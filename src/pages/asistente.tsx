@@ -4,6 +4,7 @@ import { SEO } from "@/components/SEO";
 import { Card, CardContent } from "@/components/ui/card";
 import { AIAssistant } from "@/components/AIAssistant";
 import { Lightbulb, MessageSquare, Calculator, Book } from "lucide-react";
+import Link from "next/link";
 
 export default function AsistentePage() {
   return (
@@ -125,24 +126,24 @@ export default function AsistentePage() {
                     Recursos adicionales
                   </h3>
                   <div className="space-y-2 text-sm">
-                    <a
+                    <Link
                       href="/teoria"
                       className="block p-2 bg-muted hover:bg-muted/70 rounded transition-colors"
                     >
                       📚 Ver contenido teórico completo
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href="/simulaciones"
                       className="block p-2 bg-muted hover:bg-muted/70 rounded transition-colors"
                     >
                       🎮 Explorar simulaciones 3D
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href="/ejercicios"
                       className="block p-2 bg-muted hover:bg-muted/70 rounded transition-colors"
                     >
                       ✏️ Practicar con ejercicios
-                    </a>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
