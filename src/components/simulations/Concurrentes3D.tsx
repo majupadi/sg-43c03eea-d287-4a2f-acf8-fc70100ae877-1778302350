@@ -36,7 +36,7 @@ function Force3DArrow({ force }: { force: Force3D }) {
       />
       
       {/* Arrowhead */}
-      <mesh position={endPoint} lookAt={new Vector3(0, 0, 0)}>
+      <mesh position={endPoint} onUpdate={(c) => c.lookAt(0, 0, 0)}>
         <coneGeometry args={[0.15, 0.4, 8]} />
         <meshStandardMaterial color={force.color} />
       </mesh>
@@ -67,7 +67,7 @@ function ResultantArrow({ resultant }: { resultant: Vector3 }) {
         dashScale={0.5}
       />
       
-      <mesh position={resultant} lookAt={new Vector3(0, 0, 0)}>
+      <mesh position={resultant} onUpdate={(c) => c.lookAt(0, 0, 0)}>
         <coneGeometry args={[0.2, 0.5, 8]} />
         <meshStandardMaterial color="#f59e0b" />
       </mesh>
