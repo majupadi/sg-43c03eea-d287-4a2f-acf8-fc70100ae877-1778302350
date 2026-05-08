@@ -1,9 +1,9 @@
 ---
 title: Simulación de fuerzas colineales
-status: todo
+status: done
 priority: high
 type: feature
-tags: [simulation, canvas, physics]
+tags: [simulation, colinear-forces, canvas]
 created_by: agent
 created_at: 2026-05-08T21:12:56Z
 position: 1

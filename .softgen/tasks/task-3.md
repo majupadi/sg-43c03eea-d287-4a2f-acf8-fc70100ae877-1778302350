@@ -1,6 +1,6 @@
 ---
 title: Simulación método del paralelogramo
-status: todo
+status: done
 priority: high
 type: feature
 tags: [simulation, vectors, graphical-method]

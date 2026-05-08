@@ -1,9 +1,9 @@
 ---
 title: Diseño y navegación principal
-status: in_progress
+status: done
 priority: urgent
 type: feature
-tags: [ui, navigation, design-system]
+tags: [design-system, navigation, layout]
 created_by: agent
 created_at: 2026-05-08T21:12:56Z
 position: 0
