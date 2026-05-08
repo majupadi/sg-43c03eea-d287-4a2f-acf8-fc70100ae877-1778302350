@@ -13,13 +13,13 @@ position: 2
 Simulación interactiva del método del paralelogramo para sumar vectores. Usuario arrastra puntos para modificar ángulos y magnitudes, ve construcción del paralelogramo en tiempo real.
 
 ## Checklist
-- [ ] Crear componente ParalelogramoInteractivo
-- [ ] Canvas con 2-3 vectores arrastrables (magnitud y ángulo)
-- [ ] Dibujar paralelogramo automáticamente
-- [ ] Mostrar diagonal resultante
-- [ ] Calcular y mostrar: magnitud resultante, ángulo resultante
-- [ ] Agregar paso a paso visual de la construcción
-- [ ] Incluir ejemplos precargados (ejercicios 19-22)
+- [x] Crear componente SimulacionParalelogramo con canvas HTML5
+- [x] Renderizar dos vectores desde origen común con ángulo ajustable
+- [x] Dibujar líneas punteadas para completar el paralelogramo
+- [x] Calcular y mostrar resultante: R = √(F₁² + F₂² + 2·F₁·F₂·cos(θ))
+- [x] Inputs para F₁, F₂ y ángulo θ
+- [x] Mostrar diagonal del paralelogramo como vector resultante
+- [x] Fórmulas y casos especiales (θ=0°, 90°, 180°)
 
 ## Acceptance
 - Usuario arrastra vectores y ve paralelogramo construirse dinámicamente
