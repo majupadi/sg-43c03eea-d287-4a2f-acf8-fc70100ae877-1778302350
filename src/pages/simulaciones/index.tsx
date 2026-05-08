@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
-import { Box, TrendingUp, Triangle, Scale, RotateCw, Anchor } from "lucide-react";
+import { Box, TrendingUp, Triangle, Scale, RotateCw, Anchor, Wrench, Disc, TrendingDown } from "lucide-react";
 import Link from "next/link";
 
 export default function SimulacionesIndex() {
@@ -74,13 +74,46 @@ export default function SimulacionesIndex() {
       color: "text-indigo-600 dark:text-indigo-400",
       bgColor: "bg-indigo-100 dark:bg-indigo-950",
     },
+    {
+      id: "palancas",
+      title: "Palancas 3D",
+      description: "Experimenta con los 3 tipos de palancas y calcula ventaja mecánica",
+      icon: Wrench,
+      type: "3D Interactivo",
+      difficulty: "Intermedio",
+      href: "/simulaciones/palancas-3d",
+      color: "text-cyan-600 dark:text-cyan-400",
+      bgColor: "bg-cyan-100 dark:bg-cyan-950",
+    },
+    {
+      id: "poleas",
+      title: "Poleas y Aparejos 3D",
+      description: "Sistemas de poleas fijas, móviles y compuestas con cálculo de fuerzas",
+      icon: Disc,
+      type: "3D Interactivo",
+      difficulty: "Intermedio",
+      href: "/simulaciones/poleas-3d",
+      color: "text-teal-600 dark:text-teal-400",
+      bgColor: "bg-teal-100 dark:bg-teal-950",
+    },
+    {
+      id: "plano-inclinado",
+      title: "Plano Inclinado 3D",
+      description: "Analiza descomposición de fuerzas en superficies inclinadas con fricción",
+      icon: TrendingDown,
+      type: "3D Interactivo",
+      difficulty: "Intermedio",
+      href: "/simulaciones/plano-inclinado-3d",
+      color: "text-orange-600 dark:text-orange-400",
+      bgColor: "bg-orange-100 dark:bg-orange-950",
+    },
   ];
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SEO 
         title="Simulaciones Interactivas - Algo de Fisica lab 1"
-        description="Experimenta con simulaciones 2D y 3D de sistemas de fuerzas. Manipula vectores en tiempo real."
+        description="Experimenta con simulaciones 2D y 3D de sistemas de fuerzas y máquinas simples. Manipula vectores en tiempo real."
       />
       <Navigation />
       
@@ -92,7 +125,7 @@ export default function SimulacionesIndex() {
               Simulaciones Interactivas
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explora sistemas de fuerzas mediante simulaciones 2D y 3D. 
+              Explora sistemas de fuerzas y máquinas simples mediante simulaciones 2D y 3D. 
               Manipula vectores, observa resultantes y comprende los conceptos de forma visual.
             </p>
           </div>
