@@ -19,13 +19,13 @@ Establecer sistema de diseño completo y estructura de navegación. La app neces
 ## Checklist
 - [x] Configurar CSS variables en globals.css (navy, amber, muted)
 - [x] Registrar fuentes en tailwind.config.ts
-- [ ] Crear componente Navigation con links a: Teoría, Simulaciones, Ejercicios
-- [ ] Crear página index.tsx con 4 tarjetas de temas principales:
+- [x] Crear componente Navigation con links a: Teoría, Simulaciones, Ejercicios
+- [x] Crear página index.tsx con 4 tarjetas de temas principales:
   * Sistemas de Fuerzas Colineales
   * Métodos Gráficos (Paralelogramo y Polígono)
   * Sistemas de Fuerzas Paralelas
   * Peso y Equilibrio
-- [ ] Diseñar Footer con recursos adicionales
+- [x] Diseñar Footer con recursos adicionales
 
 ## Acceptance
 - Landing page muestra 4 temas principales claramente diferenciados
