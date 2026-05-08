@@ -8,7 +8,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 const Momentos3D = dynamic(
-  () => import("@/components/simulations/Momentos3D").then(mod => ({ default: mod.Momentos3D })),
+  () => import("@/components/simulations/Momentos3D").then((mod) => mod.Momentos3D),
   { ssr: false }
 );
 

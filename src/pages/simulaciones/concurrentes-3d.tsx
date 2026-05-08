@@ -8,7 +8,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 const Concurrentes3D = dynamic(
-  () => import("@/components/simulations/Concurrentes3D").then(mod => ({ default: mod.Concurrentes3D })),
+  () => import("@/components/simulations/Concurrentes3D").then((mod) => mod.Concurrentes3D),
   { ssr: false }
 );
 

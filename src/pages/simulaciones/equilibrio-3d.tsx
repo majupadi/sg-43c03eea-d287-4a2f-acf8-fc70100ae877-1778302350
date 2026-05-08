@@ -8,7 +8,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 const Equilibrio3D = dynamic(
-  () => import("@/components/simulations/Equilibrio3D").then(mod => ({ default: mod.Equilibrio3D })),
+  () => import("@/components/simulations/Equilibrio3D").then((mod) => mod.Equilibrio3D),
   { ssr: false }
 );
 

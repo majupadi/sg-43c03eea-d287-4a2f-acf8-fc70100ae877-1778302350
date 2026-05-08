@@ -4,9 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
-import { PlanoInclinado3D } from "@/components/simulations/PlanoInclinado3D";
 import { Book, Calculator, Lightbulb } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const PlanoInclinado3D = dynamic(
+  () => import("@/components/simulations/PlanoInclinado3D").then((mod) => mod.PlanoInclinado3D),
+  { ssr: false }
+);
 
 export default function PlanoInclinado3DPage() {
   return (
