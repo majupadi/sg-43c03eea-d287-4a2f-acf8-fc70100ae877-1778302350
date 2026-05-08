@@ -2,10 +2,11 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, Triangle, Scale, Anchor } from "lucide-react";
+import { ArrowRight, TrendingUp, Triangle, Scale, Anchor, Book, Calculator, FlaskConical, Zap } from "lucide-react";
 import Link from "next/link";
+import { SEO } from "@/components/SEO";
 
-export default function HomePage() {
+export default function Home() {
   const topics = [
     {
       title: "Sistemas de Fuerzas Colineales",
@@ -42,59 +43,45 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
+      <SEO 
+        title="Algo de Fisica lab 1 - Sistema de Fuerzas Interactivo"
+        description="Aprende sistemas de fuerzas mediante simulaciones interactivas, teoría completa y ejercicios resueltos paso a paso."
+      />
       <Navigation />
 
       <main className="flex-1">
-        <section className="container py-12 md:py-20">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h1 className="font-mono text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-              Sistema Interactivo de Fuerzas
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Aprende sistemas de fuerzas físicas mediante simulaciones realistas, teoría clara y ejercicios progresivos.
-              Una plataforma completa para estudiantes de física e ingeniería.
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button asChild size="lg" className="font-medium">
-                <Link href="/simulaciones">
-                  Comenzar Simulaciones
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="font-medium">
-                <Link href="/teoria">Explorar Teoría</Link>
-              </Button>
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background py-20 md:py-32">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-4xl mx-auto text-center space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-sm font-mono font-semibold text-accent">
+                <Zap className="w-4 h-4" />
+                Aprende con Simulaciones Interactivas
+              </div>
+              
+              <h1 className="text-4xl md:text-6xl font-bold text-primary leading-tight">
+                Sistema de Fuerzas
+                <br />
+                <span className="text-foreground">Teoría y Práctica</span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Domina los conceptos de sistemas de fuerzas mediante simulaciones realistas, 
+                explicaciones claras y ejercicios resueltos paso a paso.
+              </p>
+              <div className="flex gap-4 justify-center flex-wrap">
+                <Button asChild size="lg" className="font-medium">
+                  <Link href="/simulaciones">
+                    Comenzar Simulaciones
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="font-medium">
+                  <Link href="/teoria">Explorar Teoría</Link>
+                </Button>
+              </div>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {topics.map((topic) => {
-              const Icon = topic.icon;
-              return (
-                <Link key={topic.href} href={topic.href} className="group">
-                  <Card className="h-full transition-all duration-200 hover:shadow-lg hover:border-primary/50">
-                    <CardHeader>
-                      <div className={`w-12 h-12 rounded-lg ${topic.bgColor} flex items-center justify-center mb-3`}>
-                        <Icon className={`h-6 w-6 ${topic.color}`} />
-                      </div>
-                      <CardTitle className="font-mono text-xl group-hover:text-primary transition-colors">
-                        {topic.title}
-                      </CardTitle>
-                      <CardDescription className="text-base">
-                        {topic.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                        Explorar tema
-                        <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              );
-            })}
           </div>
         </section>
 

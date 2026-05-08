@@ -1,4 +1,4 @@
-# Sistema Interactivo de Fuerzas
+# Algo de Fisica lab 1
 
 ## Vision
 Plataforma educativa interactiva para aprender sistemas de fuerzas físicas mediante simulaciones realistas, teoría clara y ejercicios progresivos. Dirigida a estudiantes de física e ingeniería.
@@ -13,6 +13,7 @@ Plataforma educativa interactiva para aprender sistemas de fuerzas físicas medi
 - Body: IBM Plex Sans (legibilidad, calidez moderada)
 - Style: Technical precision, educational clarity, interactive diagrams
 - Dark mode: Full support with optimized palette for both themes
+- Contact: majupadi@gmail.com
 
 ## Features
 - Teoría completa de sistemas de fuerzas (colineales, paralelas, concurrentes, momentos, equilibrio)
@@ -21,3 +22,4 @@ Plataforma educativa interactiva para aprender sistemas de fuerzas físicas medi
 - Métodos gráficos (paralelogramo, polígono)
 - Calculadora de resultantes con visualización en tiempo real
 - Modo oscuro con toggle persistente
+- Contacto directo: majupadi@gmail.com

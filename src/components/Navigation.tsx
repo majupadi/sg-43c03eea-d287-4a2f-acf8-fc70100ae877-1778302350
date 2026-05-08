@@ -9,8 +9,8 @@ export function Navigation() {
         <nav className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-mono font-bold text-xl text-primary hover:text-primary/80 transition-colors">
             <FlaskConical className="w-6 h-6" />
-            <span className="hidden sm:inline">Sistema de Fuerzas</span>
-            <span className="sm:hidden">Fuerzas</span>
+            <span className="hidden sm:inline">Algo de Fisica lab 1</span>
+            <span className="sm:hidden">Física Lab 1</span>
           </Link>
 
           <div className="flex items-center gap-6">
