@@ -13,13 +13,13 @@ position: 3
 Páginas de teoría con todo el contenido de los documentos escaneados, más ejercicios interactivos con soluciones paso a paso.
 
 ## Checklist
-- [ ] Página /teoria/colineales con explicación completa
-- [ ] Página /teoria/metodos-graficos (paralelogramo y polígono)
-- [ ] Página /teoria/paralelas con fórmulas y ejemplos
+- [x] Página /teoria/colineales con explicación completa
+- [x] Página /teoria/metodos-graficos (paralelogramo y polígono)
+- [x] Página /teoria/paralelas con fórmulas y ejemplos
 - [ ] Página /teoria/peso-equilibrio con definiciones
-- [ ] Página /ejercicios con todos los problemas 17-27
-- [ ] Soluciones paso a paso con toggle show/hide
-- [ ] Renderizar fórmulas matemáticas correctamente
+- [x] Página /ejercicios con todos los problemas 17-27
+- [x] Soluciones paso a paso con toggle show/hide
+- [x] Renderizar fórmulas matemáticas correctamente
 - [ ] Incluir diagramas estáticos de apoyo
 
 ## Acceptance
