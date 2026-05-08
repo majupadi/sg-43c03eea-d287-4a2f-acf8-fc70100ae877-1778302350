@@ -8,7 +8,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 const Paralelas3D = dynamic(
-  () => import("@/components/simulations/Paralelas3D").then(mod => ({ default: mod.Paralelas3D })),
+  () => import("@/components/simulations/Paralelas3D").then((mod) => mod.Paralelas3D),
   { ssr: false }
 );
 

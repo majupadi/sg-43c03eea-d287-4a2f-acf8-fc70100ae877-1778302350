@@ -4,9 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
-import { Palancas3D } from "@/components/simulations/Palancas3D";
 import { Book, Calculator, Lightbulb } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const Palancas3D = dynamic(
+  () => import("@/components/simulations/Palancas3D").then((mod) => mod.Palancas3D),
+  { ssr: false }
+);
 
 export default function Palancas3DPage() {
   return (
