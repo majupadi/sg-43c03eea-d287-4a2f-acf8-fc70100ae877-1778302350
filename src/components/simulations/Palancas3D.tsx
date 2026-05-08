@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import { Settings2, RotateCcw } from "lucide-react";
 
 type LeverType = "first" | "second" | "third";
 
@@ -157,20 +158,28 @@ export function Palancas3D() {
   const [powerArm, setPowerArm] = useState(3);
   const [resistanceArm, setResistanceArm] = useState(2);
   const [resistance, setResistance] = useState(100);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Calcular potencia necesaria según ley de la palanca: P × BP = R × BR
   const power = (resistance * resistanceArm) / powerArm;
   const vm = powerArm / resistanceArm;
 
   const leverTypes = [
-    { id: "first" as LeverType, name: "1er Género (Inter-apoyo)", desc: "P — F — R" },
-    { id: "second" as LeverType, name: "2do Género (Inter-resistencia)", desc: "F — R — P" },
-    { id: "third" as LeverType, name: "3er Género (Inter-potencia)", desc: "F — P — R" },
+    { id: "first" as LeverType, name: "1er Género", desc: "P — F — R" },
+    { id: "second" as LeverType, name: "2do Género", desc: "F — R — P" },
+    { id: "third" as LeverType, name: "3er Género", desc: "F — P — R" },
   ];
+
+  const reset = () => {
+    setPowerArm(3);
+    setResistanceArm(2);
+    setResistance(100);
+    setLeverType("first");
+  };
 
   return (
     <div className="w-full space-y-6">
-      <Card>
+      <Card className="border-2">
         <CardHeader>
           <CardTitle>Tipo de Palanca</CardTitle>
         </CardHeader>
@@ -191,10 +200,11 @@ export function Palancas3D() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-2">
         <CardContent className="pt-6">
-          <div className="h-[500px] bg-muted/20 rounded-lg overflow-hidden">
+          <div className="h-[500px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden border-2 border-primary/30 shadow-inner">
             <Canvas camera={{ position: [0, 3, 12], fov: 50 }}>
+              <color attach="background" args={["#f1f5f9"]} />
               <LeverScene
                 type={leverType}
                 powerArm={powerArm}
@@ -203,6 +213,8 @@ export function Palancas3D() {
                 resistance={resistance}
               />
               <OrbitControls 
+                enableDamping
+                dampingFactor={0.05}
                 enablePan={false}
                 minDistance={8}
                 maxDistance={20}
@@ -213,43 +225,31 @@ export function Palancas3D() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-2">
         <CardHeader>
-          <CardTitle>Controles</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Controles</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+              >
+                <Settings2 className="w-4 h-4 mr-2" />
+                {showAdvanced ? "Básicos" : "Avanzados"}
+              </Button>
+              <Button variant="outline" size="sm" onClick={reset}>
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <div className="flex justify-between">
-              <Label>Brazo de Potencia (BP)</Label>
-              <span className="text-sm font-mono text-muted-foreground">{powerArm.toFixed(1)} m</span>
-            </div>
-            <Slider
-              value={[powerArm]}
-              onValueChange={([v]) => setPowerArm(v)}
-              min={0.5}
-              max={5}
-              step={0.1}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label>Brazo de Resistencia (BR)</Label>
-              <span className="text-sm font-mono text-muted-foreground">{resistanceArm.toFixed(1)} m</span>
-            </div>
-            <Slider
-              value={[resistanceArm]}
-              onValueChange={([v]) => setResistanceArm(v)}
-              min={0.5}
-              max={5}
-              step={0.1}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between">
               <Label>Resistencia (R)</Label>
-              <span className="text-sm font-mono text-muted-foreground">{resistance} N</span>
+              <span className="text-sm font-mono text-primary">{resistance} N</span>
             </div>
             <Slider
               value={[resistance]}
@@ -259,12 +259,44 @@ export function Palancas3D() {
               step={10}
             />
           </div>
+
+          {showAdvanced && (
+            <>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <Label>Brazo de Potencia (BP)</Label>
+                  <span className="text-sm font-mono text-primary">{powerArm.toFixed(1)} m</span>
+                </div>
+                <Slider
+                  value={[powerArm]}
+                  onValueChange={([v]) => setPowerArm(v)}
+                  min={0.5}
+                  max={5}
+                  step={0.1}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <Label>Brazo de Resistencia (BR)</Label>
+                  <span className="text-sm font-mono text-primary">{resistanceArm.toFixed(1)} m</span>
+                </div>
+                <Slider
+                  value={[resistanceArm]}
+                  onValueChange={([v]) => setResistanceArm(v)}
+                  min={0.5}
+                  max={5}
+                  step={0.1}
+                />
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
-      <Card className="bg-primary/5 border-primary/20">
+      <Card className="bg-primary/5 border-primary/20 border-2">
         <CardHeader>
-          <CardTitle>Cálculos</CardTitle>
+          <CardTitle>📊 Análisis</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="grid grid-cols-2 gap-4">
