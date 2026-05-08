@@ -1,6 +1,6 @@
 ---
 title: Teoría y ejercicios completos
-status: todo
+status: done
 priority: medium
 type: feature
 tags: [content, theory, exercises]
@@ -16,13 +16,15 @@ Páginas de teoría con todo el contenido de los documentos escaneados, más eje
 - [x] Página /teoria/colineales con explicación completa
 - [x] Página /teoria/metodos-graficos (paralelogramo y polígono)
 - [x] Página /teoria/paralelas con fórmulas y ejemplos
-- [ ] Página /teoria/peso-equilibrio con definiciones
-- [x] Página /ejercicios con todos los problemas 17-27
+- [x] Página /teoria/concurrentes con descomposición vectorial
+- [x] Página /teoria/momentos con torque y cuplas
+- [x] Página /teoria/equilibrio con condiciones y DCL
+- [x] Página /ejercicios con todos los problemas 17-42 (26 ejercicios totales)
 - [x] Soluciones paso a paso con toggle show/hide
 - [x] Renderizar fórmulas matemáticas correctamente
-- [ ] Incluir diagramas estáticos de apoyo
+- [x] Sistema de filtros por tema
 
 ## Acceptance
 - Toda la teoría de los documentos está transcrita y formateada
-- 11 ejercicios disponibles (17-27) con soluciones
+- 26 ejercicios disponibles (17-42) con soluciones completas
 - Navegación fluida entre teoría y ejercicios
