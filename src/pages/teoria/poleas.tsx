@@ -157,49 +157,141 @@ export default function PoleasPage() {
             <CardContent className="space-y-4">
               <p className="leading-relaxed">
                 Es una <strong>combinación de poleas fijas y móviles</strong> que trabajan en conjunto para 
-                multiplicar aún más la ventaja mecánica. También llamado <em>aparejo factorial</em>.
+                multiplicar aún más la ventaja mecánica. Existen dos tipos principales de aparejos según su configuración.
               </p>
 
-              <Alert className="bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800">
-                <AlertDescription>
-                  <div className="space-y-2">
-                    <p className="font-mono text-lg font-bold text-purple-700 dark:text-purple-400">
-                      F = R / n
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      donde <strong>n</strong> = número de segmentos de cuerda que sostienen la carga
-                    </p>
-                    <p className="text-sm">
-                      <strong>Ventaja Mecánica:</strong> VM = n
-                    </p>
-                  </div>
-                </AlertDescription>
-              </Alert>
+              <div className="space-y-4">
+                {/* Aparejo Potencial */}
+                <div className="bg-blue-50 dark:bg-blue-950/30 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <h4 className="font-bold text-lg mb-3 text-blue-700 dark:text-blue-400">
+                    1. Aparejo Potencial (Exponencial)
+                  </h4>
+                  <p className="text-sm mb-3 leading-relaxed">
+                    En este sistema, <strong>cada polea móvil se apoya en la anterior</strong>, formando una cadena vertical.
+                    La ventaja mecánica crece exponencialmente.
+                  </p>
+                  
+                  <Alert className="bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700">
+                    <AlertDescription>
+                      <div className="space-y-2">
+                        <p className="font-mono text-xl font-bold text-blue-700 dark:text-blue-300">
+                          Fm = R / 2ⁿ
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          donde <strong>n</strong> = número de poleas móviles
+                        </p>
+                        <p className="text-sm">
+                          <strong>Ventaja Mecánica:</strong> VM = 2ⁿ
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
 
-              <div className="space-y-3">
-                <div className="bg-muted/50 p-4 rounded-lg text-sm">
-                  <h4 className="font-semibold mb-2">Ejemplos de configuraciones:</h4>
-                  <ul className="space-y-1">
-                    <li>• <strong>2 poleas (1 fija + 1 móvil):</strong> VM = 2, F = R/2</li>
-                    <li>• <strong>3 poleas (1 fija + 2 móviles):</strong> VM = 3, F = R/3</li>
-                    <li>• <strong>4 poleas (2 fijas + 2 móviles):</strong> VM = 4, F = R/4</li>
-                  </ul>
+                  <div className="mt-3 space-y-2 text-sm">
+                    <p className="font-semibold">Ejemplos:</p>
+                    <ul className="space-y-1 ml-4">
+                      <li>• <strong>n = 1:</strong> VM = 2¹ = 2 → Fm = R/2</li>
+                      <li>• <strong>n = 2:</strong> VM = 2² = 4 → Fm = R/4</li>
+                      <li>• <strong>n = 3:</strong> VM = 2³ = 8 → Fm = R/8</li>
+                      <li>• <strong>n = 4:</strong> VM = 2⁴ = 16 → Fm = R/16</li>
+                    </ul>
+                  </div>
                 </div>
 
-                <div className="bg-accent/10 border border-accent/20 p-4 rounded-lg text-sm">
-                  <p><strong>Importante:</strong> A mayor VM, mayor longitud de cuerda hay que tirar.</p>
-                  <p className="mt-2 font-mono">
-                    Distancia de cuerda = n × altura elevada
+                {/* Aparejo Factorial */}
+                <div className="bg-green-50 dark:bg-green-950/30 border-2 border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <h4 className="font-bold text-lg mb-3 text-green-700 dark:text-green-400">
+                    2. Aparejo Factorial (Lineal)
+                  </h4>
+                  <p className="text-sm mb-3 leading-relaxed">
+                    Aquí las poleas móviles están <strong>todas sujetas a la misma barra horizontal</strong>.
+                    La ventaja mecánica crece linealmente.
+                  </p>
+                  
+                  <Alert className="bg-green-100 dark:bg-green-900/50 border-green-300 dark:border-green-700">
+                    <AlertDescription>
+                      <div className="space-y-2">
+                        <p className="font-mono text-xl font-bold text-green-700 dark:text-green-300">
+                          Fm = R / (2 · n)
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          donde <strong>n</strong> = número de poleas móviles
+                        </p>
+                        <p className="text-sm">
+                          <strong>Ventaja Mecánica:</strong> VM = 2 · n
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="mt-3 space-y-2 text-sm">
+                    <p className="font-semibold">Ejemplos:</p>
+                    <ul className="space-y-1 ml-4">
+                      <li>• <strong>n = 1:</strong> VM = 2·1 = 2 → Fm = R/2</li>
+                      <li>• <strong>n = 2:</strong> VM = 2·2 = 4 → Fm = R/4</li>
+                      <li>• <strong>n = 3:</strong> VM = 2·3 = 6 → Fm = R/6</li>
+                      <li>• <strong>n = 4:</strong> VM = 2·4 = 8 → Fm = R/8</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Comparación */}
+                <div className="bg-purple-50 dark:bg-purple-950/30 border-2 border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                  <h4 className="font-bold mb-3 text-purple-700 dark:text-purple-400">
+                    Comparación de Eficiencia
+                  </h4>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b-2 border-purple-300 dark:border-purple-700">
+                          <th className="text-left p-2 font-mono">Poleas</th>
+                          <th className="text-center p-2 font-mono">Potencial (2ⁿ)</th>
+                          <th className="text-center p-2 font-mono">Factorial (2·n)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-purple-200 dark:divide-purple-800">
+                        <tr>
+                          <td className="p-2 font-mono">n = 1</td>
+                          <td className="p-2 text-center font-mono">VM = 2</td>
+                          <td className="p-2 text-center font-mono">VM = 2</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-mono">n = 2</td>
+                          <td className="p-2 text-center font-mono text-blue-600 dark:text-blue-400">VM = 4</td>
+                          <td className="p-2 text-center font-mono">VM = 4</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-mono">n = 3</td>
+                          <td className="p-2 text-center font-mono font-bold text-blue-600 dark:text-blue-400">VM = 8 ✓</td>
+                          <td className="p-2 text-center font-mono text-green-600 dark:text-green-400">VM = 6</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-mono">n = 4</td>
+                          <td className="p-2 text-center font-mono font-bold text-blue-600 dark:text-blue-400">VM = 16 ✓</td>
+                          <td className="p-2 text-center font-mono text-green-600 dark:text-green-400">VM = 8</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-xs mt-3 text-muted-foreground">
+                    El aparejo <strong>potencial es más eficiente</strong> con 3 o más poleas móviles (VM crece exponencialmente)
                   </p>
                 </div>
 
+                <div className="bg-accent/10 border border-accent/20 p-4 rounded-lg text-sm">
+                  <p><strong>Regla práctica:</strong></p>
+                  <ul className="mt-2 space-y-1 text-muted-foreground">
+                    <li>• Para <strong>1-2 poleas móviles:</strong> Ambos sistemas son equivalentes</li>
+                    <li>• Para <strong>3+ poleas móviles:</strong> El aparejo potencial ofrece mayor VM</li>
+                    <li>• <strong>Desventaja:</strong> Mayor VM = más longitud de cuerda a tirar</li>
+                  </ul>
+                </div>
+
                 <div className="bg-muted/50 p-4 rounded-lg text-sm space-y-2">
-                  <p><strong>Aplicaciones:</strong></p>
+                  <p><strong>Aplicaciones industriales:</strong></p>
                   <ul className="space-y-1 text-muted-foreground">
-                    <li>• Grúas industriales y de construcción</li>
-                    <li>• Montacargas de talleres mecánicos</li>
-                    <li>• Sistemas de elevación en barcos (aparejos navales)</li>
-                    <li>• Ascensores y elevadores de carga</li>
+                    <li>• <strong>Potencial:</strong> Grúas de gran altura, elevadores industriales</li>
+                    <li>• <strong>Factorial:</strong> Talleres mecánicos, aparejos navales, montacargas</li>
                   </ul>
                 </div>
               </div>
@@ -244,7 +336,7 @@ export default function PoleasPage() {
           {/* Comparación */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Tabla Comparativa</CardTitle>
+              <CardTitle>Tabla Comparativa Completa</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -260,24 +352,34 @@ export default function PoleasPage() {
                   <tbody className="divide-y divide-border">
                     <tr>
                       <td className="p-2 font-semibold text-blue-600 dark:text-blue-400">Polea Fija</td>
-                      <td className="p-2 text-center font-mono">F = R</td>
+                      <td className="p-2 text-center font-mono">Fm = R</td>
                       <td className="p-2 text-center font-mono">1</td>
                       <td className="p-2 text-muted-foreground">Cambiar dirección</td>
                     </tr>
                     <tr>
                       <td className="p-2 font-semibold text-green-600 dark:text-green-400">Polea Móvil</td>
-                      <td className="p-2 text-center font-mono">F = R/2</td>
+                      <td className="p-2 text-center font-mono">Fm = R/2</td>
                       <td className="p-2 text-center font-mono">2</td>
                       <td className="p-2 text-muted-foreground">Reducir esfuerzo</td>
                     </tr>
                     <tr>
-                      <td className="p-2 font-semibold text-purple-600 dark:text-purple-400">Aparejo (n poleas)</td>
-                      <td className="p-2 text-center font-mono">F = R/n</td>
-                      <td className="p-2 text-center font-mono">n</td>
-                      <td className="p-2 text-muted-foreground">Grandes cargas</td>
+                      <td className="p-2 font-semibold text-purple-600 dark:text-purple-400">Aparejo Potencial</td>
+                      <td className="p-2 text-center font-mono">Fm = R/2ⁿ</td>
+                      <td className="p-2 text-center font-mono">2ⁿ</td>
+                      <td className="p-2 text-muted-foreground">Grandes cargas (exponencial)</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-semibold text-orange-600 dark:text-orange-400">Aparejo Factorial</td>
+                      <td className="p-2 text-center font-mono">Fm = R/(2·n)</td>
+                      <td className="p-2 text-center font-mono">2·n</td>
+                      <td className="p-2 text-muted-foreground">Cargas medias (lineal)</td>
                     </tr>
                   </tbody>
                 </table>
+              </div>
+              
+              <div className="mt-4 text-xs text-muted-foreground italic">
+                <p>n = número de poleas móviles en el sistema</p>
               </div>
             </CardContent>
           </Card>
