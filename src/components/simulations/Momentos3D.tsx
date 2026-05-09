@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text, Html } from "@react-three/drei";
+import { OrbitControls, Text } from "@react-three/drei";
 import { Vector3 } from "three";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,24 +13,30 @@ import { RotateCcw, Play, Pause } from "lucide-react";
 function RotatingBar({ 
   rotation, 
   force, 
-  distance 
+  distance,
+  isRotating
 }: { 
   rotation: number; 
   force: number; 
   distance: number;
+  isRotating: boolean;
 }) {
   const barRef = useRef<any>();
+  const rotRef = useRef(rotation);
 
   useFrame(() => {
     if (barRef.current) {
-      barRef.current.rotation.z = rotation;
+      if (isRotating) {
+        rotRef.current += 0.02;
+      }
+      barRef.current.rotation.z = rotRef.current;
     }
   });
 
   const forceScale = force / 30;
   const forcePosition = new Vector3(
-    Math.cos(rotation) * distance,
-    Math.sin(rotation) * distance,
+    Math.cos(rotRef.current) * distance,
+    Math.sin(rotRef.current) * distance,
     0
   );
 
@@ -74,21 +80,14 @@ function RotatingBar({
 export function Momentos3D() {
   const [force, setForce] = useState(60);
   const [distance, setDistance] = useState(2);
-  const [rotation, setRotation] = useState(0);
+  const [rotation] = useState(0);
   const [isRotating, setIsRotating] = useState(false);
 
   const torque = force * distance;
 
-  useFrame(() => {
-    if (isRotating) {
-      setRotation(prev => prev + 0.02);
-    }
-  });
-
   const reset = () => {
     setForce(60);
     setDistance(2);
-    setRotation(0);
     setIsRotating(false);
   };
 
@@ -103,7 +102,7 @@ export function Momentos3D() {
               <directionalLight position={[10, 10, 5]} intensity={1} />
               <pointLight position={[-10, -10, -5]} intensity={0.5} />
               
-              <RotatingBar rotation={rotation} force={force} distance={distance} />
+              <RotatingBar rotation={rotation} force={force} distance={distance} isRotating={isRotating} />
               
               <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -0.5]}>
                 <ringGeometry args={[distance * 1.1, distance * 1.15, 64]} />

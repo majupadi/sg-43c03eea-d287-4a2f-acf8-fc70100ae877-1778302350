@@ -4,192 +4,176 @@ import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Text, Line } from "@react-three/drei";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { RotateCcw, Settings2, ChevronDown } from "lucide-react";
 
-function InclinedPlaneScene({ 
+function InclinedPlane({ 
   angle, 
-  weight, 
+  mass, 
   friction 
 }: { 
-  angle: number;
-  weight: number;
+  angle: number; 
+  mass: number;
   friction: number;
 }) {
-  const angleRad = (angle * Math.PI) / 180;
-  const length = 6;
-  const height = length * Math.sin(angleRad);
-  const base = length * Math.cos(angleRad);
-
-  // Componentes del peso
-  const wParallel = weight * Math.sin(angleRad);
-  const wNormal = weight * Math.cos(angleRad);
-  const frictionForce = friction * wNormal;
-  const requiredForce = wParallel + frictionForce;
-
-  // Posición del objeto en el plano
-  const objX = base / 2;
-  const objY = height / 2;
+  const radAngle = (angle * Math.PI) / 180;
+  const weight = mass * 9.8;
+  const parallelForce = weight * Math.sin(radAngle);
+  const normalForce = weight * Math.cos(radAngle);
+  const frictionForce = friction * normalForce;
+  
+  const planeLength = 6;
+  const planeWidth = 3;
+  const blockSize = 0.5;
+  
+  const blockX = (planeLength / 2) * Math.cos(radAngle);
+  const blockY = (planeLength / 2) * Math.sin(radAngle);
 
   return (
-    <>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[10, 10, 5]} intensity={0.8} />
-
-      {/* Plano inclinado */}
-      <mesh position={[objX, objY / 2, 0]} rotation={[0, 0, -angleRad]}>
-        <boxGeometry args={[length, 0.3, 3]} />
-        <meshStandardMaterial color="#94a3b8" />
+    <group>
+      <mesh rotation={[0, 0, -radAngle]} position={[planeLength / 2 * Math.cos(radAngle), planeLength / 2 * Math.sin(radAngle), 0]}>
+        <boxGeometry args={[planeLength, 0.2, planeWidth]} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.3} roughness={0.7} />
       </mesh>
 
-      {/* Base del plano */}
-      <Line
-        points={[[0, 0, 0], [base, 0, 0]]}
-        color="#64748b"
-        lineWidth={4}
-      />
-
-      {/* Altura del plano */}
-      <Line
-        points={[[base, 0, 0], [base, height, 0]]}
-        color="#64748b"
-        lineWidth={4}
-        dashed
-      />
-
-      {/* Objeto sobre el plano */}
-      <mesh position={[objX, objY, 0]}>
-        <boxGeometry args={[0.8, 0.8, 0.8]} />
-        <meshStandardMaterial color="#ef4444" />
+      <mesh position={[blockX, blockY, 0]}>
+        <boxGeometry args={[blockSize, blockSize, blockSize]} />
+        <meshStandardMaterial color="#dc2626" metalness={0.5} roughness={0.5} />
       </mesh>
-
-      {/* Peso (W) - flecha hacia abajo */}
-      <Line
-        points={[[objX, objY, 0], [objX, objY - 2, 0]]}
-        color="#dc2626"
-        lineWidth={3}
-      />
-      <mesh position={[objX, objY - 2, 0]} rotation={[0, 0, 0]}>
-        <coneGeometry args={[0.12, 0.25, 8]} />
-        <meshStandardMaterial color="#dc2626" />
-      </mesh>
-      <Text position={[objX + 0.5, objY - 1, 0]} fontSize={0.3} color="#dc2626" anchorX="left">
-        {`W=${weight}N`}
+      <Text position={[blockX, blockY - 0.5, 0]} fontSize={0.2} color="#dc2626" anchorX="center">
+        m={mass}kg
       </Text>
 
-      {/* Componente paralela (W‖) */}
+      <Line
+        points={[[blockX, blockY, 0], [blockX, blockY - weight / 50, 0]]}
+        color="#8b5cf6"
+        lineWidth={3}
+      />
+      <mesh position={[blockX, blockY - weight / 50, 0]} rotation={[Math.PI, 0, 0]}>
+        <coneGeometry args={[0.1, 0.2, 8]} />
+        <meshStandardMaterial color="#8b5cf6" />
+      </mesh>
+      <Text position={[blockX + 0.4, blockY - weight / 100, 0]} fontSize={0.18} color="#8b5cf6" anchorX="left">
+        W={weight.toFixed(1)}N
+      </Text>
+
       <Line
         points={[
-          [objX, objY, 0],
-          [objX + wParallel / 50, objY - wParallel / 50, 0]
+          [blockX, blockY, 0],
+          [blockX + parallelForce / 50 * Math.cos(radAngle), blockY + parallelForce / 50 * Math.sin(radAngle), 0]
         ]}
-        color="#f59e0b"
-        lineWidth={3}
+        color="#10b981"
+        lineWidth={2}
       />
-      <mesh 
-        position={[objX + wParallel / 50, objY - wParallel / 50, 0]} 
-        rotation={[0, 0, -angleRad]}
+      <Text
+        position={[
+          blockX + (parallelForce / 50 * Math.cos(radAngle)) * 1.2,
+          blockY + (parallelForce / 50 * Math.sin(radAngle)) * 1.2 + 0.2,
+          0
+        ]}
+        fontSize={0.15}
+        color="#10b981"
+        anchorX="center"
       >
-        <coneGeometry args={[0.12, 0.25, 8]} />
-        <meshStandardMaterial color="#f59e0b" />
-      </mesh>
-      <Text 
-        position={[objX + wParallel / 100 + 0.5, objY - wParallel / 100, 0]} 
-        fontSize={0.25} 
-        color="#f59e0b" 
-        anchorX="left"
-      >
-        {`W‖=${wParallel.toFixed(1)}N`}
+        F∥={parallelForce.toFixed(1)}N
       </Text>
 
-      {/* Componente normal (W⊥) */}
       <Line
         points={[
-          [objX, objY, 0],
-          [objX + Math.sin(angleRad) * 1.5, objY - Math.cos(angleRad) * 1.5, 0]
+          [blockX, blockY, 0],
+          [blockX - normalForce / 50 * Math.sin(radAngle), blockY + normalForce / 50 * Math.cos(radAngle), 0]
         ]}
         color="#3b82f6"
-        lineWidth={3}
-        dashed
+        lineWidth={2}
       />
-      <Text 
-        position={[objX + Math.sin(angleRad) * 0.8 + 0.3, objY - Math.cos(angleRad) * 0.8, 0]} 
-        fontSize={0.25} 
-        color="#3b82f6" 
-        anchorX="left"
-      >
-        {`W⊥=${wNormal.toFixed(1)}N`}
-      </Text>
-
-      {/* Fuerza aplicada (F) - paralela al plano, hacia arriba */}
-      <Line
-        points={[
-          [objX, objY, 0],
-          [objX - Math.cos(angleRad) * 1.5, objY + Math.sin(angleRad) * 1.5, 0]
+      <Text
+        position={[
+          blockX - (normalForce / 50 * Math.sin(radAngle)) * 1.2,
+          blockY + (normalForce / 50 * Math.cos(radAngle)) * 1.2,
+          0
         ]}
-        color="#22c55e"
-        lineWidth={4}
-      />
-      <mesh 
-        position={[objX - Math.cos(angleRad) * 1.5, objY + Math.sin(angleRad) * 1.5, 0]} 
-        rotation={[0, 0, Math.PI - angleRad]}
+        fontSize={0.15}
+        color="#3b82f6"
+        anchorX="center"
       >
-        <coneGeometry args={[0.15, 0.3, 8]} />
-        <meshStandardMaterial color="#22c55e" />
+        N={normalForce.toFixed(1)}N
+      </Text>
+
+      {friction > 0 && (
+        <>
+          <Line
+            points={[
+              [blockX, blockY, 0],
+              [blockX - frictionForce / 50 * Math.cos(radAngle), blockY - frictionForce / 50 * Math.sin(radAngle), 0]
+            ]}
+            color="#f59e0b"
+            lineWidth={2}
+          />
+          <Text
+            position={[
+              blockX - (frictionForce / 50 * Math.cos(radAngle)) * 1.2,
+              blockY - (frictionForce / 50 * Math.sin(radAngle)) * 1.2 - 0.2,
+              0
+            ]}
+            fontSize={0.15}
+            color="#f59e0b"
+            anchorX="center"
+          >
+            Fr={frictionForce.toFixed(1)}N
+          </Text>
+        </>
+      )}
+
+      <mesh position={[0, -0.1, 0]}>
+        <boxGeometry args={[10, 0.2, planeWidth + 1]} />
+        <meshStandardMaterial color="#64748b" />
       </mesh>
-      <Text 
-        position={[objX - Math.cos(angleRad) * 0.8 - 0.5, objY + Math.sin(angleRad) * 0.8, 0]} 
-        fontSize={0.3} 
-        color="#22c55e" 
-        anchorX="right"
-      >
-        {`F=${requiredForce.toFixed(1)}N`}
-      </Text>
 
-      {/* Etiquetas de dimensiones */}
-      <Text position={[base / 2, -0.4, 0]} fontSize={0.3} color="#64748b" anchorX="center">
-        {`Base = ${base.toFixed(2)}m`}
-      </Text>
-      <Text position={[base + 0.6, height / 2, 0]} fontSize={0.3} color="#64748b" anchorX="left">
-        {`h = ${height.toFixed(2)}m`}
-      </Text>
-      <Text position={[objX - 0.8, objY + 0.8, 0]} fontSize={0.3} color="#8b5cf6" anchorX="center">
-        {`θ = ${angle}°`}
-      </Text>
-
-      {/* Plano de referencia */}
-      <mesh position={[base / 2, -1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[12, 10]} />
-        <meshStandardMaterial color="#e5e7eb" opacity={0.3} transparent />
-      </mesh>
-
-      <gridHelper args={[12, 12, "#94a3b8", "#cbd5e1"]} position={[base / 2, -1, 0]} />
-    </>
+      <gridHelper args={[12, 12, "#94a3b8", "#cbd5e1"]} position={[0, -0.25, 0]} />
+    </group>
   );
 }
 
 export function PlanoInclinado3D() {
   const [angle, setAngle] = useState(30);
-  const [weight, setWeight] = useState(100);
+  const [mass, setMass] = useState(10);
   const [friction, setFriction] = useState(0.2);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const angleRad = (angle * Math.PI) / 180;
-  const wParallel = weight * Math.sin(angleRad);
-  const wNormal = weight * Math.cos(angleRad);
-  const frictionForce = friction * wNormal;
-  const requiredForce = wParallel + frictionForce;
-  const vm = 1 / Math.sin(angleRad);
+  const weight = mass * 9.8;
+  const radAngle = (angle * Math.PI) / 180;
+  const parallelForce = weight * Math.sin(radAngle);
+  const normalForce = weight * Math.cos(radAngle);
+  const frictionForce = friction * normalForce;
+  const netForce = parallelForce - frictionForce;
+  const vm = 1 / Math.sin(radAngle);
+
+  const reset = () => {
+    setAngle(30);
+    setMass(10);
+    setFriction(0.2);
+  };
 
   return (
-    <div className="w-full space-y-6">
-      <Card>
-        <CardContent className="pt-6">
-          <div className="h-[500px] bg-muted/20 rounded-lg overflow-hidden">
-            <Canvas camera={{ position: [0, 3, 10], fov: 50 }}>
-              <InclinedPlaneScene angle={angle} weight={weight} friction={friction} />
-              <OrbitControls 
-                enablePan={false}
-                minDistance={6}
+    <div className="space-y-4">
+      <Card className="border-2 shadow-sm">
+        <CardContent className="p-3 md:p-6">
+          <div className="h-[400px] md:h-[600px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden border-2 border-primary/30 shadow-inner">
+            <Canvas camera={{ position: [5, 4, 8], fov: 50 }}>
+              <color attach="background" args={["#f1f5f9"]} />
+              <ambientLight intensity={0.6} />
+              <directionalLight position={[10, 10, 5]} intensity={1} />
+              <pointLight position={[-5, 5, -5]} intensity={0.5} />
+
+              <InclinedPlane angle={angle} mass={mass} friction={friction} />
+
+              <OrbitControls
+                enableDamping
+                dampingFactor={0.05}
+                minDistance={5}
                 maxDistance={15}
                 maxPolarAngle={Math.PI / 2}
               />
@@ -198,109 +182,133 @@ export function PlanoInclinado3D() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Controles</CardTitle>
+      <Card className="border-2 shadow-sm">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <CardTitle className="text-lg md:text-xl">Controles</CardTitle>
+            <Button variant="outline" size="sm" onClick={reset}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label>Ángulo de Inclinación (θ)</Label>
-              <span className="text-sm font-mono text-muted-foreground">{angle}°</span>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <Label className="text-sm md:text-base">Ángulo de inclinación (θ)</Label>
+              <span className="text-sm md:text-base font-mono font-bold text-primary">{angle}°</span>
             </div>
             <Slider
               value={[angle]}
               onValueChange={([v]) => setAngle(v)}
-              min={10}
+              min={5}
               max={60}
-              step={1}
+              step={5}
+              className="cursor-pointer"
             />
           </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label>Peso del Objeto (W)</Label>
-              <span className="text-sm font-mono text-muted-foreground">{weight} N</span>
-            </div>
-            <Slider
-              value={[weight]}
-              onValueChange={([v]) => setWeight(v)}
-              min={20}
-              max={200}
-              step={10}
-            />
-          </div>
+          <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="w-full justify-between">
+                <span className="flex items-center gap-2">
+                  <Settings2 className="w-4 h-4" />
+                  Configuración Avanzada
+                </span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-6 pt-4">
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <Label className="text-sm">Masa del objeto (m)</Label>
+                  <span className="text-sm font-mono text-muted-foreground">{mass} kg</span>
+                </div>
+                <Slider
+                  value={[mass]}
+                  onValueChange={([v]) => setMass(v)}
+                  min={1}
+                  max={50}
+                  step={1}
+                  className="cursor-pointer"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label>Coeficiente de Fricción (μ)</Label>
-              <span className="text-sm font-mono text-muted-foreground">{friction.toFixed(2)}</span>
-            </div>
-            <Slider
-              value={[friction]}
-              onValueChange={([v]) => setFriction(v)}
-              min={0}
-              max={0.8}
-              step={0.05}
-            />
-          </div>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <Label className="text-sm">Coeficiente de fricción (μ)</Label>
+                  <span className="text-sm font-mono text-muted-foreground">{friction.toFixed(2)}</span>
+                </div>
+                <Slider
+                  value={[friction]}
+                  onValueChange={([v]) => setFriction(v)}
+                  min={0}
+                  max={0.8}
+                  step={0.05}
+                  className="cursor-pointer"
+                />
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
       </Card>
 
-      <Card className="bg-primary/5 border-primary/20">
-        <CardHeader>
-          <CardTitle>Cálculos y Componentes</CardTitle>
+      <Card className="bg-primary/5 border-2 border-primary/20 shadow-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg md:text-xl">📊 Análisis de Fuerzas</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-background p-3 rounded border">
-              <p className="text-xs text-muted-foreground mb-1">Componente Paralela:</p>
-              <p className="font-mono font-bold text-lg text-amber-600 dark:text-amber-400">
-                W‖ = {wParallel.toFixed(1)} N
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="bg-background p-3 md:p-4 rounded-lg border-2">
+              <p className="text-xs text-muted-foreground mb-1">Peso total:</p>
+              <p className="font-mono font-bold text-lg md:text-xl text-purple-600 dark:text-purple-400">
+                W = {weight.toFixed(1)} N
               </p>
-              <p className="text-xs text-muted-foreground mt-1">W × sin({angle}°)</p>
             </div>
-            <div className="bg-background p-3 rounded border">
-              <p className="text-xs text-muted-foreground mb-1">Componente Normal:</p>
-              <p className="font-mono font-bold text-lg text-blue-600 dark:text-blue-400">
-                W⊥ = {wNormal.toFixed(1)} N
+            <div className="bg-background p-3 md:p-4 rounded-lg border-2">
+              <p className="text-xs text-muted-foreground mb-1">Fuerza normal:</p>
+              <p className="font-mono font-bold text-lg md:text-xl text-blue-600 dark:text-blue-400">
+                N = {normalForce.toFixed(1)} N
               </p>
-              <p className="text-xs text-muted-foreground mt-1">W × cos({angle}°)</p>
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-background p-3 rounded border">
-              <p className="text-xs text-muted-foreground mb-1">Fuerza de Fricción:</p>
-              <p className="font-mono font-bold text-lg text-red-600 dark:text-red-400">
-                Ff = {frictionForce.toFixed(1)} N
+            <div className="bg-background p-3 md:p-4 rounded-lg border-2">
+              <p className="text-xs text-muted-foreground mb-1">Comp. paralela:</p>
+              <p className="font-mono font-bold text-lg md:text-xl text-green-600 dark:text-green-400">
+                F∥ = {parallelForce.toFixed(1)} N
               </p>
-              <p className="text-xs text-muted-foreground mt-1">μ × W⊥</p>
             </div>
-            <div className="bg-background p-3 rounded border">
-              <p className="text-xs text-muted-foreground mb-1">Ventaja Mecánica:</p>
-              <p className="font-mono font-bold text-lg text-accent">
-                VM = {vm.toFixed(2)}
+            <div className="bg-background p-3 md:p-4 rounded-lg border-2">
+              <p className="text-xs text-muted-foreground mb-1">Fricción:</p>
+              <p className="font-mono font-bold text-lg md:text-xl text-amber-600 dark:text-amber-400">
+                Fr = {frictionForce.toFixed(1)} N
               </p>
-              <p className="text-xs text-muted-foreground mt-1">1 / sin(θ)</p>
             </div>
           </div>
 
-          <div className="bg-background p-3 rounded border">
-            <p className="text-xs text-muted-foreground mb-2">Fuerza Requerida (con fricción):</p>
-            <p className="font-mono font-bold text-xl text-center text-green-600 dark:text-green-400">
-              F = {requiredForce.toFixed(1)} N
+          <div className="bg-background p-4 rounded-lg border-2">
+            <p className="text-xs text-muted-foreground mb-2">Fuerza neta sobre el plano:</p>
+            <p className="font-mono text-base md:text-lg text-center">
+              Fneta = F∥ - Fr
             </p>
-            <p className="text-xs text-center text-muted-foreground mt-2">
-              F = W·sin(θ) + μ·W·cos(θ)
+            <p className="font-mono text-base md:text-lg text-center text-primary mt-1">
+              Fneta = {parallelForce.toFixed(1)} - {frictionForce.toFixed(1)} = {netForce.toFixed(1)} N
             </p>
           </div>
 
-          <p className="text-sm text-muted-foreground text-center">
-            {friction === 0 
-              ? "✓ Sin fricción: F = W·sin(θ)" 
-              : `Con fricción μ=${friction.toFixed(2)}: se requiere ${frictionForce.toFixed(1)}N adicional`}
-          </p>
+          <div className="bg-background p-4 rounded-lg border-2">
+            <p className="text-xs text-muted-foreground mb-1">Ventaja Mecánica:</p>
+            <p className="font-mono font-bold text-xl md:text-2xl text-accent text-center">
+              VM = {vm.toFixed(2)}
+            </p>
+          </div>
+
+          <div className="bg-accent/10 p-3 rounded-lg border border-accent/30">
+            <p className="text-xs md:text-sm leading-relaxed">
+              <strong>Plano inclinado:</strong> El peso se descompone en dos componentes: paralela al plano (F∥ = W·sen θ) 
+              y perpendicular (N = W·cos θ). La fricción se opone al movimiento (Fr = μ·N). 
+              A menor ángulo, menor fuerza paralela pero mayor distancia recorrida (ventaja mecánica).
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
