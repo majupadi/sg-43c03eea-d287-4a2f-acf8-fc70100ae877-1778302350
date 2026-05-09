@@ -24,23 +24,19 @@ function LeverScene({
   power: number;
   resistance: number;
 }) {
-  // Calcular posiciones según el tipo de palanca
   let fulcrumPos = 0;
   let powerPos = 0;
   let resistancePos = 0;
 
   if (type === "first") {
-    // Fulcro en el centro
     fulcrumPos = 0;
     powerPos = -powerArm;
     resistancePos = resistanceArm;
   } else if (type === "second") {
-    // Resistencia en el centro
     fulcrumPos = -(powerArm + resistanceArm) / 2;
     resistancePos = fulcrumPos + resistanceArm;
     powerPos = fulcrumPos + resistanceArm + powerArm;
   } else {
-    // Potencia en el centro
     fulcrumPos = -(powerArm + resistanceArm) / 2;
     powerPos = fulcrumPos + powerArm;
     resistancePos = fulcrumPos + powerArm + resistanceArm;
@@ -89,7 +85,7 @@ function LeverScene({
         color="#22c55e"
         anchorX="center"
       >
-        {`P=${power}N`}
+        P={power.toFixed(1)}N
       </Text>
 
       {/* Fuerza de Resistencia (flecha hacia abajo) */}
@@ -108,7 +104,7 @@ function LeverScene({
         color="#ef4444"
         anchorX="center"
       >
-        {`R=${resistance}N`}
+        R={resistance}N
       </Text>
 
       {/* Indicadores de brazos */}
@@ -124,7 +120,7 @@ function LeverScene({
         color="#f59e0b"
         anchorX="center"
       >
-        {`BP=${powerArm.toFixed(1)}m`}
+        BP={powerArm.toFixed(1)}m
       </Text>
 
       <Line
@@ -139,7 +135,7 @@ function LeverScene({
         color="#a855f7"
         anchorX="center"
       >
-        {`BR=${resistanceArm.toFixed(1)}m`}
+        BR={resistanceArm.toFixed(1)}m
       </Text>
 
       {/* Plano de referencia */}

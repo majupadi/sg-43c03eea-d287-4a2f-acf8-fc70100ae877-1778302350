@@ -57,7 +57,6 @@ function ForceArrow({
         fontSize={0.2}
         color={color}
         anchorX="center"
-        font="/fonts/GeistMonoVF.woff"
       >
         {magnitude}N
       </Text>
@@ -67,7 +66,6 @@ function ForceArrow({
         fontSize={0.15}
         color="#94a3b8"
         anchorX="center"
-        font="/fonts/GeistMonoVF.woff"
       >
         x={position.toFixed(1)}m
       </Text>
@@ -108,7 +106,6 @@ function Beam3D({
               fontSize={0.12}
               color="#64748b"
               anchorX="center"
-              font="/fonts/GeistMonoVF.woff"
             >
               {i}m
             </Text>
@@ -141,7 +138,6 @@ function Beam3D({
             fontSize={0.25}
             color="#f59e0b"
             anchorX="center"
-            font="/fonts/GeistMonoVF.woff"
           >
             Resultante en x={resultant.position.toFixed(2)}m
           </Text>
