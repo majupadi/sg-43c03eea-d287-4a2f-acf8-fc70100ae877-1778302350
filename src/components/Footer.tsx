@@ -15,22 +15,32 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-3">
-            <h3 className="font-mono font-semibold text-primary">Enlaces Rápidos</h3>
+          <div>
+            <h3 className="font-mono font-semibold mb-4 text-primary">Recursos</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/teoria" className="text-muted-foreground hover:text-primary transition-colors">
-                  Teoría
+                <Link href="/teoria" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Teoría Completa
                 </Link>
               </li>
               <li>
-                <Link href="/simulaciones" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/simulaciones" className="text-muted-foreground hover:text-foreground transition-colors">
                   Simulaciones
                 </Link>
               </li>
               <li>
-                <Link href="/ejercicios" className="text-muted-foreground hover:text-primary transition-colors">
-                  Ejercicios
+                <Link href="/ejercicios" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Ejercicios Resueltos
+                </Link>
+              </li>
+              <li>
+                <Link href="/glosario" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Glosario
+                </Link>
+              </li>
+              <li>
+                <Link href="/quiz" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Quiz Interactivo
                 </Link>
               </li>
             </ul>
