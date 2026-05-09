@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { RotateCcw, Play, Pause, ChevronDown } from "lucide-react";
+import { RotateCcw, Play, Pause, ChevronDown, Settings2 } from "lucide-react";
 import * as THREE from "three";
 
 function AnimatedBlock({ 
@@ -383,18 +383,19 @@ export function PlanoInclinado3D() {
   const netForce = parallelForce - frictionForce;
   const calculatedAcceleration = netForce / mass;
   const vm = 1 / Math.sin(radAngle);
+  const planeLength = 6;
 
   // Energía
   const height = position * Math.sin(radAngle);
   const initialHeight = 0; // Empieza desde el top cuando position = 0
-  const potentialEnergy = mass * 9.8 * (6 * Math.sin(radAngle) - height);
+  const potentialEnergy = mass * 9.8 * (planeLength * Math.sin(radAngle) - height);
   const kineticEnergy = 0.5 * mass * velocity * velocity;
   const workByFriction = frictionForce * position;
 
-  const handlePositionUpdate = (pos: number, vel: number, acc: number) => {
-    setPosition(pos);
-    setVelocity(vel);
-    setAcceleration(acc);
+  const handlePositionUpdate = (state: { position: number; velocity: number; acceleration: number }) => {
+    setPosition(state.position);
+    setVelocity(state.velocity);
+    setAcceleration(state.acceleration);
   };
 
   const reset = () => {
