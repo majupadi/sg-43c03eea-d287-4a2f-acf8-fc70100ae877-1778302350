@@ -17,13 +17,13 @@ import {
 } from "lucide-react";
 
 export interface QuizQuestion {
-  id: number;
+  id: string;
+  topic: string;
   question: string;
   options: string[];
   correctAnswer: number;
   explanation: string;
-  topic: string;
-  difficulty: "Fácil" | "Medio" | "Difícil";
+  difficulty: "easy" | "medium" | "hard";
 }
 
 interface QuizProps {
@@ -417,13 +417,14 @@ export function Quiz({ questions, title, description }: QuizProps) {
             </Badge>
             <Badge 
               variant={
-                question.difficulty === "Fácil" ? "default" : 
-                question.difficulty === "Medio" ? "secondary" : 
+                question.difficulty === "easy" ? "default" : 
+                question.difficulty === "medium" ? "secondary" : 
                 "destructive"
               }
               className="w-fit"
             >
-              {question.difficulty}
+              {question.difficulty === "easy" ? "Fácil" : 
+               question.difficulty === "medium" ? "Medio" : "Difícil"}
             </Badge>
           </div>
           <CardTitle className="text-xl md:text-2xl leading-relaxed">
