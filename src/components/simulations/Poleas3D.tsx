@@ -87,7 +87,6 @@ function Weight({ position, mass }: { position: [number, number, number]; mass: 
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/GeistMonoVF.woff"
       >
         {mass}N
       </Text>
@@ -119,15 +118,15 @@ function FijaSystem({ weight, isAnimating, ropeLength, pulleyRadius, animationSp
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.6, 0, 0]} fontSize={0.15} color="#10b981" font="/fonts/GeistMonoVF.woff">
+        <Text position={[0.6, 0, 0]} fontSize={0.15} color="#10b981">
           F = {weight}N
         </Text>
       </group>
 
-      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center" font="/fonts/GeistMonoVF.woff">
+      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
         Polea Fija
       </Text>
-      <Text position={[0, -3.5, 0]} fontSize={0.14} color="#94a3b8" anchorX="center" font="/fonts/GeistMonoVF.woff">
+      <Text position={[0, -3.5, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
         VM = 1 · Solo cambia dirección
       </Text>
     </group>
@@ -165,15 +164,15 @@ function MovilSystem({ weight, isAnimating, ropeLength, pulleyRadius, animationS
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981" font="/fonts/GeistMonoVF.woff">
+        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
           F = {(weight / 2).toFixed(1)}N
         </Text>
       </group>
 
-      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center" font="/fonts/GeistMonoVF.woff">
+      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
         Polea Móvil
       </Text>
-      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#94a3b8" anchorX="center" font="/fonts/GeistMonoVF.woff">
+      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
         VM = 2 · Fuerza = Peso/2
       </Text>
     </group>
@@ -217,15 +216,15 @@ function AparejoSystem({ weight, isAnimating, ropeLength, pulleyRadius, animatio
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981" font="/fonts/GeistMonoVF.woff">
+        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
           F = {(weight / 4).toFixed(1)}N
         </Text>
       </group>
 
-      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center" font="/fonts/GeistMonoVF.woff">
+      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
         Aparejo (4 ramales)
       </Text>
-      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#94a3b8" anchorX="center" font="/fonts/GeistMonoVF.woff">
+      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
         VM = 4 · Fuerza = Peso/4
       </Text>
     </group>

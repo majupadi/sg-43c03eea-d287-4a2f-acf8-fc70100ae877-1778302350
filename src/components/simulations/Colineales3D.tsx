@@ -65,7 +65,6 @@ function Arrow3D({
         color={color}
         anchorX="center"
         anchorY="middle"
-        font="/fonts/inter-bold.woff"
       >
         {label}: {magnitude}N
       </Text>
