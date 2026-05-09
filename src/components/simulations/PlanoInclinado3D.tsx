@@ -181,22 +181,12 @@ function InclinedPlaneScene({
           />
         </mesh>
 
-        {/* Líneas de grid en el plano cada metro */}
+        {/* Líneas de marcas en el plano cada metro */}
         {Array.from({ length: Math.floor(planeLength) + 1 }).map((_, i) => (
-          <group key={i} position={[-planeLength / 2 + i, 0, 0]}>
-            <mesh position={[0, 0.16, 0]}>
-              <boxGeometry args={[0.05, 0.02, 2]} />
-              <meshStandardMaterial color="#8b6f47" />
-            </mesh>
-            <Text
-              position={[0, -0.3, 0]}
-              fontSize={0.25}
-              color="#2c1810"
-              anchorX="center"
-            >
-              {i}m
-            </Text>
-          </group>
+          <mesh key={`mark-${i}`} position={[-planeLength / 2 + i, 0, 0]}>
+            <boxGeometry args={[0.05, 0.02, 2]} />
+            <meshStandardMaterial color="#8b6f47" />
+          </mesh>
         ))}
 
         {/* Borde del plano */}
@@ -209,6 +199,24 @@ function InclinedPlaneScene({
           <meshStandardMaterial color="#8b6f47" />
         </mesh>
       </group>
+
+      {/* Etiquetas de distancia - fuera del grupo rotado para que sean horizontales */}
+      {Array.from({ length: Math.floor(planeLength) + 1 }).map((_, i) => {
+        const x = -planeWidth / 2 + (i * Math.cos(angleRad));
+        const y = -planeHeight / 2 + (i * Math.sin(angleRad));
+        return (
+          <Text
+            key={`label-${i}`}
+            position={[x, y - 0.4, 0]}
+            fontSize={0.3}
+            color="#2c1810"
+            anchorX="center"
+            rotation={[0, 0, 0]}
+          >
+            {i}m
+          </Text>
+        );
+      })}
 
       {/* Soporte triangular - más visible */}
       <group position={[-planeWidth / 2, -planeHeight / 2, 0]}>
