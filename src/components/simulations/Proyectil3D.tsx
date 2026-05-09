@@ -92,8 +92,8 @@ function ProjectileScene({
 
       {/* Cañón/Lanzador */}
       <group rotation={[0, 0, angleRad]}>
-        <mesh position={[0.5, 0, 0]}>
-          <cylinderGeometry args={[0.1, 0.15, 1, 16]} rotation={[0, 0, Math.PI / 2]} />
+        <mesh position={[0.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.1, 0.15, 1, 16]} />
           <meshStandardMaterial color="#374151" metalness={0.7} roughness={0.3} />
         </mesh>
       </group>

@@ -202,13 +202,13 @@ function InclinedPlaneScene({
 
       {/* Etiquetas de distancia - fuera del grupo rotado para que sean horizontales */}
       {Array.from({ length: Math.floor(planeLength) + 1 }).map((_, i) => {
-        const x = -planeWidth / 2 + (i * Math.cos(angleRad));
-        const y = -planeHeight / 2 + (i * Math.sin(angleRad));
+        const x = (-planeLength / 2 + i) * Math.cos(angleRad);
+        const y = (-planeLength / 2 + i) * -Math.sin(angleRad);
         return (
           <Text
             key={`label-${i}`}
             position={[x, y - 0.4, 0]}
-            fontSize={0.3}
+            fontSize={0.25}
             color="#2c1810"
             anchorX="center"
             rotation={[0, 0, 0]}
