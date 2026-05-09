@@ -286,7 +286,25 @@ function InclinedPlaneScene({
           W={weight.toFixed(1)}N
         </Text>
 
-        {/* Vector Normal (N) - perpendicular al plano */}
+        {/* Vector P-R (Componente vertical del peso - eliminada por el plano) */}
+        {/* Este es el componente del peso que el plano elimina/reacciona */}
+        <Line
+          points={[[0, 0, 0], [0, -normalForce / 40, 0]]}
+          color="#6366f1"
+          lineWidth={3}
+          dashed
+          dashScale={2}
+        />
+        <Text
+          position={[-0.5, -normalForce / 80, 0]}
+          fontSize={0.18}
+          color="#6366f1"
+          anchorX="right"
+        >
+          P-R={normalForce.toFixed(1)}N
+        </Text>
+
+        {/* Vector Normal (N) - perpendicular al plano hacia arriba */}
         <Line
           points={[[0, 0, 0], [0, normalForce / 40, 0]]}
           color="#3b82f6"
@@ -305,20 +323,42 @@ function InclinedPlaneScene({
           N={normalForce.toFixed(1)}N
         </Text>
 
-        {/* Vector Paralelo (F∥) - paralelo al plano hacia abajo */}
+        {/* Vector Fm (Fuerza motriz - paralela hacia arriba del plano) */}
+        {/* Esta es la fuerza que impulsa el bloque hacia arriba cuando hay movimiento */}
+        {acceleration > 0 && (
+          <>
+            <Line
+              points={[[0, 0, 0], [parallelForce / 40, 0, 0]]}
+              color="#10b981"
+              lineWidth={4}
+            />
+            <mesh position={[parallelForce / 40, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <coneGeometry args={[0.1, 0.2, 8]} />
+              <meshStandardMaterial color="#10b981" />
+            </mesh>
+            <Text
+              position={[parallelForce / 80, 0.4, 0]}
+              fontSize={0.2}
+              color="#10b981"
+              anchorX="center"
+            >
+              Fm={parallelForce.toFixed(1)}N
+            </Text>
+          </>
+        )}
+
+        {/* Vector F∥ (Componente paralela del peso - hacia abajo del plano) */}
         <Line
           points={[[0, 0, 0], [-parallelForce / 40, 0, 0]]}
-          color="#10b981"
-          lineWidth={4}
+          color="#ef4444"
+          lineWidth={3}
+          dashed
+          dashScale={2}
         />
-        <mesh position={[-parallelForce / 40, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
-          <coneGeometry args={[0.1, 0.2, 8]} />
-          <meshStandardMaterial color="#10b981" />
-        </mesh>
         <Text
-          position={[-parallelForce / 80, -0.4, 0]}
-          fontSize={0.2}
-          color="#10b981"
+          position={[-parallelForce / 80, -0.5, 0]}
+          fontSize={0.18}
+          color="#ef4444"
           anchorX="center"
         >
           F∥={parallelForce.toFixed(1)}N
@@ -343,6 +383,40 @@ function InclinedPlaneScene({
           Fr={frictionForce.toFixed(1)}N
         </Text>
       </group>
+
+      {/* Marcador de altura h - línea vertical desde la base hasta la posición actual del bloque */}
+      {blockPos.y > 0.1 && (
+        <group>
+          <Line
+            points={[
+              [blockPos.x, -planeHeight / 2, 0],
+              [blockPos.x, blockPos.y, 0],
+            ]}
+            color="#f59e0b"
+            lineWidth={2}
+            dashed
+            dashScale={1}
+          />
+          <Text
+            position={[blockPos.x + 0.8, blockPos.y / 2, 0]}
+            fontSize={0.25}
+            color="#f59e0b"
+            anchorX="left"
+          >
+            h = {blockPos.y.toFixed(2)}m
+          </Text>
+          
+          {/* Marcadores en los extremos de la línea de altura */}
+          <mesh position={[blockPos.x, -planeHeight / 2, 0]}>
+            <cylinderGeometry args={[0.08, 0.08, 0.05, 16]} />
+            <meshStandardMaterial color="#f59e0b" />
+          </mesh>
+          <mesh position={[blockPos.x, blockPos.y, 0]}>
+            <cylinderGeometry args={[0.08, 0.08, 0.05, 16]} />
+            <meshStandardMaterial color="#f59e0b" />
+          </mesh>
+        </group>
+      )}
 
       {/* Suelo/base - más claro */}
       <mesh position={[0, -planeHeight / 2 - 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>

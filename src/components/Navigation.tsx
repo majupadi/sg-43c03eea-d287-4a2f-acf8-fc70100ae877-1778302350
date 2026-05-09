@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Book, FlaskConical, Calculator, Brain } from "lucide-react";
+import { Book, FlaskConical, Calculator, Brain, MessageSquare } from "lucide-react";
 import { ThemeSwitch } from "./ThemeSwitch";
 
 export function Navigation() {
@@ -43,6 +43,14 @@ export function Navigation() {
             >
               <Brain className="h-4 w-4" />
               <span className="text-sm hidden sm:inline">Quiz</span>
+            </Link>
+
+            <Link
+              href="/asistente"
+              className="px-3 md:px-4 py-2 rounded-md hover:bg-accent transition-colors flex items-center gap-2"
+            >
+              <MessageSquare className="h-4 w-4" />
+              <span className="text-sm hidden sm:inline">Asistente IA</span>
             </Link>
 
             <ThemeSwitch />
