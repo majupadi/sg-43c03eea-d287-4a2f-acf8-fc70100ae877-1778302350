@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { Settings2, RotateCcw } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Settings2, RotateCcw, ChevronDown } from "lucide-react";
 
 type LeverType = "first" | "second" | "third";
 
@@ -49,13 +50,11 @@ function LeverScene({
       <ambientLight intensity={0.6} />
       <directionalLight position={[10, 10, 5]} intensity={0.8} />
 
-      {/* Barra de la palanca */}
       <mesh position={[0, 0.5, 0]}>
         <boxGeometry args={[barLength, 0.1, 0.4]} />
         <meshStandardMaterial color="#8b7355" />
       </mesh>
 
-      {/* Fulcro (punto de apoyo) */}
       <mesh position={[fulcrumPos, 0, 0]}>
         <coneGeometry args={[0.4, 0.8, 4]} />
         <meshStandardMaterial color="#1e40af" />
@@ -69,7 +68,6 @@ function LeverScene({
         Fulcro (F)
       </Text>
 
-      {/* Fuerza de Potencia (flecha hacia abajo) */}
       <Line
         points={[[powerPos, 1.5, 0], [powerPos, 0.6, 0]]}
         color="#22c55e"
@@ -88,7 +86,6 @@ function LeverScene({
         P={power.toFixed(1)}N
       </Text>
 
-      {/* Fuerza de Resistencia (flecha hacia abajo) */}
       <Line
         points={[[resistancePos, 1.5, 0], [resistancePos, 0.6, 0]]}
         color="#ef4444"
@@ -107,7 +104,6 @@ function LeverScene({
         R={resistance}N
       </Text>
 
-      {/* Indicadores de brazos */}
       <Line
         points={[[fulcrumPos, -0.3, 0], [powerPos, -0.3, 0]]}
         color="#f59e0b"
@@ -138,7 +134,6 @@ function LeverScene({
         BR={resistanceArm.toFixed(1)}m
       </Text>
 
-      {/* Plano de referencia */}
       <mesh position={[0, -1.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[15, 10]} />
         <meshStandardMaterial color="#e5e7eb" opacity={0.3} transparent />
@@ -156,7 +151,6 @@ export function Palancas3D() {
   const [resistance, setResistance] = useState(100);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  // Calcular potencia necesaria según ley de la palanca: P × BP = R × BR
   const power = (resistance * resistanceArm) / powerArm;
   const vm = powerArm / resistanceArm;
 
@@ -174,19 +168,19 @@ export function Palancas3D() {
   };
 
   return (
-    <div className="w-full space-y-6">
-      <Card className="border-2">
-        <CardHeader>
-          <CardTitle>Tipo de Palanca</CardTitle>
+    <div className="w-full space-y-4">
+      <Card className="border-2 shadow-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg md:text-xl">Tipo de Palanca</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {leverTypes.map((type) => (
               <Button
                 key={type.id}
                 variant={leverType === type.id ? "default" : "outline"}
                 onClick={() => setLeverType(type.id)}
-                className="h-auto py-3 flex flex-col items-start"
+                className="h-auto py-4 flex flex-col items-start gap-1"
               >
                 <span className="font-bold text-sm">{type.name}</span>
                 <span className="text-xs opacity-70 font-mono">{type.desc}</span>
@@ -196,9 +190,9 @@ export function Palancas3D() {
         </CardContent>
       </Card>
 
-      <Card className="border-2">
-        <CardContent className="pt-6">
-          <div className="h-[500px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden border-2 border-primary/30 shadow-inner">
+      <Card className="border-2 shadow-sm">
+        <CardContent className="p-3 md:p-6">
+          <div className="h-[400px] md:h-[500px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden border-2 border-primary/30 shadow-inner">
             <Canvas camera={{ position: [0, 3, 12], fov: 50 }}>
               <color attach="background" args={["#f1f5f9"]} />
               <LeverScene
@@ -221,31 +215,21 @@ export function Palancas3D() {
         </CardContent>
       </Card>
 
-      <Card className="border-2">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Controles</CardTitle>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-              >
-                <Settings2 className="w-4 h-4 mr-2" />
-                {showAdvanced ? "Básicos" : "Avanzados"}
-              </Button>
-              <Button variant="outline" size="sm" onClick={reset}>
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
+      <Card className="border-2 shadow-sm">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <CardTitle className="text-lg md:text-xl">Controles</CardTitle>
+            <Button variant="outline" size="sm" onClick={reset}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset
+            </Button>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label>Resistencia (R)</Label>
-              <span className="text-sm font-mono text-primary">{resistance} N</span>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <Label className="text-sm md:text-base">Resistencia (R)</Label>
+              <span className="text-sm md:text-base font-mono font-bold text-primary">{resistance} N</span>
             </div>
             <Slider
               value={[resistance]}
@@ -253,15 +237,25 @@ export function Palancas3D() {
               min={10}
               max={200}
               step={10}
+              className="cursor-pointer"
             />
           </div>
 
-          {showAdvanced && (
-            <>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <Label>Brazo de Potencia (BP)</Label>
-                  <span className="text-sm font-mono text-primary">{powerArm.toFixed(1)} m</span>
+          <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="w-full justify-between">
+                <span className="flex items-center gap-2">
+                  <Settings2 className="w-4 h-4" />
+                  Configuración Avanzada
+                </span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-6 pt-4">
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <Label className="text-sm">Brazo de Potencia (BP)</Label>
+                  <span className="text-sm font-mono text-muted-foreground">{powerArm.toFixed(1)} m</span>
                 </div>
                 <Slider
                   value={[powerArm]}
@@ -269,13 +263,14 @@ export function Palancas3D() {
                   min={0.5}
                   max={5}
                   step={0.1}
+                  className="cursor-pointer"
                 />
               </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <Label>Brazo de Resistencia (BR)</Label>
-                  <span className="text-sm font-mono text-primary">{resistanceArm.toFixed(1)} m</span>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <Label className="text-sm">Brazo de Resistencia (BR)</Label>
+                  <span className="text-sm font-mono text-muted-foreground">{resistanceArm.toFixed(1)} m</span>
                 </div>
                 <Slider
                   value={[resistanceArm]}
@@ -283,33 +278,34 @@ export function Palancas3D() {
                   min={0.5}
                   max={5}
                   step={0.1}
+                  className="cursor-pointer"
                 />
               </div>
-            </>
-          )}
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
       </Card>
 
-      <Card className="bg-primary/5 border-primary/20 border-2">
-        <CardHeader>
-          <CardTitle>📊 Análisis</CardTitle>
+      <Card className="bg-primary/5 border-2 border-primary/20 shadow-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg md:text-xl">📊 Análisis</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-background p-3 rounded border">
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="bg-background p-4 rounded-lg border-2">
               <p className="text-xs text-muted-foreground mb-1">Potencia necesaria:</p>
-              <p className="font-mono font-bold text-lg text-green-600 dark:text-green-400">
+              <p className="font-mono font-bold text-xl md:text-2xl text-green-600 dark:text-green-400">
                 P = {power.toFixed(1)} N
               </p>
             </div>
-            <div className="bg-background p-3 rounded border">
+            <div className="bg-background p-4 rounded-lg border-2">
               <p className="text-xs text-muted-foreground mb-1">Ventaja Mecánica:</p>
-              <p className="font-mono font-bold text-lg text-accent">
+              <p className="font-mono font-bold text-xl md:text-2xl text-accent">
                 VM = {vm.toFixed(2)}
               </p>
             </div>
           </div>
-          <div className="bg-background p-3 rounded border">
+          <div className="bg-background p-4 rounded-lg border-2">
             <p className="text-xs text-muted-foreground mb-2">Ley de la Palanca:</p>
             <p className="font-mono text-sm text-center">
               P × BP = R × BR
@@ -321,9 +317,11 @@ export function Palancas3D() {
               {(power * powerArm).toFixed(1)} N·m = {(resistance * resistanceArm).toFixed(1)} N·m ✓
             </p>
           </div>
-          <p className="text-sm text-muted-foreground text-center">
-            {vm > 1 ? "✓ Ganancia de fuerza" : vm < 1 ? "⚠ Ganancia de velocidad/distancia" : "= Sin ventaja mecánica"}
-          </p>
+          <div className="bg-accent/10 p-3 rounded-lg border border-accent/30">
+            <p className="text-xs md:text-sm text-center">
+              {vm > 1 ? "✓ Ganancia de fuerza" : vm < 1 ? "⚠ Ganancia de velocidad/distancia" : "= Sin ventaja mecánica"}
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
