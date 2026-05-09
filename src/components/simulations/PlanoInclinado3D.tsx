@@ -2,13 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text, Line } from "@react-three/drei";
+import { OrbitControls, Text, Line, Grid } from "@react-three/drei";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { RotateCcw, Settings2, ChevronDown, Play, Pause } from "lucide-react";
+import { RotateCcw, Play, Pause, ChevronDown } from "lucide-react";
 import * as THREE from "three";
 
 function AnimatedBlock({ 
@@ -87,198 +87,281 @@ function AnimatedBlock({
   );
 }
 
-function InclinedPlaneScene({ 
-  angle, 
-  mass, 
+function InclinedPlaneScene({
+  angle,
+  mass,
   friction,
-  position,
-  isAnimating,
-  onPositionUpdate
-}: { 
-  angle: number; 
+  planeLength,
+  isRunning,
+  onStateChange,
+}: {
+  angle: number;
   mass: number;
   friction: number;
-  position: number;
-  isAnimating: boolean;
-  onPositionUpdate: (pos: number, vel: number, acc: number) => void;
+  planeLength: number;
+  isRunning: boolean;
+  onStateChange: (state: any) => void;
 }) {
-  const radAngle = (angle * Math.PI) / 180;
-  const weight = mass * 9.8;
-  const parallelForce = weight * Math.sin(radAngle);
-  const normalForce = weight * Math.cos(radAngle);
-  const frictionForce = friction * normalForce;
-  
-  const planeLength = 6;
-  const planeWidth = 3;
-  const blockSize = 0.5;
-  
-  // Posición del bloque
-  const blockX = position * Math.cos(radAngle);
-  const blockY = position * Math.sin(radAngle);
+  const blockRef = useRef<THREE.Group>(null);
+  const positionRef = useRef(0);
+  const velocityRef = useRef(0);
 
-  // Marcas de distancia en el plano
-  const distanceMarks = Array.from({ length: 7 }, (_, i) => i);
+  useEffect(() => {
+    if (!isRunning) {
+      positionRef.current = 0;
+      velocityRef.current = 0;
+    }
+  }, [isRunning]);
+
+  useFrame((state, delta) => {
+    if (!blockRef.current || !isRunning) return;
+
+    const angleRad = (angle * Math.PI) / 180;
+    const g = 9.81;
+    const weight = mass * g;
+    const normalForce = weight * Math.cos(angleRad);
+    const parallelForce = weight * Math.sin(angleRad);
+    const frictionForce = friction * normalForce;
+    
+    const netForce = parallelForce - frictionForce;
+    const acceleration = netForce / mass;
+
+    if (acceleration > 0) {
+      velocityRef.current += acceleration * delta;
+      positionRef.current += velocityRef.current * delta;
+
+      if (positionRef.current > planeLength - 0.3) {
+        positionRef.current = planeLength - 0.3;
+        velocityRef.current = 0;
+      }
+
+      const x = -planeLength / 2 + positionRef.current;
+      const y = positionRef.current * Math.sin(angleRad);
+      blockRef.current.position.set(x, y, 0);
+      blockRef.current.rotation.z = -angleRad;
+
+      const height = positionRef.current * Math.sin(angleRad);
+      onStateChange({
+        position: positionRef.current,
+        velocity: velocityRef.current,
+        acceleration: acceleration,
+        height: height,
+      });
+    }
+  });
+
+  const angleRad = (angle * Math.PI) / 180;
+  const planeHeight = planeLength * Math.sin(angleRad);
+  const planeWidth = planeLength * Math.cos(angleRad);
+  
+  const g = 9.81;
+  const weight = mass * g;
+  const normalForce = weight * Math.cos(angleRad);
+  const parallelForce = weight * Math.sin(angleRad);
+  const frictionForce = friction * normalForce;
+
+  const blockPos = blockRef.current?.position || new THREE.Vector3(-planeLength / 2, 0, 0);
 
   return (
-    <group>
-      {/* Plano inclinado con textura de madera */}
-      <mesh 
-        rotation={[0, 0, -radAngle]} 
-        position={[planeLength / 2 * Math.cos(radAngle), planeLength / 2 * Math.sin(radAngle), 0]}
-      >
-        <boxGeometry args={[planeLength, 0.2, planeWidth]} />
-        <meshStandardMaterial 
-          color="#94a3b8" 
-          metalness={0.3} 
-          roughness={0.7}
-        />
-      </mesh>
+    <>
+      {/* Iluminación mejorada */}
+      <ambientLight intensity={0.8} />
+      <directionalLight position={[10, 10, 5]} intensity={1.2} castShadow />
+      <directionalLight position={[-10, 5, -5]} intensity={0.6} />
+      <pointLight position={[0, 5, 5]} intensity={0.8} />
 
-      {/* Marcas de distancia en el plano */}
-      {distanceMarks.map((mark) => {
-        const markX = mark * Math.cos(radAngle);
-        const markY = mark * Math.sin(radAngle);
-        return (
-          <group key={mark}>
-            <mesh position={[markX, markY, 0.3]} rotation={[0, 0, -radAngle]}>
-              <cylinderGeometry args={[0.04, 0.04, 0.15, 8]} />
-              <meshStandardMaterial color="#64748b" />
+      {/* Plano inclinado - color beige/madera clara */}
+      <group rotation={[0, 0, -angleRad]} position={[0, 0, 0]}>
+        <mesh position={[0, 0, 0]} receiveShadow>
+          <boxGeometry args={[planeLength, 0.3, 2]} />
+          <meshStandardMaterial 
+            color="#d4a574" 
+            roughness={0.6} 
+            metalness={0.1}
+          />
+        </mesh>
+
+        {/* Líneas de grid en el plano cada metro */}
+        {Array.from({ length: Math.floor(planeLength) + 1 }).map((_, i) => (
+          <group key={i} position={[-planeLength / 2 + i, 0, 0]}>
+            <mesh position={[0, 0.16, 0]}>
+              <boxGeometry args={[0.05, 0.02, 2]} />
+              <meshStandardMaterial color="#8b6f47" />
             </mesh>
             <Text
-              position={[markX, markY, 0.6]}
-              fontSize={0.15}
-              color="#64748b"
+              position={[0, -0.3, 0]}
+              fontSize={0.25}
+              color="#2c1810"
               anchorX="center"
-              rotation={[0, 0, -radAngle]}
             >
-              {mark}m
+              {i}m
             </Text>
           </group>
-        );
-      })}
+        ))}
 
-      {/* Bloque animado */}
-      <AnimatedBlock
-        angle={angle}
-        mass={mass}
-        friction={friction}
-        isAnimating={isAnimating}
-        onPositionUpdate={onPositionUpdate}
-      />
+        {/* Borde del plano */}
+        <mesh position={[0, 0, 1.05]}>
+          <boxGeometry args={[planeLength, 0.35, 0.1]} />
+          <meshStandardMaterial color="#8b6f47" />
+        </mesh>
+        <mesh position={[0, 0, -1.05]}>
+          <boxGeometry args={[planeLength, 0.35, 0.1]} />
+          <meshStandardMaterial color="#8b6f47" />
+        </mesh>
+      </group>
 
-      {/* Etiqueta de masa en el bloque */}
-      <Text 
-        position={[blockX, blockY - 0.5, 0]} 
-        fontSize={0.2} 
-        color="#dc2626" 
-        anchorX="center"
-      >
-        {mass}kg
-      </Text>
+      {/* Soporte triangular - más visible */}
+      <group position={[-planeWidth / 2, -planeHeight / 2, 0]}>
+        <Line
+          points={[
+            [0, 0, -1],
+            [planeWidth, 0, -1],
+            [planeWidth, planeHeight, -1],
+            [0, 0, -1],
+          ]}
+          color="#1e3a8a"
+          lineWidth={4}
+        />
+        <Line
+          points={[
+            [0, 0, 1],
+            [planeWidth, 0, 1],
+            [planeWidth, planeHeight, 1],
+            [0, 0, 1],
+          ]}
+          color="#1e3a8a"
+          lineWidth={4}
+        />
+        <mesh position={[planeWidth, planeHeight / 2, 0]}>
+          <boxGeometry args={[0.15, planeHeight, 2]} />
+          <meshStandardMaterial color="#1e3a8a" transparent opacity={0.3} />
+        </mesh>
+      </group>
 
-      {/* Vector de peso */}
-      <Line
-        points={[[blockX, blockY, 0], [blockX, blockY - weight / 50, 0]]}
-        color="#8b5cf6"
-        lineWidth={3}
-      />
-      <mesh position={[blockX, blockY - weight / 50, 0]} rotation={[Math.PI, 0, 0]}>
-        <coneGeometry args={[0.1, 0.2, 8]} />
-        <meshStandardMaterial color="#8b5cf6" />
-      </mesh>
-      <Text 
-        position={[blockX + 0.5, blockY - weight / 100, 0]} 
-        fontSize={0.18} 
-        color="#8b5cf6" 
-        anchorX="left"
-      >
-        W={weight.toFixed(1)}N
-      </Text>
-
-      {/* Vector componente paralela */}
-      <Line
-        points={[
-          [blockX, blockY, 0],
-          [blockX + parallelForce / 50 * Math.cos(radAngle), blockY + parallelForce / 50 * Math.sin(radAngle), 0]
-        ]}
-        color="#10b981"
-        lineWidth={2}
-      />
-      <Text
-        position={[
-          blockX + (parallelForce / 50 * Math.cos(radAngle)) * 1.3,
-          blockY + (parallelForce / 50 * Math.sin(radAngle)) * 1.3 + 0.2,
-          0
-        ]}
-        fontSize={0.15}
-        color="#10b981"
-        anchorX="center"
-      >
-        F∥={parallelForce.toFixed(1)}N
-      </Text>
-
-      {/* Vector normal */}
-      <Line
-        points={[
-          [blockX, blockY, 0],
-          [blockX - normalForce / 50 * Math.sin(radAngle), blockY + normalForce / 50 * Math.cos(radAngle), 0]
-        ]}
-        color="#3b82f6"
-        lineWidth={2}
-      />
-      <Text
-        position={[
-          blockX - (normalForce / 50 * Math.sin(radAngle)) * 1.3,
-          blockY + (normalForce / 50 * Math.cos(radAngle)) * 1.3,
-          0
-        ]}
-        fontSize={0.15}
-        color="#3b82f6"
-        anchorX="center"
-      >
-        N={normalForce.toFixed(1)}N
-      </Text>
-
-      {/* Vector de fricción */}
-      {friction > 0 && (
-        <>
-          <Line
-            points={[
-              [blockX, blockY, 0],
-              [blockX - frictionForce / 50 * Math.cos(radAngle), blockY - frictionForce / 50 * Math.sin(radAngle), 0]
-            ]}
-            color="#f59e0b"
-            lineWidth={2}
+      {/* Bloque deslizante - color más brillante */}
+      <group ref={blockRef} position={[-planeLength / 2, 0, 0]} rotation={[0, 0, -angleRad]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.6, 0.6, 0.6]} />
+          <meshStandardMaterial 
+            color="#dc2626" 
+            roughness={0.4} 
+            metalness={0.2}
           />
-          <Text
-            position={[
-              blockX - (frictionForce / 50 * Math.cos(radAngle)) * 1.3,
-              blockY - (frictionForce / 50 * Math.sin(radAngle)) * 1.3 - 0.2,
-              0
-            ]}
-            fontSize={0.15}
-            color="#f59e0b"
-            anchorX="center"
-          >
-            Fr={frictionForce.toFixed(1)}N
-          </Text>
-        </>
-      )}
+        </mesh>
+        
+        {/* Etiqueta de masa */}
+        <Text
+          position={[0, 0, 0.35]}
+          fontSize={0.2}
+          color="#ffffff"
+          anchorX="center"
+        >
+          {mass}kg
+        </Text>
 
-      {/* Base horizontal */}
-      <mesh position={[0, -0.15, 0]}>
-        <boxGeometry args={[12, 0.3, planeWidth + 1]} />
-        <meshStandardMaterial color="#475569" />
+        {/* Vector Peso (W) - hacia abajo */}
+        <Line
+          points={[[0, 0, 0], [0, -weight / 40, 0]]}
+          color="#9333ea"
+          lineWidth={4}
+        />
+        <mesh position={[0, -weight / 40, 0]}>
+          <coneGeometry args={[0.1, 0.2, 8]} />
+          <meshStandardMaterial color="#9333ea" />
+        </mesh>
+        <Text
+          position={[0.4, -weight / 80, 0]}
+          fontSize={0.2}
+          color="#9333ea"
+          anchorX="left"
+        >
+          W={weight.toFixed(1)}N
+        </Text>
+
+        {/* Vector Normal (N) - perpendicular al plano */}
+        <Line
+          points={[[0, 0, 0], [0, normalForce / 40, 0]]}
+          color="#3b82f6"
+          lineWidth={4}
+        />
+        <mesh position={[0, normalForce / 40, 0]} rotation={[0, 0, 0]}>
+          <coneGeometry args={[0.1, 0.2, 8]} />
+          <meshStandardMaterial color="#3b82f6" />
+        </mesh>
+        <Text
+          position={[-0.4, normalForce / 80, 0]}
+          fontSize={0.2}
+          color="#3b82f6"
+          anchorX="right"
+        >
+          N={normalForce.toFixed(1)}N
+        </Text>
+
+        {/* Vector Paralelo (F∥) - paralelo al plano hacia abajo */}
+        <Line
+          points={[[0, 0, 0], [-parallelForce / 40, 0, 0]]}
+          color="#10b981"
+          lineWidth={4}
+        />
+        <mesh position={[-parallelForce / 40, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <coneGeometry args={[0.1, 0.2, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text
+          position={[-parallelForce / 80, -0.4, 0]}
+          fontSize={0.2}
+          color="#10b981"
+          anchorX="center"
+        >
+          F∥={parallelForce.toFixed(1)}N
+        </Text>
+
+        {/* Vector Fricción (Fr) - opuesta al movimiento */}
+        <Line
+          points={[[0, 0, 0], [frictionForce / 40, 0, 0]]}
+          color="#f97316"
+          lineWidth={4}
+        />
+        <mesh position={[frictionForce / 40, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <coneGeometry args={[0.1, 0.2, 8]} />
+          <meshStandardMaterial color="#f97316" />
+        </mesh>
+        <Text
+          position={[frictionForce / 80, 0.4, 0]}
+          fontSize={0.2}
+          color="#f97316"
+          anchorX="center"
+        >
+          Fr={frictionForce.toFixed(1)}N
+        </Text>
+      </group>
+
+      {/* Suelo/base - más claro */}
+      <mesh position={[0, -planeHeight / 2 - 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[15, 15]} />
+        <meshStandardMaterial color="#e2e8f0" opacity={0.6} transparent />
       </mesh>
 
-      {/* Soporte triangular */}
-      <mesh position={[0, -0.5, 0]} rotation={[0, 0, -radAngle]}>
-        <boxGeometry args={[0.3, planeLength * Math.sin(radAngle) + 0.5, planeWidth * 0.8]} />
-        <meshStandardMaterial color="#64748b" opacity={0.7} transparent />
-      </mesh>
+      {/* Grid de referencia */}
+      <Grid
+        args={[15, 15]}
+        position={[0, -planeHeight / 2 - 0.49, 0]}
+        cellColor="#94a3b8"
+        sectionColor="#64748b"
+        fadeDistance={30}
+        fadeStrength={1}
+      />
 
-      <gridHelper args={[14, 14, "#94a3b8", "#cbd5e1"]} position={[0, -0.35, 0]} />
-    </group>
+      {/* Etiqueta del ángulo */}
+      <Text
+        position={[-planeWidth / 2 + 1, 0.5, 0]}
+        fontSize={0.35}
+        color="#f59e0b"
+        anchorX="center"
+      >
+        θ = {angle}°
+      </Text>
+    </>
   );
 }
 
@@ -332,28 +415,25 @@ export function PlanoInclinado3D() {
     <div className="space-y-4">
       <Card className="border-2 shadow-sm">
         <CardContent className="p-3 md:p-6">
-          <div className="h-[400px] md:h-[600px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden border-2 border-primary/30 shadow-inner">
-            <Canvas camera={{ position: [6, 5, 9], fov: 50 }}>
-              <color attach="background" args={["#f1f5f9"]} />
-              <ambientLight intensity={0.6} />
-              <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-              <pointLight position={[-5, 5, -5]} intensity={0.5} />
-
-              <InclinedPlaneScene 
-                angle={angle} 
-                mass={mass} 
+          <div className="h-[400px] md:h-[600px] bg-gradient-to-br from-blue-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden border-2 border-primary/30 shadow-inner">
+            <Canvas 
+              camera={{ position: [8, 4, 8], fov: 50 }}
+              shadows
+            >
+              <color attach="background" args={["#f8fafc"]} />
+              <InclinedPlaneScene
+                angle={angle}
+                mass={mass}
                 friction={friction}
-                position={position}
-                isAnimating={isAnimating}
-                onPositionUpdate={handlePositionUpdate}
+                planeLength={planeLength}
+                isRunning={isAnimating}
+                onStateChange={handlePositionUpdate}
               />
-
-              <OrbitControls
-                enableDamping
-                dampingFactor={0.05}
+              <OrbitControls 
+                enablePan={false}
                 minDistance={5}
-                maxDistance={18}
-                maxPolarAngle={Math.PI / 2.2}
+                maxDistance={20}
+                maxPolarAngle={Math.PI / 2}
               />
             </Canvas>
           </div>
