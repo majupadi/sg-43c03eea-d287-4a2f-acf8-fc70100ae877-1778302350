@@ -3,12 +3,43 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { SEO } from "@/components/SEO";
 import { Book, Calculator, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function PlanoInclinado3DPage() {
+  const [weight, setWeight] = useState(100);
+  const [angle, setAngle] = useState(30);
+  const [friction, setFriction] = useState(0.2);
+  const [useFriction, setUseFriction] = useState(true);
+
+  const calculateInclinedPlane = () => {
+    const angleRad = (angle * Math.PI) / 180;
+    const wx = weight * Math.sin(angleRad);
+    const wy = weight * Math.cos(angleRad);
+    const normal = wy;
+    const fr = useFriction ? friction * normal : 0;
+    const totalForce = wx + fr;
+    const vm = 1 / Math.sin(angleRad);
+
+    return {
+      wx: wx.toFixed(2),
+      wy: wy.toFixed(2),
+      normal: normal.toFixed(2),
+      friction: fr.toFixed(2),
+      totalForce: totalForce.toFixed(2),
+      vm: vm.toFixed(2),
+      sinAngle: Math.sin(angleRad).toFixed(3),
+      cosAngle: Math.cos(angleRad).toFixed(3),
+    };
+  };
+
+  const results = calculateInclinedPlane();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SEO 
@@ -43,6 +74,193 @@ export default function PlanoInclinado3DPage() {
               Diagrama de descomposición de fuerzas en superficies inclinadas
             </p>
           </div>
+
+          {/* Interactive Calculator */}
+          <Card className="mb-8 border-2 border-accent/30 bg-accent/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calculator className="w-5 h-5 text-accent" />
+                Calculadora Interactiva de Plano Inclinado
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Inputs */}
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="weight-pi" className="text-sm font-semibold">
+                      Peso del Objeto (W) - Newtons
+                    </Label>
+                    <Input
+                      id="weight-pi"
+                      type="number"
+                      min="1"
+                      max="1000"
+                      value={weight}
+                      onChange={(e) => setWeight(Number(e.target.value))}
+                      className="mt-1.5"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="angle-pi" className="text-sm font-semibold">
+                      Ángulo de Inclinación (θ) - Grados
+                    </Label>
+                    <Input
+                      id="angle-pi"
+                      type="number"
+                      min="1"
+                      max="89"
+                      value={angle}
+                      onChange={(e) => setAngle(Number(e.target.value))}
+                      className="mt-1.5"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      sin({angle}°) = {results.sinAngle} · cos({angle}°) = {results.cosAngle}
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <input
+                        type="checkbox"
+                        id="use-friction"
+                        checked={useFriction}
+                        onChange={(e) => setUseFriction(e.target.checked)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor="use-friction" className="text-sm font-semibold cursor-pointer">
+                        Incluir Fricción
+                      </Label>
+                    </div>
+                    {useFriction && (
+                      <>
+                        <Label htmlFor="friction-pi" className="text-sm font-semibold">
+                          Coeficiente de Fricción (μ)
+                        </Label>
+                        <Input
+                          id="friction-pi"
+                          type="number"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          value={friction}
+                          onChange={(e) => setFriction(Number(e.target.value))}
+                          className="mt-1.5"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          0 = sin fricción · 0.3 = madera · 0.8 = alto
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Results */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-sm mb-3">Resultados:</h4>
+                  
+                  <Alert className="bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Componente Paralela</p>
+                        <p className="text-xl font-mono font-bold text-red-600 dark:text-red-400">
+                          Wx = {results.wx} N
+                        </p>
+                        <p className="text-xs font-mono text-red-600 dark:text-red-400">
+                          W × sin({angle}°) = {weight} × {results.sinAngle}
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Componente Perpendicular</p>
+                        <p className="text-xl font-mono font-bold text-blue-600 dark:text-blue-400">
+                          Wy = {results.wy} N
+                        </p>
+                        <p className="text-xs font-mono text-blue-600 dark:text-blue-400">
+                          W × cos({angle}°) = {weight} × {results.cosAngle}
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert className="bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Fuerza Normal</p>
+                        <p className="text-xl font-mono font-bold text-cyan-600 dark:text-cyan-400">
+                          N = {results.normal} N
+                        </p>
+                        <p className="text-xs text-cyan-600 dark:text-cyan-400">
+                          (N = Wy)
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  {useFriction && (
+                    <Alert className="bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800">
+                      <AlertDescription>
+                        <div className="space-y-1">
+                          <p className="text-xs text-muted-foreground">Fuerza de Fricción</p>
+                          <p className="text-xl font-mono font-bold text-orange-600 dark:text-orange-400">
+                            Fr = {results.friction} N
+                          </p>
+                          <p className="text-xs font-mono text-orange-600 dark:text-orange-400">
+                            μ × N = {friction} × {results.normal}
+                          </p>
+                        </div>
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  <Alert className="bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Fuerza Total para Subir</p>
+                        <p className="text-2xl font-mono font-bold text-green-600 dark:text-green-400">
+                          F = {results.totalForce} N
+                        </p>
+                        <p className="text-xs font-mono text-green-600 dark:text-green-400">
+                          Wx {useFriction ? `+ Fr = ${results.wx} + ${results.friction}` : '(sin fricción)'}
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert className="bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Ventaja Mecánica</p>
+                        <p className="text-xl font-mono font-bold text-purple-600 dark:text-purple-400">
+                          VM = {results.vm}
+                        </p>
+                        <p className="text-xs text-purple-600 dark:text-purple-400">
+                          (sin fricción: 1/sin(θ))
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                <p className="text-sm font-semibold mb-2">Interpretación:</p>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Se necesitan <strong className="text-foreground">{results.totalForce}N</strong> para subir el objeto por el plano</li>
+                  <li>• Esto es {((parseFloat(results.totalForce) / weight * 100)).toFixed(1)}% del peso total ({weight}N)</li>
+                  {useFriction && (
+                    <li>• La fricción añade {results.friction}N de resistencia adicional</li>
+                  )}
+                  <li>• A menor ángulo, menor fuerza necesaria (mayor VM)</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Info Cards */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">

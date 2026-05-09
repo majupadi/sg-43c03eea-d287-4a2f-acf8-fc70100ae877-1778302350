@@ -4,11 +4,51 @@ import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
-import { ArrowLeft, Book } from "lucide-react";
+import { ArrowLeft, Book, Calculator } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function PoleasSimulacion() {
+  const [pulleyType, setPulleyType] = useState("fija");
+  const [weight, setWeight] = useState(100);
+  const [numPulleys, setNumPulleys] = useState(2);
+  const [distance, setDistance] = useState(2);
+
+  const calculatePulley = () => {
+    let vm = 1;
+    let fm = weight;
+
+    switch (pulleyType) {
+      case "fija":
+        vm = 1;
+        fm = weight;
+        break;
+      case "movil":
+        vm = 2;
+        fm = weight / 2;
+        break;
+      case "potencial":
+        vm = Math.pow(2, numPulleys);
+        fm = weight / vm;
+        break;
+      case "factorial":
+        vm = 2 * numPulleys;
+        fm = weight / vm;
+        break;
+    }
+
+    const ropeDistance = distance * vm;
+    const reduction = ((weight - fm) / weight * 100).toFixed(1);
+
+    return { vm, fm: fm.toFixed(2), ropeDistance: ropeDistance.toFixed(2), reduction };
+  };
+
+  const results = calculatePulley();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SEO 
@@ -42,6 +82,143 @@ export default function PoleasSimulacion() {
               Diagramas de sistemas de poleas mostrando polea fija, móvil y aparejos potencial y factorial.
             </p>
           </div>
+
+          {/* Interactive Calculator */}
+          <Card className="mb-8 border-2 border-accent/30 bg-accent/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calculator className="w-5 h-5 text-accent" />
+                Calculadora Interactiva de Poleas
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Inputs */}
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="pulley-type" className="text-sm font-semibold">
+                      Tipo de Sistema
+                    </Label>
+                    <Select value={pulleyType} onValueChange={setPulleyType}>
+                      <SelectTrigger id="pulley-type" className="mt-1.5">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fija">Polea Fija (VM = 1)</SelectItem>
+                        <SelectItem value="movil">Polea Móvil (VM = 2)</SelectItem>
+                        <SelectItem value="potencial">Aparejo Potencial (VM = 2ⁿ)</SelectItem>
+                        <SelectItem value="factorial">Aparejo Factorial (VM = 2·n)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="weight" className="text-sm font-semibold">
+                      Peso a Levantar (R) - Newtons
+                    </Label>
+                    <Input
+                      id="weight"
+                      type="number"
+                      min="1"
+                      max="1000"
+                      value={weight}
+                      onChange={(e) => setWeight(Number(e.target.value))}
+                      className="mt-1.5"
+                    />
+                  </div>
+
+                  {(pulleyType === "potencial" || pulleyType === "factorial") && (
+                    <div>
+                      <Label htmlFor="num-pulleys" className="text-sm font-semibold">
+                        Número de Poleas Móviles (n)
+                      </Label>
+                      <Input
+                        id="num-pulleys"
+                        type="number"
+                        min="1"
+                        max="6"
+                        value={numPulleys}
+                        onChange={(e) => setNumPulleys(Number(e.target.value))}
+                        className="mt-1.5"
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <Label htmlFor="distance" className="text-sm font-semibold">
+                      Distancia a Elevar la Carga (metros)
+                    </Label>
+                    <Input
+                      id="distance"
+                      type="number"
+                      min="0.1"
+                      max="100"
+                      step="0.1"
+                      value={distance}
+                      onChange={(e) => setDistance(Number(e.target.value))}
+                      className="mt-1.5"
+                    />
+                  </div>
+                </div>
+
+                {/* Results */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-sm mb-3">Resultados:</h4>
+                  
+                  <Alert className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Ventaja Mecánica</p>
+                        <p className="text-2xl font-mono font-bold text-blue-600 dark:text-blue-400">
+                          VM = {results.vm}
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert className="bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Fuerza Motriz Necesaria</p>
+                        <p className="text-2xl font-mono font-bold text-green-600 dark:text-green-400">
+                          Fm = {results.fm} N
+                        </p>
+                        <p className="text-xs text-green-600 dark:text-green-400">
+                          ({results.reduction}% menos esfuerzo)
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert className="bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800">
+                    <AlertDescription>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Distancia de Cuerda a Tirar</p>
+                        <p className="text-2xl font-mono font-bold text-purple-600 dark:text-purple-400">
+                          {results.ropeDistance} m
+                        </p>
+                        <p className="text-xs text-purple-600 dark:text-purple-400">
+                          (para elevar {distance}m)
+                        </p>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="mt-4 p-3 bg-muted/50 rounded-lg text-xs text-muted-foreground">
+                    <p className="font-semibold mb-1">Fórmula aplicada:</p>
+                    {pulleyType === "fija" && <p className="font-mono">Fm = R</p>}
+                    {pulleyType === "movil" && <p className="font-mono">Fm = R/2</p>}
+                    {pulleyType === "potencial" && (
+                      <p className="font-mono">Fm = R/2ⁿ = {weight}/2^{numPulleys} = {results.fm}N</p>
+                    )}
+                    {pulleyType === "factorial" && (
+                      <p className="font-mono">Fm = R/(2·n) = {weight}/(2×{numPulleys}) = {results.fm}N</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Tipos de Poleas */}
           <Card className="mb-8">
