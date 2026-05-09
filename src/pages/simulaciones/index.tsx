@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
-import { Box, TrendingUp, Triangle, Scale, RotateCw, Anchor, Wrench, Disc, TrendingDown } from "lucide-react";
+import { Box, TrendingUp, Triangle, Scale, RotateCw, Anchor, Wrench, Disc, TrendingDown, Target } from "lucide-react";
 import Link from "next/link";
 
 export default function SimulacionesIndex() {
@@ -106,6 +106,17 @@ export default function SimulacionesIndex() {
       href: "/simulaciones/plano-inclinado-3d",
       color: "text-orange-600 dark:text-orange-400",
       bgColor: "bg-orange-100 dark:bg-orange-950",
+    },
+    {
+      id: "proyectil",
+      title: "Tiro Parabólico 3D",
+      description: "Lanza proyectiles con diferentes ángulos y velocidades, observa la trayectoria parabólica",
+      icon: Target,
+      type: "3D Interactivo",
+      difficulty: "Intermedio",
+      href: "/simulaciones/proyectil-3d",
+      color: "text-pink-600 dark:text-pink-400",
+      bgColor: "bg-pink-100 dark:bg-pink-950",
     },
   ];
 
