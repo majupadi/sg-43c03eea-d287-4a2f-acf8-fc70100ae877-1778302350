@@ -43,6 +43,11 @@ export function Footer() {
                   Quiz Interactivo
                 </Link>
               </li>
+              <li>
+                <Link href="/asistente" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Asistente IA
+                </Link>
+              </li>
             </ul>
           </div>
 

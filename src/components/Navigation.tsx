@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Book, FlaskConical, Calculator, BookOpen } from "lucide-react";
+import { Book, FlaskConical, Calculator, BookOpen, MessageSquare } from "lucide-react";
 
 export function Navigation() {
   return (
@@ -39,6 +39,13 @@ export function Navigation() {
             >
               <BookOpen className="w-4 h-4" />
               <span className="hidden sm:inline">Glosario</span>
+            </Link>
+            <Link
+              href="/asistente"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-md hover:bg-accent/10 transition-colors text-sm md:text-base"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">Asistente IA</span>
             </Link>
           </div>
         </nav>
