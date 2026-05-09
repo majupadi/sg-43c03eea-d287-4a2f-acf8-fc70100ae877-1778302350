@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SEO } from "@/components/SEO";
 import { Quiz } from "@/components/Quiz";
-import { physicsQuizQuestions, quizzesByTopic } from "@/data/quizQuestions";
-import { Brain, Zap, Target, TrendingUp, BookOpen, Trophy } from "lucide-react";
+import { physicsQuizQuestions, quizByTopic } from "@/data/quizQuestions";
+import { Brain, Zap, Target, TrendingUp, BookOpen, Trophy, Triangle, Scale, RotateCw, Wrench, Settings } from "lucide-react";
 
 export default function QuizPage() {
   const [selectedQuiz, setSelectedQuiz] = useState<string | null>(null);
@@ -29,50 +29,50 @@ export default function QuizPage() {
       title: "Fuerzas Colineales",
       description: "Suma y resta de fuerzas en línea recta",
       icon: TrendingUp,
-      questions: quizzesByTopic["Fuerzas Colineales"],
+      questions: quizByTopic["Fuerzas Colineales"],
       color: "text-blue-600 dark:text-blue-400",
       bgColor: "bg-blue-100 dark:bg-blue-950",
-      count: quizzesByTopic["Fuerzas Colineales"].length,
+      count: quizByTopic["Fuerzas Colineales"].length,
     },
     {
       id: "graficos",
       title: "Métodos Gráficos",
       description: "Paralelogramo y polígono de fuerzas",
       icon: Target,
-      questions: quizzesByTopic["Métodos Gráficos"],
+      questions: quizByTopic["Métodos Gráficos"],
       color: "text-green-600 dark:text-green-400",
       bgColor: "bg-green-100 dark:bg-green-950",
-      count: quizzesByTopic["Métodos Gráficos"].length,
+      count: quizByTopic["Métodos Gráficos"].length,
     },
     {
       id: "paralelas",
       title: "Fuerzas Paralelas",
       description: "Sistemas de fuerzas paralelas",
       icon: Zap,
-      questions: quizzesByTopic["Fuerzas Paralelas"],
+      questions: quizByTopic["Fuerzas Paralelas"],
       color: "text-amber-600 dark:text-amber-400",
       bgColor: "bg-amber-100 dark:bg-amber-950",
-      count: quizzesByTopic["Fuerzas Paralelas"].length,
+      count: quizByTopic["Fuerzas Paralelas"].length,
     },
     {
       id: "momentos",
       title: "Momentos y Torque",
       description: "Fuerzas rotacionales y palancas",
       icon: Trophy,
-      questions: [...quizzesByTopic["Momentos"], ...quizzesByTopic["Palancas"]],
+      questions: [...quizByTopic["Momentos"], ...quizByTopic["Palancas"]],
       color: "text-red-600 dark:text-red-400",
       bgColor: "bg-red-100 dark:bg-red-950",
-      count: quizzesByTopic["Momentos"].length + quizzesByTopic["Palancas"].length,
+      count: quizByTopic["Momentos"].length + quizByTopic["Palancas"].length,
     },
     {
       id: "maquinas",
       title: "Máquinas Simples",
       description: "Poleas, planos inclinados y equilibrio",
       icon: BookOpen,
-      questions: [...quizzesByTopic["Poleas"], ...quizzesByTopic["Plano Inclinado"], ...quizzesByTopic["Equilibrio"]],
+      questions: [...quizByTopic["Poleas"], ...quizByTopic["Plano Inclinado"], ...quizByTopic["Equilibrio"]],
       color: "text-cyan-600 dark:text-cyan-400",
       bgColor: "bg-cyan-100 dark:bg-cyan-950",
-      count: quizzesByTopic["Poleas"].length + quizzesByTopic["Plano Inclinado"].length + quizzesByTopic["Equilibrio"].length,
+      count: quizByTopic["Poleas"].length + quizByTopic["Plano Inclinado"].length + quizByTopic["Equilibrio"].length,
     },
   ];
 
@@ -160,7 +160,7 @@ export default function QuizPage() {
               <CardContent className="p-6 text-center">
                 <Target className="w-8 h-8 mx-auto mb-2 text-green-600 dark:text-green-400" />
                 <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-                  {Object.keys(quizzesByTopic).length}
+                  {Object.keys(quizByTopic).length}
                 </p>
                 <p className="text-sm text-muted-foreground">Temas Cubiertos</p>
               </CardContent>
