@@ -30,35 +30,35 @@ function Pulley({ position, radius = 0.4, isMoving = false, speed = 1 }: { posit
 
   return (
     <group position={position}>
+      {/* Rueda principal de la polea */}
       <mesh ref={meshRef}>
         <torusGeometry args={[radius, 0.08, 16, 32]} />
         <meshStandardMaterial color="#2563eb" metalness={0.8} roughness={0.2} />
       </mesh>
       
+      {/* Centro de la polea */}
       <mesh>
         <cylinderGeometry args={[0.12, 0.12, 0.2, 16]} />
         <meshStandardMaterial color="#1e293b" metalness={0.9} roughness={0.1} />
       </mesh>
 
+      {/* Eje de la polea */}
       <mesh rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.06, 0.06, 0.5, 8]} />
+        <cylinderGeometry args={[0.06, 0.06, radius * 2.5, 8]} />
         <meshStandardMaterial color="#475569" metalness={0.9} roughness={0.1} />
-      </mesh>
-
-      <mesh position={[0, 0.3, 0]}>
-        <boxGeometry args={[0.15, 0.1, 0.15]} />
-        <meshStandardMaterial color="#334155" />
       </mesh>
     </group>
   );
 }
 
-function Rope({ points, color = "#78350f" }: { points: [number, number, number][]; color?: string }) {
+function Rope({ points, color = "#78350f", dashed = false }: { points: [number, number, number][]; color?: string; dashed?: boolean }) {
   return (
     <Line
       points={points}
       color={color}
-      lineWidth={4}
+      lineWidth={5}
+      dashed={dashed}
+      dashScale={3}
     />
   );
 }
@@ -75,6 +75,7 @@ function Weight({ position, mass }: { position: [number, number, number]; mass: 
         />
       </mesh>
 
+      {/* Gancho superior */}
       <mesh position={[0, 0.35, 0]}>
         <cylinderGeometry args={[0.05, 0.05, 0.1, 8]} />
         <meshStandardMaterial color="#1f2937" />
@@ -93,40 +94,85 @@ function Weight({ position, mass }: { position: [number, number, number]; mass: 
   );
 }
 
+function FixedAnchor({ position, label = "" }: { position: [number, number, number]; label?: string }) {
+  return (
+    <group position={position}>
+      {/* Punto de anclaje fijo (triángulo) */}
+      <mesh rotation={[0, 0, 0]}>
+        <coneGeometry args={[0.15, 0.25, 3]} />
+        <meshStandardMaterial color="#334155" />
+      </mesh>
+      {label && (
+        <Text position={[0, 0.4, 0]} fontSize={0.12} color="#64748b" anchorX="center">
+          {label}
+        </Text>
+      )}
+    </group>
+  );
+}
+
 function FijaSystem({ weight, isAnimating, pulleyRadius, animationSpeed }: Omit<PolySystemProps, 'type'>) {
   const baseY = -2;
   const ropeY = isAnimating ? baseY + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.4 : baseY;
   
   return (
     <group>
+      {/* Viga superior fija */}
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[0, 2.5, 0]} radius={pulleyRadius} isMoving={isAnimating} speed={animationSpeed} />
+      {/* Anclaje superior de la polea */}
+      <FixedAnchor position={[0, 2.8, 0]} label="FIJO" />
 
-      <Rope points={[[0, 2.5, 0], [0, ropeY + 0.3, 0]]} />
+      {/* Polea fija */}
+      <Pulley position={[0, 2.2, 0]} radius={pulleyRadius} isMoving={isAnimating} speed={animationSpeed} />
+
+      {/* Cuerda del peso (ramal 1 - lado izquierdo de la polea) */}
+      <Rope 
+        points={[
+          [-pulleyRadius * 0.9, 2.2, 0],
+          [-pulleyRadius * 0.9, ropeY + 0.3, 0]
+        ]} 
+        color="#8b4513"
+      />
       
-      <Weight position={[0, ropeY, 0]} mass={weight} />
+      {/* Peso colgando */}
+      <Weight position={[-pulleyRadius * 0.9, ropeY, 0]} mass={weight} />
 
-      <Rope points={[[pulleyRadius + 0.1, 2.5, 0], [2, 2.5, 0], [2, 0, 0]]} color="#10b981" />
+      {/* Cuerda de tracción (ramal 2 - lado derecho, hacia abajo donde se tira) */}
+      <Rope 
+        points={[
+          [pulleyRadius * 0.9, 2.2, 0],
+          [pulleyRadius * 0.9, -0.5, 0]
+        ]} 
+        color="#10b981"
+      />
 
-      <group position={[2, 0, 0]}>
+      {/* Indicador de fuerza aplicada (Fm) */}
+      <group position={[pulleyRadius * 0.9, -0.5, 0]}>
         <mesh>
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.6, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {weight}N
+        <mesh position={[0, -0.35, 0]} rotation={[0, 0, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.7, 0, 0]} fontSize={0.18} color="#10b981">
+          Fm={weight}N
         </Text>
       </group>
 
-      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Polea Fija
+      <Text position={[0, 3.6, 0]} fontSize={0.24} color="#f59e0b" anchorX="center">
+        POLEA FIJA
       </Text>
-      <Text position={[0, -3.5, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
-        VM = 1 · Solo cambia dirección
+      <Text position={[0, -3.3, 0]} fontSize={0.15} color="#64748b" anchorX="center">
+        VM = 1 · No hay ventaja mecánica
+      </Text>
+      <Text position={[0, -3.7, 0]} fontSize={0.13} color="#94a3b8" anchorX="center">
+        Solo cambia la dirección de la fuerza
       </Text>
     </group>
   );
@@ -134,46 +180,80 @@ function FijaSystem({ weight, isAnimating, pulleyRadius, animationSpeed }: Omit<
 
 function MovilSystem({ weight, isAnimating, pulleyRadius, animationSpeed }: Omit<PolySystemProps, 'type'>) {
   const baseY = -1.3;
-  const poleyaY = isAnimating ? baseY + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.4 : baseY;
+  const movingY = isAnimating ? baseY + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.4 : baseY;
   
   return (
     <group>
+      {/* Viga superior fija */}
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[-1.5, 2.5, 0]} radius={pulleyRadius * 0.8} isMoving={isAnimating} speed={animationSpeed} />
+      {/* Anclajes superiores */}
+      <FixedAnchor position={[-1.5, 2.8, 0]} label="FIJO" />
+      <FixedAnchor position={[1.5, 2.8, 0]} />
 
-      <Pulley position={[0, poleyaY, 0]} radius={pulleyRadius} isMoving={isAnimating} speed={animationSpeed} />
+      {/* Polea móvil (se mueve con el peso) */}
+      <Pulley position={[0, movingY, 0]} radius={pulleyRadius} isMoving={isAnimating} speed={animationSpeed} />
 
-      <Rope points={[
-        [-1.5, 2.5, 0],
-        [-(pulleyRadius + 0.08), poleyaY, 0],
-        [pulleyRadius + 0.08, poleyaY, 0],
-        [1.5, 2.5, 0],
-        [1.5, 0, 0]
-      ]} color="#10b981" />
+      {/* Ramal 1: desde anclaje izquierdo hasta lado izquierdo de la polea móvil */}
+      <Rope 
+        points={[
+          [-1.5, 2.8, 0],
+          [-1.5, 2.5, 0],
+          [-pulleyRadius * 0.9, movingY, 0]
+        ]} 
+        color="#8b4513"
+      />
 
-      <Weight position={[0, poleyaY - 0.8, 0]} mass={weight} />
+      {/* Ramal 2: desde lado derecho de la polea móvil, pasando por arriba hacia donde se aplica Fm */}
+      <Rope 
+        points={[
+          [pulleyRadius * 0.9, movingY, 0],
+          [1.5, 2.5, 0],
+          [1.5, 0, 0]
+        ]} 
+        color="#10b981"
+      />
 
-      <Rope points={[[0, poleyaY - 0.5, 0], [0, poleyaY - 0.1, 0]]} />
+      {/* Peso colgando de la polea móvil */}
+      <Weight position={[0, movingY - 0.8, 0]} mass={weight} />
 
+      {/* Cuerda del peso a la polea */}
+      <Rope points={[[0, movingY - 0.5, 0], [0, movingY - 0.15, 0]]} color="#8b4513" />
+
+      {/* Indicador de fuerza aplicada (Fm) */}
       <group position={[1.5, 0, 0]}>
         <mesh>
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {(weight / 2).toFixed(1)}N
+        <mesh position={[0, -0.35, 0]} rotation={[0, 0, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.8, 0, 0]} fontSize={0.18} color="#10b981">
+          Fm={(weight / 2).toFixed(1)}N
         </Text>
       </group>
 
-      <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Polea Móvil (VM=2)
+      {/* Etiquetas de ramales */}
+      <Text position={[-1.8, movingY / 2 + 1.2, 0]} fontSize={0.13} color="#8b4513" anchorX="right">
+        Ramal 1
       </Text>
-      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
-        Fm = R/2
+      <Text position={[1.8, movingY / 2 + 1.2, 0]} fontSize={0.13} color="#10b981" anchorX="left">
+        Ramal 2
+      </Text>
+
+      <Text position={[0, 3.6, 0]} fontSize={0.24} color="#f59e0b" anchorX="center">
+        POLEA MÓVIL
+      </Text>
+      <Text position={[0, -3.1, 0]} fontSize={0.15} color="#64748b" anchorX="center">
+        VM = 2 · Fm = R/2
+      </Text>
+      <Text position={[0, -3.5, 0]} fontSize={0.13} color="#94a3b8" anchorX="center">
+        2 ramales soportan el peso
       </Text>
     </group>
   );
@@ -185,39 +265,58 @@ function Potencial2System({ weight, isAnimating, pulleyRadius, animationSpeed }:
   const movingY1 = isAnimating ? baseY1 + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.3 : baseY1;
   const movingY2 = isAnimating ? baseY2 + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.3 : baseY2;
   
+  const r = pulleyRadius * 0.75;
+  
   return (
     <group>
+      {/* Viga superior */}
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[-1.2, 2.5, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0, movingY1, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0, movingY2, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
+      <FixedAnchor position={[-1.2, 2.8, 0]} label="FIJO" />
 
-      <Rope points={[[-1.2, 2.5, 0], [-(pulleyRadius * 0.75 + 0.08), movingY1, 0]]} />
-      <Rope points={[[pulleyRadius * 0.75 + 0.08, movingY1, 0], [1.5, 2.5, 0], [1.5, 0, 0]]} color="#10b981" />
-      <Rope points={[[0, movingY1 - (pulleyRadius * 0.75 + 0.1), 0], [0, movingY2 + (pulleyRadius * 0.75 + 0.1), 0]]} />
+      {/* Poleas móviles en cadena vertical */}
+      <Pulley position={[0, movingY1, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[0, movingY2, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
 
+      {/* Ramal anclado a viga superior */}
+      <Rope points={[[-1.2, 2.8, 0], [-1.2, 2.5, 0], [-r * 0.9, movingY1, 0]]} color="#8b4513" />
+
+      {/* Cuerda entre polea 1 y polea 2 */}
+      <Rope points={[[0, movingY1 - r - 0.1, 0], [0, movingY2 + r + 0.1, 0]]} color="#8b4513" />
+
+      {/* Ramal de fuerza (Fm) */}
+      <Rope points={[[r * 0.9, movingY1, 0], [1.5, 2.5, 0], [1.5, 0, 0]]} color="#10b981" />
+
+      {/* Peso */}
       <Weight position={[0, movingY2 - 0.8, 0]} mass={weight} />
-      <Rope points={[[0, movingY2 - 0.5, 0], [0, movingY2 - (pulleyRadius * 0.75 + 0.08), 0]]} />
+      <Rope points={[[0, movingY2 - 0.5, 0], [0, movingY2 - r - 0.08, 0]]} color="#8b4513" />
 
+      {/* Indicador Fm */}
       <group position={[1.5, 0, 0]}>
         <mesh>
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {(weight / 4).toFixed(1)}N
+        <mesh position={[0, -0.35, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.7, 0, 0]} fontSize={0.16} color="#10b981">
+          Fm={(weight / 4).toFixed(1)}N
         </Text>
       </group>
 
       <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Aparejo Potencial (n=2)
+        APAREJO POTENCIAL (n=2)
       </Text>
-      <Text position={[0, -3.4, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
+      <Text position={[0, -3.4, 0]} fontSize={0.14} color="#64748b" anchorX="center">
         VM = 2² = 4 · Fm = R/4
+      </Text>
+      <Text position={[0, -3.75, 0]} fontSize={0.12} color="#94a3b8" anchorX="center">
+        Poleas móviles en cadena vertical
       </Text>
     </group>
   );
@@ -231,40 +330,47 @@ function Potencial3System({ weight, isAnimating, pulleyRadius, animationSpeed }:
   const movingY2 = isAnimating ? baseY2 + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.25 : baseY2;
   const movingY3 = isAnimating ? baseY3 + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.25 : baseY3;
   
+  const r = pulleyRadius * 0.65;
+  
   return (
     <group>
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[-1.2, 2.5, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0, movingY1, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0, movingY2, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0, movingY3, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
+      <FixedAnchor position={[-1.2, 2.8, 0]} label="FIJO" />
 
-      <Rope points={[[-1.2, 2.5, 0], [-(pulleyRadius * 0.65 + 0.08), movingY1, 0]]} />
-      <Rope points={[[pulleyRadius * 0.65 + 0.08, movingY1, 0], [1.5, 2.5, 0], [1.5, 0, 0]]} color="#10b981" />
-      <Rope points={[[0, movingY1 - (pulleyRadius * 0.65 + 0.1), 0], [0, movingY2 + (pulleyRadius * 0.65 + 0.1), 0]]} />
-      <Rope points={[[0, movingY2 - (pulleyRadius * 0.65 + 0.1), 0], [0, movingY3 + (pulleyRadius * 0.65 + 0.1), 0]]} />
+      <Pulley position={[0, movingY1, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[0, movingY2, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[0, movingY3, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+
+      <Rope points={[[-1.2, 2.8, 0], [-1.2, 2.5, 0], [-r * 0.9, movingY1, 0]]} color="#8b4513" />
+      <Rope points={[[0, movingY1 - r - 0.1, 0], [0, movingY2 + r + 0.1, 0]]} color="#8b4513" />
+      <Rope points={[[0, movingY2 - r - 0.1, 0], [0, movingY3 + r + 0.1, 0]]} color="#8b4513" />
+      <Rope points={[[r * 0.9, movingY1, 0], [1.5, 2.5, 0], [1.5, 0, 0]]} color="#10b981" />
 
       <Weight position={[0, movingY3 - 0.75, 0]} mass={weight} />
-      <Rope points={[[0, movingY3 - 0.5, 0], [0, movingY3 - (pulleyRadius * 0.65 + 0.08), 0]]} />
+      <Rope points={[[0, movingY3 - 0.5, 0], [0, movingY3 - r - 0.08, 0]]} color="#8b4513" />
 
       <group position={[1.5, 0, 0]}>
         <mesh>
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {(weight / 8).toFixed(1)}N
+        <mesh position={[0, -0.35, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.7, 0, 0]} fontSize={0.16} color="#10b981">
+          Fm={(weight / 8).toFixed(1)}N
         </Text>
       </group>
 
       <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Aparejo Potencial (n=3)
+        APAREJO POTENCIAL (n=3)
       </Text>
-      <Text position={[0, -3.4, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
+      <Text position={[0, -3.4, 0]} fontSize={0.14} color="#64748b" anchorX="center">
         VM = 2³ = 8 · Fm = R/8
       </Text>
     </group>
@@ -274,33 +380,40 @@ function Potencial3System({ weight, isAnimating, pulleyRadius, animationSpeed }:
 function Factorial2System({ weight, isAnimating, pulleyRadius, animationSpeed }: Omit<PolySystemProps, 'type'>) {
   const baseY = -1.5;
   const movingY = isAnimating ? baseY + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.35 : baseY;
+  const r = pulleyRadius * 0.75;
   
   return (
     <group>
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[-1, 2.5, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[1, 2.5, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
+      {/* Poleas fijas superiores */}
+      <Pulley position={[-1, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[1, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      
+      <FixedAnchor position={[-1, 2.95, 0]} />
+      <FixedAnchor position={[1, 2.95, 0]} />
 
+      {/* Barra horizontal móvil con poleas */}
       <group position={[0, movingY, 0]}>
         <mesh position={[0, 0.3, 0]}>
-          <boxGeometry args={[1.6, 0.15, 0.4]} />
+          <boxGeometry args={[1.8, 0.15, 0.4]} />
           <meshStandardMaterial color="#1e293b" />
         </mesh>
         
-        <Pulley position={[-0.55, 0, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
-        <Pulley position={[0.55, 0, 0]} radius={pulleyRadius * 0.75} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[-0.6, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[0.6, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
 
         <Weight position={[0, -0.8, 0]} mass={weight} />
-        <Rope points={[[0, -0.5, 0], [0, 0.15, 0]]} />
+        <Rope points={[[0, -0.5, 0], [0, 0.15, 0]]} color="#8b4513" />
       </group>
 
-      <Rope points={[[-1, 2.5, 0], [-0.55 - (pulleyRadius * 0.75 + 0.08), movingY, 0]]} />
-      <Rope points={[[-0.55 + (pulleyRadius * 0.75 + 0.08), movingY, 0], [0.55 - (pulleyRadius * 0.75 + 0.08), movingY, 0]]} />
-      <Rope points={[[0.55 + (pulleyRadius * 0.75 + 0.08), movingY, 0], [1, 2.5, 0]]} />
+      {/* Ramales de cuerda */}
+      <Rope points={[[-1, 2.5, 0], [-0.6 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[-0.6 + r * 0.9, movingY, 0], [0.6 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[0.6 + r * 0.9, movingY, 0], [1, 2.5, 0]]} color="#8b4513" />
       <Rope points={[[1, 2.5, 0], [2, 2.5, 0], [2, 0, 0]]} color="#10b981" />
 
       <group position={[2, 0, 0]}>
@@ -308,16 +421,23 @@ function Factorial2System({ weight, isAnimating, pulleyRadius, animationSpeed }:
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {(weight / 4).toFixed(1)}N
+        <mesh position={[0, -0.35, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.7, 0, 0]} fontSize={0.16} color="#10b981">
+          Fm={(weight / 4).toFixed(1)}N
         </Text>
       </group>
 
       <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Aparejo Factorial (n=2)
+        APAREJO FACTORIAL (n=2)
       </Text>
-      <Text position={[0, -3.3, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
+      <Text position={[0, -3.3, 0]} fontSize={0.14} color="#64748b" anchorX="center">
         VM = 2·2 = 4 · Fm = R/4
+      </Text>
+      <Text position={[0, -3.65, 0]} fontSize={0.12} color="#94a3b8" anchorX="center">
+        Poleas móviles en barra horizontal
       </Text>
     </group>
   );
@@ -326,36 +446,41 @@ function Factorial2System({ weight, isAnimating, pulleyRadius, animationSpeed }:
 function Factorial3System({ weight, isAnimating, pulleyRadius, animationSpeed }: Omit<PolySystemProps, 'type'>) {
   const baseY = -1.3;
   const movingY = isAnimating ? baseY + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.3 : baseY;
+  const r = pulleyRadius * 0.65;
   
   return (
     <group>
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[-1.2, 2.5, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0, 2.5, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[1.2, 2.5, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[-1.2, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[0, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[1.2, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      
+      <FixedAnchor position={[-1.2, 2.95, 0]} />
+      <FixedAnchor position={[0, 2.95, 0]} />
+      <FixedAnchor position={[1.2, 2.95, 0]} />
 
       <group position={[0, movingY, 0]}>
         <mesh position={[0, 0.3, 0]}>
-          <boxGeometry args={[2.2, 0.15, 0.4]} />
+          <boxGeometry args={[2.4, 0.15, 0.4]} />
           <meshStandardMaterial color="#1e293b" />
         </mesh>
         
-        <Pulley position={[-0.8, 0, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-        <Pulley position={[0, 0, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
-        <Pulley position={[0.8, 0, 0]} radius={pulleyRadius * 0.65} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[-0.85, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[0, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[0.85, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
 
         <Weight position={[0, -0.75, 0]} mass={weight} />
-        <Rope points={[[0, -0.5, 0], [0, 0.15, 0]]} />
+        <Rope points={[[0, -0.5, 0], [0, 0.15, 0]]} color="#8b4513" />
       </group>
 
-      <Rope points={[[-1.2, 2.5, 0], [-0.8 - (pulleyRadius * 0.65 + 0.08), movingY, 0]]} />
-      <Rope points={[[-0.8 + (pulleyRadius * 0.65 + 0.08), movingY, 0], [0 - (pulleyRadius * 0.65 + 0.08), movingY, 0]]} />
-      <Rope points={[[0 + (pulleyRadius * 0.65 + 0.08), movingY, 0], [0.8 - (pulleyRadius * 0.65 + 0.08), movingY, 0]]} />
-      <Rope points={[[0.8 + (pulleyRadius * 0.65 + 0.08), movingY, 0], [1.2, 2.5, 0]]} />
+      <Rope points={[[-1.2, 2.5, 0], [-0.85 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[-0.85 + r * 0.9, movingY, 0], [0 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[0 + r * 0.9, movingY, 0], [0.85 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[0.85 + r * 0.9, movingY, 0], [1.2, 2.5, 0]]} color="#8b4513" />
       <Rope points={[[0, 2.5, 0], [2, 2.5, 0], [2, 0, 0]]} color="#10b981" />
 
       <group position={[2, 0, 0]}>
@@ -363,15 +488,19 @@ function Factorial3System({ weight, isAnimating, pulleyRadius, animationSpeed }:
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {(weight / 6).toFixed(1)}N
+        <mesh position={[0, -0.35, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.7, 0, 0]} fontSize={0.16} color="#10b981">
+          Fm={(weight / 6).toFixed(1)}N
         </Text>
       </group>
 
       <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Aparejo Factorial (n=3)
+        APAREJO FACTORIAL (n=3)
       </Text>
-      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
+      <Text position={[0, -3.2, 0]} fontSize={0.14} color="#64748b" anchorX="center">
         VM = 2·3 = 6 · Fm = R/6
       </Text>
     </group>
@@ -381,39 +510,45 @@ function Factorial3System({ weight, isAnimating, pulleyRadius, animationSpeed }:
 function Factorial4System({ weight, isAnimating, pulleyRadius, animationSpeed }: Omit<PolySystemProps, 'type'>) {
   const baseY = -1.2;
   const movingY = isAnimating ? baseY + Math.sin(Date.now() * 0.001 * animationSpeed) * 0.28 : baseY;
+  const r = pulleyRadius * 0.6;
   
   return (
     <group>
       <mesh position={[0, 3, 0]} castShadow>
-        <boxGeometry args={[6, 0.25, 0.35]} />
+        <boxGeometry args={[6, 0.3, 0.4]} />
         <meshStandardMaterial color="#0f172a" roughness={0.4} />
       </mesh>
 
-      <Pulley position={[-1.5, 2.5, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[-0.5, 2.5, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[0.5, 2.5, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
-      <Pulley position={[1.5, 2.5, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[-1.5, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[-0.5, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[0.5, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      <Pulley position={[1.5, 2.5, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+      
+      <FixedAnchor position={[-1.5, 2.95, 0]} />
+      <FixedAnchor position={[-0.5, 2.95, 0]} />
+      <FixedAnchor position={[0.5, 2.95, 0]} />
+      <FixedAnchor position={[1.5, 2.95, 0]} />
 
       <group position={[0, movingY, 0]}>
         <mesh position={[0, 0.3, 0]}>
-          <boxGeometry args={[2.8, 0.15, 0.4]} />
+          <boxGeometry args={[3.2, 0.15, 0.4]} />
           <meshStandardMaterial color="#1e293b" />
         </mesh>
         
-        <Pulley position={[-1.05, 0, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
-        <Pulley position={[-0.35, 0, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
-        <Pulley position={[0.35, 0, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
-        <Pulley position={[1.05, 0, 0]} radius={pulleyRadius * 0.6} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[-1.1, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[-0.37, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[0.37, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
+        <Pulley position={[1.1, 0, 0]} radius={r} isMoving={isAnimating} speed={animationSpeed} />
 
         <Weight position={[0, -0.7, 0]} mass={weight} />
-        <Rope points={[[0, -0.45, 0], [0, 0.15, 0]]} />
+        <Rope points={[[0, -0.45, 0], [0, 0.15, 0]]} color="#8b4513" />
       </group>
 
-      <Rope points={[[-1.5, 2.5, 0], [-1.05 - (pulleyRadius * 0.6 + 0.08), movingY, 0]]} />
-      <Rope points={[[-1.05 + (pulleyRadius * 0.6 + 0.08), movingY, 0], [-0.35 - (pulleyRadius * 0.6 + 0.08), movingY, 0]]} />
-      <Rope points={[[-0.35 + (pulleyRadius * 0.6 + 0.08), movingY, 0], [0.35 - (pulleyRadius * 0.6 + 0.08), movingY, 0]]} />
-      <Rope points={[[0.35 + (pulleyRadius * 0.6 + 0.08), movingY, 0], [1.05 - (pulleyRadius * 0.6 + 0.08), movingY, 0]]} />
-      <Rope points={[[1.05 + (pulleyRadius * 0.6 + 0.08), movingY, 0], [1.5, 2.5, 0]]} />
+      <Rope points={[[-1.5, 2.5, 0], [-1.1 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[-1.1 + r * 0.9, movingY, 0], [-0.37 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[-0.37 + r * 0.9, movingY, 0], [0.37 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[0.37 + r * 0.9, movingY, 0], [1.1 - r * 0.9, movingY, 0]]} color="#8b4513" />
+      <Rope points={[[1.1 + r * 0.9, movingY, 0], [1.5, 2.5, 0]]} color="#8b4513" />
       <Rope points={[[-0.5, 2.5, 0], [2.2, 2.5, 0], [2.2, 0, 0]]} color="#10b981" />
 
       <group position={[2.2, 0, 0]}>
@@ -421,15 +556,19 @@ function Factorial4System({ weight, isAnimating, pulleyRadius, animationSpeed }:
           <cylinderGeometry args={[0.15, 0.15, 0.4, 8]} />
           <meshStandardMaterial color="#10b981" metalness={0.3} roughness={0.4} />
         </mesh>
-        <Text position={[0.7, 0, 0]} fontSize={0.15} color="#10b981">
-          Fm = {(weight / 8).toFixed(1)}N
+        <mesh position={[0, -0.35, 0]}>
+          <coneGeometry args={[0.12, 0.25, 8]} />
+          <meshStandardMaterial color="#10b981" />
+        </mesh>
+        <Text position={[0.7, 0, 0]} fontSize={0.16} color="#10b981">
+          Fm={(weight / 8).toFixed(1)}N
         </Text>
       </group>
 
       <Text position={[0, 3.6, 0]} fontSize={0.22} color="#f59e0b" anchorX="center">
-        Aparejo Factorial (n=4)
+        APAREJO FACTORIAL (n=4)
       </Text>
-      <Text position={[0, -3.1, 0]} fontSize={0.14} color="#94a3b8" anchorX="center">
+      <Text position={[0, -3.1, 0]} fontSize={0.14} color="#64748b" anchorX="center">
         VM = 2·4 = 8 · Fm = R/8
       </Text>
     </group>
@@ -466,19 +605,19 @@ export function Poleas3D() {
   const getSystemInfo = () => {
     switch (polyType) {
       case "fija":
-        return { force: weight, vm: 1, formula: "Fm = R" };
+        return { force: weight, vm: 1, formula: "Fm = R", type: "Fija" };
       case "movil":
-        return { force: weight / 2, vm: 2, formula: "Fm = R/2" };
+        return { force: weight / 2, vm: 2, formula: "Fm = R/2", type: "Móvil" };
       case "potencial-2":
-        return { force: weight / 4, vm: 4, formula: "Fm = R/2² = R/4" };
+        return { force: weight / 4, vm: 4, formula: "Fm = R/2² = R/4", type: "Potencial (2ⁿ)" };
       case "potencial-3":
-        return { force: weight / 8, vm: 8, formula: "Fm = R/2³ = R/8" };
+        return { force: weight / 8, vm: 8, formula: "Fm = R/2³ = R/8", type: "Potencial (2ⁿ)" };
       case "factorial-2":
-        return { force: weight / 4, vm: 4, formula: "Fm = R/(2·2) = R/4" };
+        return { force: weight / 4, vm: 4, formula: "Fm = R/(2·2) = R/4", type: "Factorial (2·n)" };
       case "factorial-3":
-        return { force: weight / 6, vm: 6, formula: "Fm = R/(2·3) = R/6" };
+        return { force: weight / 6, vm: 6, formula: "Fm = R/(2·3) = R/6", type: "Factorial (2·n)" };
       case "factorial-4":
-        return { force: weight / 8, vm: 8, formula: "Fm = R/(2·4) = R/8" };
+        return { force: weight / 8, vm: 8, formula: "Fm = R/(2·4) = R/8", type: "Factorial (2·n)" };
     }
   };
 
@@ -706,24 +845,20 @@ export function Poleas3D() {
               </p>
               <p className="flex justify-between">
                 <span className="text-muted-foreground">Tipo:</span>
-                <span className="font-mono font-semibold">
-                  {polyType.includes("potencial") ? "Potencial (2ⁿ)" : 
-                   polyType.includes("factorial") ? "Factorial (2·n)" : 
-                   polyType === "movil" ? "Móvil" : "Fija"}
-                </span>
+                <span className="font-mono font-semibold">{systemInfo.type}</span>
               </p>
             </div>
           </div>
 
           <div className="mt-4 pt-4 border-t border-primary/20">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              {polyType === "fija" && "La polea fija (VM=1) solo cambia la dirección de la fuerza. No hay ventaja mecánica."}
-              {polyType === "movil" && "La polea móvil (VM=2) reduce la fuerza a la mitad mediante 2 ramales de soporte."}
-              {polyType === "potencial-2" && "Aparejo potencial con n=2: VM = 2² = 4. Cada polea móvil se apoya en la anterior (configuración vertical)."}
-              {polyType === "potencial-3" && "Aparejo potencial con n=3: VM = 2³ = 8. Máxima ventaja mecánica para 3 poleas (crecimiento exponencial)."}
-              {polyType === "factorial-2" && "Aparejo factorial con n=2: VM = 2·2 = 4. Poleas móviles en la misma barra horizontal."}
-              {polyType === "factorial-3" && "Aparejo factorial con n=3: VM = 2·3 = 6. Ventaja mecánica menor que el potencial equivalente."}
-              {polyType === "factorial-4" && "Aparejo factorial con n=4: VM = 2·4 = 8. Misma VM que potencial n=3, pero con más poleas."}
+              {polyType === "fija" && "La polea fija solo cambia la dirección de la fuerza. La cuerda pasa por encima de la polea y se tira hacia abajo."}
+              {polyType === "movil" && "La polea móvil se mueve con la carga. Dos ramales de cuerda soportan el peso, reduciendo Fm a la mitad."}
+              {polyType === "potencial-2" && "Aparejo potencial n=2: Poleas móviles en cadena vertical. Cada polea duplica la VM (exponencial)."}
+              {polyType === "potencial-3" && "Aparejo potencial n=3: Tres poleas móviles verticales. VM = 2³ = 8 (máxima eficiencia)."}
+              {polyType === "factorial-2" && "Aparejo factorial n=2: Poleas móviles en barra horizontal. VM crece linealmente (2·n)."}
+              {polyType === "factorial-3" && "Aparejo factorial n=3: VM = 2·3 = 6. Menos eficiente que potencial pero más compacto."}
+              {polyType === "factorial-4" && "Aparejo factorial n=4: VM = 2·4 = 8. Requiere más poleas que potencial para misma VM."}
             </p>
           </div>
         </CardContent>
