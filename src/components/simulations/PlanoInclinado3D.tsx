@@ -286,8 +286,7 @@ function InclinedPlaneScene({
           W={weight.toFixed(1)}N
         </Text>
 
-        {/* Vector P-R (Componente vertical del peso - eliminada por el plano) */}
-        {/* Este es el componente del peso que el plano elimina/reacciona */}
+        {/* Vector Wy (Componente perpendicular del peso) */}
         <Line
           points={[[0, 0, 0], [0, -normalForce / 40, 0]]}
           color="#6366f1"
@@ -296,12 +295,12 @@ function InclinedPlaneScene({
           dashScale={2}
         />
         <Text
-          position={[-0.5, -normalForce / 80, 0]}
+          position={[0.2, -normalForce / 80, 0]}
           fontSize={0.18}
           color="#6366f1"
-          anchorX="right"
+          anchorX="left"
         >
-          P-R={normalForce.toFixed(1)}N
+          Wy={normalForce.toFixed(1)}N
         </Text>
 
         {/* Vector Normal (N) - perpendicular al plano hacia arriba */}
@@ -323,31 +322,7 @@ function InclinedPlaneScene({
           N={normalForce.toFixed(1)}N
         </Text>
 
-        {/* Vector Fm (Fuerza motriz - paralela hacia arriba del plano) */}
-        {/* Esta es la fuerza que impulsa el bloque hacia arriba cuando hay movimiento */}
-        {acceleration > 0 && (
-          <>
-            <Line
-              points={[[0, 0, 0], [parallelForce / 40, 0, 0]]}
-              color="#10b981"
-              lineWidth={4}
-            />
-            <mesh position={[parallelForce / 40, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <coneGeometry args={[0.1, 0.2, 8]} />
-              <meshStandardMaterial color="#10b981" />
-            </mesh>
-            <Text
-              position={[parallelForce / 80, 0.4, 0]}
-              fontSize={0.2}
-              color="#10b981"
-              anchorX="center"
-            >
-              Fm={parallelForce.toFixed(1)}N
-            </Text>
-          </>
-        )}
-
-        {/* Vector F∥ (Componente paralela del peso - hacia abajo del plano) */}
+        {/* Vector Wx (Componente paralela del peso) */}
         <Line
           points={[[0, 0, 0], [-parallelForce / 40, 0, 0]]}
           color="#ef4444"
@@ -356,12 +331,12 @@ function InclinedPlaneScene({
           dashScale={2}
         />
         <Text
-          position={[-parallelForce / 80, -0.5, 0]}
+          position={[-parallelForce / 80, -0.3, 0]}
           fontSize={0.18}
           color="#ef4444"
           anchorX="center"
         >
-          F∥={parallelForce.toFixed(1)}N
+          Wx={parallelForce.toFixed(1)}N
         </Text>
 
         {/* Vector Fricción (Fr) - opuesta al movimiento */}
