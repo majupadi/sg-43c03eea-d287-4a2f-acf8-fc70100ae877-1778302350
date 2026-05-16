@@ -28,8 +28,8 @@ interface Preset {
 
 const PRESETS: Preset[] = [
   {
-    name: "Ejercicio 38",
-    description: "F₁=20kgf θ₁₂=45°, F₂=40kgf θ₂₃=135°, F₃=30kgf",
+    name: "Ejercicio 1",
+    description: "F₁=20kgf (196N) θ₁₂=45°, F₂=40kgf (392N) θ₂₃=135°, F₃=30kgf (294N)",
     forces: [
       { magnitude: 20 * 9.8, angleXY: 0, angleZ: 0, color: "#ef4444" },
       { magnitude: 40 * 9.8, angleXY: 45, angleZ: 0, color: "#3b82f6" },
@@ -37,8 +37,8 @@ const PRESETS: Preset[] = [
     ]
   },
   {
-    name: "Ejercicio 39",
-    description: "Tres fuerzas de 20kgf con ángulos de 120° entre sí",
+    name: "Ejercicio 2",
+    description: "Tres fuerzas de 20kgf (196N) con ángulos de 120° entre sí",
     forces: [
       { magnitude: 20 * 9.8, angleXY: 0, angleZ: 0, color: "#ef4444" },
       { magnitude: 20 * 9.8, angleXY: 120, angleZ: 0, color: "#3b82f6" },
@@ -46,8 +46,8 @@ const PRESETS: Preset[] = [
     ]
   },
   {
-    name: "Ejercicio 40",
-    description: "F₁=23N θ₁₂=60°, F₂=30N θ₂₃=30°, F₃=23N",
+    name: "Ejercicio 3",
+    description: "F₁=23N (2.35kgf) θ₁₂=60°, F₂=30N (3.06kgf) θ₂₃=30°, F₃=23N (2.35kgf)",
     forces: [
       { magnitude: 23, angleXY: 0, angleZ: 0, color: "#ef4444" },
       { magnitude: 30, angleXY: 60, angleZ: 0, color: "#3b82f6" },
@@ -55,16 +55,16 @@ const PRESETS: Preset[] = [
     ]
   },
   {
-    name: "Ejercicio 41",
-    description: "F₁=40kg θ=45°, F₂=12kg, R=50kg θ=154° (hallar faltante)",
+    name: "Ejercicio 4",
+    description: "F₁=40kgf (392N) θ=45°, F₂=12kgf (117.6N), R=50kgf (490N) θ=154° (hallar faltante)",
     forces: [
       { magnitude: 40 * 9.8, angleXY: 45, angleZ: 0, color: "#ef4444" },
       { magnitude: 12 * 9.8, angleXY: 180, angleZ: 0, color: "#3b82f6" },
     ]
   },
   {
-    name: "Ejercicio 42",
-    description: "F₁=12kg θ=20°, F₂=20kg θ=120°, F₃=14kg θ=200°, F₄=4kg θ=20°",
+    name: "Ejercicio 5",
+    description: "F₁=12kgf (117.6N) θ=20°, F₂=20kgf (196N) θ=120°, F₃=14kgf (137.2N) θ=200°, F₄=4kgf (39.2N) θ=20°",
     forces: [
       { magnitude: 12 * 9.8, angleXY: 20, angleZ: 0, color: "#ef4444" },
       { magnitude: 20 * 9.8, angleXY: 120, angleZ: 0, color: "#3b82f6" },
