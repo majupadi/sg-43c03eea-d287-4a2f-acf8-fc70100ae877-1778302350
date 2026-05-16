@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RotateCcw, Plus, Trash2, Eye, EyeOff } from "lucide-react";
+import { RotateCcw, Plus, Trash2, Eye, EyeOff, Settings } from "lucide-react";
 import * as THREE from "three";
 
 interface Force {
@@ -19,6 +19,60 @@ interface Force {
   color: string;
   showComponents: boolean;
 }
+
+interface Preset {
+  name: string;
+  description: string;
+  forces: Omit<Force, 'id' | 'showComponents'>[];
+}
+
+const PRESETS: Preset[] = [
+  {
+    name: "Ejercicio 38",
+    description: "F₁=20kgf θ₁₂=45°, F₂=40kgf θ₂₃=135°, F₃=30kgf",
+    forces: [
+      { magnitude: 20 * 9.8, angleXY: 0, angleZ: 0, color: "#ef4444" },
+      { magnitude: 40 * 9.8, angleXY: 45, angleZ: 0, color: "#3b82f6" },
+      { magnitude: 30 * 9.8, angleXY: 45 + 135, angleZ: 0, color: "#10b981" },
+    ]
+  },
+  {
+    name: "Ejercicio 39",
+    description: "Tres fuerzas de 20kgf con ángulos de 120° entre sí",
+    forces: [
+      { magnitude: 20 * 9.8, angleXY: 0, angleZ: 0, color: "#ef4444" },
+      { magnitude: 20 * 9.8, angleXY: 120, angleZ: 0, color: "#3b82f6" },
+      { magnitude: 20 * 9.8, angleXY: 240, angleZ: 0, color: "#10b981" },
+    ]
+  },
+  {
+    name: "Ejercicio 40",
+    description: "F₁=23N θ₁₂=60°, F₂=30N θ₂₃=30°, F₃=23N",
+    forces: [
+      { magnitude: 23, angleXY: 0, angleZ: 0, color: "#ef4444" },
+      { magnitude: 30, angleXY: 60, angleZ: 0, color: "#3b82f6" },
+      { magnitude: 23, angleXY: 60 + 30, angleZ: 0, color: "#10b981" },
+    ]
+  },
+  {
+    name: "Ejercicio 41",
+    description: "F₁=40kg θ=45°, F₂=12kg, R=50kg θ=154° (hallar faltante)",
+    forces: [
+      { magnitude: 40 * 9.8, angleXY: 45, angleZ: 0, color: "#ef4444" },
+      { magnitude: 12 * 9.8, angleXY: 180, angleZ: 0, color: "#3b82f6" },
+    ]
+  },
+  {
+    name: "Ejercicio 42",
+    description: "F₁=12kg θ=20°, F₂=20kg θ=120°, F₃=14kg θ=200°, F₄=4kg θ=20°",
+    forces: [
+      { magnitude: 12 * 9.8, angleXY: 20, angleZ: 0, color: "#ef4444" },
+      { magnitude: 20 * 9.8, angleXY: 120, angleZ: 0, color: "#3b82f6" },
+      { magnitude: 14 * 9.8, angleXY: 200, angleZ: 0, color: "#10b981" },
+      { magnitude: 4 * 9.8, angleXY: 20, angleZ: 0, color: "#f59e0b" },
+    ]
+  }
+];
 
 function ForceVector({ 
   magnitude, 
@@ -211,6 +265,16 @@ export function Concurrentes3D() {
     setNextId(4);
   };
 
+  const loadPreset = (preset: Preset) => {
+    const newForces = preset.forces.map((f, idx) => ({
+      ...f,
+      id: idx + 1,
+      showComponents: false
+    }));
+    setForces(newForces);
+    setNextId(newForces.length + 1);
+  };
+
   return (
     <div className="space-y-4">
       {/* Visualización 3D */}
@@ -298,6 +362,46 @@ export function Concurrentes3D() {
                 maxDistance={15}
               />
             </Canvas>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Ejercicios Predefinidos */}
+      <Card className="border-2 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <span className="text-2xl">📚</span>
+            Ejercicios del Laboratorio
+          </CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            Carga ejercicios predefinidos con un clic
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {PRESETS.map((preset, idx) => (
+              <Card 
+                key={idx}
+                className="p-3 hover:shadow-md transition-shadow cursor-pointer bg-background"
+                onClick={() => loadPreset(preset)}
+              >
+                <h4 className="font-semibold text-sm mb-1">{preset.name}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {preset.description}
+                </p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full mt-3"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    loadPreset(preset);
+                  }}
+                >
+                  Cargar ejercicio
+                </Button>
+              </Card>
+            ))}
           </div>
         </CardContent>
       </Card>
