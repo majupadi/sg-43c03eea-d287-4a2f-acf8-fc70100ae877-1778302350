@@ -429,20 +429,20 @@ export function Concurrentes3D() {
                         value={force.angleZ}
                         onChange={(e) => {
                           const val = Number(e.target.value);
-                          if (val >= -90 && val <= 90) {
+                          if (val >= -180 && val <= 180) {
                             updateForce(force.id, { angleZ: val });
                           }
                         }}
                         className="w-16 h-7 text-xs text-right"
-                        min={-90}
-                        max={90}
+                        min={-180}
+                        max={180}
                       />
                     </div>
                     <Slider
                       value={[force.angleZ]}
                       onValueChange={([v]) => updateForce(force.id, { angleZ: v })}
-                      min={-90}
-                      max={90}
+                      min={-180}
+                      max={180}
                       step={5}
                       className="cursor-pointer"
                     />
