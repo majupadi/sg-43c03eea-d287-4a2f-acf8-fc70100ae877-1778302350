@@ -80,12 +80,13 @@ function ForceVector({
   angleZ, 
   color, 
   label,
-  showComponents 
-}: Force & { label: string }) {
+  showComponents,
+  visualScale = 25
+}: Force & { label: string; visualScale?: number }) {
   const radXY = (angleXY * Math.PI) / 180;
   const radZ = (angleZ * Math.PI) / 180;
   
-  const scale = magnitude / 25;
+  const scale = magnitude / visualScale;
   const x = Math.cos(radXY) * Math.cos(radZ) * scale;
   const y = Math.sin(radZ) * scale;
   const z = Math.sin(radXY) * Math.cos(radZ) * scale;
@@ -185,6 +186,7 @@ export function Concurrentes3D() {
     { id: 3, magnitude: 60, angleXY: 240, angleZ: -20, color: "#10b981", showComponents: false },
   ]);
   const [nextId, setNextId] = useState(4);
+  const [visualScale, setVisualScale] = useState(25);
 
   const calculateComponents = () => {
     return forces.map((f) => {
@@ -304,7 +306,7 @@ export function Concurrentes3D() {
 
               {/* Vectores de fuerza */}
               {forces.map((force, idx) => (
-                <ForceVector key={force.id} {...force} label={`F${idx + 1}`} />
+                <ForceVector key={force.id} {...force} label={`F${idx + 1}`} visualScale={visualScale} />
               ))}
 
               {/* Resultante */}
@@ -312,9 +314,9 @@ export function Concurrentes3D() {
                 <group>
                   <Line
                     points={[[0, 0, 0], [
-                      resultant.rx / 25,
-                      resultant.ry / 25,
-                      resultant.rz / 25
+                      resultant.rx / visualScale,
+                      resultant.ry / visualScale,
+                      resultant.rz / visualScale
                     ]]}
                     color="#f59e0b"
                     lineWidth={5}
@@ -324,9 +326,9 @@ export function Concurrentes3D() {
                   />
                   <mesh 
                     position={[
-                      resultant.rx / 25,
-                      resultant.ry / 25,
-                      resultant.rz / 25
+                      resultant.rx / visualScale,
+                      resultant.ry / visualScale,
+                      resultant.rz / visualScale
                     ]}
                     quaternion={new THREE.Quaternion().setFromUnitVectors(
                       new THREE.Vector3(0, 1, 0),
@@ -338,9 +340,9 @@ export function Concurrentes3D() {
                   </mesh>
                   <Text
                     position={[
-                      resultant.rx / 25 * 1.15,
-                      resultant.ry / 25 * 1.15 + 0.3,
-                      resultant.rz / 25 * 1.15
+                      resultant.rx / visualScale * 1.15,
+                      resultant.ry / visualScale * 1.15 + 0.3,
+                      resultant.rz / visualScale * 1.15
                     ]}
                     fontSize={0.28}
                     color="#f59e0b"
@@ -362,6 +364,79 @@ export function Concurrentes3D() {
                 maxDistance={15}
               />
             </Canvas>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Control de Escala Visual */}
+      <Card className="border-2 shadow-lg bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Settings className="w-5 h-5" />
+            Escala Visual
+          </CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            Ajusta el tamaño de las flechas en pantalla sin cambiar los valores reales
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-semibold">
+                Factor de escala: 1:{visualScale}
+              </Label>
+              <Input
+                type="number"
+                value={visualScale}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (val >= 10 && val <= 100) {
+                    setVisualScale(val);
+                  }
+                }}
+                className="w-20 h-8 text-sm text-right"
+                min={10}
+                max={100}
+              />
+            </div>
+            <Slider
+              value={[visualScale]}
+              onValueChange={([v]) => setVisualScale(v)}
+              min={10}
+              max={100}
+              step={5}
+              className="cursor-pointer"
+            />
+            <div className="grid grid-cols-3 gap-2 text-xs text-center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setVisualScale(15)}
+                className="h-8"
+              >
+                Grande (1:15)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setVisualScale(25)}
+                className="h-8"
+              >
+                Normal (1:25)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setVisualScale(50)}
+                className="h-8"
+              >
+                Pequeño (1:50)
+              </Button>
+            </div>
+            <div className="bg-background p-3 rounded-lg border text-xs space-y-1">
+              <p><strong>💡 Tip:</strong> Para fuerzas grandes (como 392N), usa escala 1:50 o mayor.</p>
+              <p>Para fuerzas pequeñas (como 23N), usa escala 1:15 para mejor visualización.</p>
+            </div>
           </div>
         </CardContent>
       </Card>
