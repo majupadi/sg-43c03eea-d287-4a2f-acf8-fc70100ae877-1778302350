@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const GOOGLE_GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,8 +10,8 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  if (!OPENROUTER_API_KEY) {
-    return res.status(500).json({ error: "OpenRouter API key not configured" });
+  if (!GOOGLE_GEMINI_API_KEY) {
+    return res.status(500).json({ error: "Google Gemini API key not configured" });
   }
 
   try {
@@ -35,7 +35,7 @@ export default async function handler(
 
 **TU ENFOQUE:**
 - Explicaciones claras, precisas y educativas
-- Usa fórmulas matemáticas cuando sea necesario (formato LaTeX si es posible)
+- Usa fórmulas matemáticas cuando sea necesario
 - Da ejemplos prácticos y cotidianos
 - Paso a paso para resolver problemas
 - Relaciona conceptos entre sí
@@ -63,42 +63,63 @@ Esta es una plataforma educativa de física con:
 
 Responde en español de forma amigable pero técnicamente precisa.`;
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    // Google Gemini API endpoint
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_GEMINI_API_KEY}`;
+
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-        "X-Title": "Algo de Fisica lab 1"
       },
       body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo",
-        messages: [
+        contents: [
           {
-            role: "system",
-            content: systemPrompt
-          },
-          {
-            role: "user",
-            content: message
+            parts: [
+              {
+                text: systemPrompt + "\n\nPregunta del usuario: " + message
+              }
+            ]
           }
         ],
-        temperature: 0.7,
-        max_tokens: 1000
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1000,
+          topP: 0.95,
+        },
+        safetySettings: [
+          {
+            category: "HARM_CATEGORY_HARASSMENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_HATE_SPEECH",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          }
+        ]
       })
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("OpenRouter API error:", errorData);
+      console.error("Google Gemini API error:", errorData);
       return res.status(response.status).json({ 
-        error: "Error al procesar la solicitud",
+        error: "Error al procesar la solicitud con Gemini",
         details: errorData 
       });
     }
 
     const data = await response.json();
-    const assistantMessage = data.choices[0]?.message?.content;
+    
+    // Extraer el texto de la respuesta de Gemini
+    const assistantMessage = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!assistantMessage) {
       return res.status(500).json({ error: "No se recibió respuesta del asistente" });
