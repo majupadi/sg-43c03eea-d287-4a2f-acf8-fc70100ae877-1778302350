@@ -8,6 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Download } from "lucide-react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface Force {
   magnitude: number;
@@ -61,6 +64,141 @@ export function ConcurrentesMethods() {
   };
 
   const result = calculateResultant();
+
+  const exportToPDF = async () => {
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    let yPosition = 20;
+
+    // Header
+    pdf.setFontSize(20);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Reporte de Simulación", pageWidth / 2, yPosition, { align: "center" });
+    
+    yPosition += 10;
+    pdf.setFontSize(16);
+    pdf.text("Fuerzas Concurrentes - Métodos Gráficos", pageWidth / 2, yPosition, { align: "center" });
+    
+    yPosition += 15;
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Fecha: ${new Date().toLocaleDateString("es-ES", { 
+      year: "numeric", 
+      month: "long", 
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    })}`, pageWidth / 2, yPosition, { align: "center" });
+
+    // Datos de entrada
+    yPosition += 15;
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Datos de Entrada:", 15, yPosition);
+    
+    yPosition += 8;
+    pdf.setFontSize(11);
+    pdf.setFont("helvetica", "normal");
+    forces.forEach((force, index) => {
+      pdf.text(`Fuerza ${index + 1}: ${force.magnitude.toFixed(1)} N a ${force.angle.toFixed(1)}°`, 20, yPosition);
+      yPosition += 6;
+    });
+
+    // Componentes de cada fuerza
+    yPosition += 5;
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Componentes Rectangulares:", 15, yPosition);
+    
+    yPosition += 8;
+    pdf.setFontSize(11);
+    pdf.setFont("helvetica", "normal");
+    forces.forEach((force, index) => {
+      const rad = (force.angle * Math.PI) / 180;
+      const fx = force.magnitude * Math.cos(rad);
+      const fy = force.magnitude * Math.sin(rad);
+      pdf.text(`F${index + 1}x = ${fx.toFixed(2)} N  |  F${index + 1}y = ${fy.toFixed(2)} N`, 20, yPosition);
+      yPosition += 6;
+    });
+
+    // Resultados
+    yPosition += 5;
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Resultados:", 15, yPosition);
+    
+    yPosition += 8;
+    pdf.setFontSize(12);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Componente Rx = ${result.rx.toFixed(2)} N`, 20, yPosition);
+    yPosition += 7;
+    pdf.text(`Componente Ry = ${result.ry.toFixed(2)} N`, 20, yPosition);
+    yPosition += 10;
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(220, 38, 38);
+    pdf.text(`Resultante R = ${result.r.toFixed(2)} N a ${result.theta.toFixed(1)}°`, 20, yPosition);
+    pdf.setTextColor(0, 0, 0);
+
+    // Capturar canvas del método del paralelogramo
+    if (canvasParRef.current && forces.length >= 2) {
+      yPosition += 15;
+      if (yPosition > pageHeight - 100) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+      
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Método del Paralelogramo:", 15, yPosition);
+      yPosition += 5;
+
+      try {
+        const canvas = canvasParRef.current;
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = 180;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 15, yPosition, imgWidth, imgHeight);
+        yPosition += imgHeight + 10;
+      } catch (error) {
+        console.error("Error capturing canvas:", error);
+      }
+    }
+
+    // Capturar canvas del método del polígono
+    if (canvasPolRef.current) {
+      if (yPosition > pageHeight - 100) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+      
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Método del Polígono:", 15, yPosition);
+      yPosition += 5;
+
+      try {
+        const canvas = canvasPolRef.current;
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = 180;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 15, yPosition, imgWidth, imgHeight);
+      } catch (error) {
+        console.error("Error capturing canvas:", error);
+      }
+    }
+
+    // Footer
+    const footerY = pageHeight - 10;
+    pdf.setFontSize(9);
+    pdf.setFont("helvetica", "italic");
+    pdf.setTextColor(100, 100, 100);
+    pdf.text("Generado por Algo de Fisica lab 1 - majupadi@gmail.com", pageWidth / 2, footerY, { align: "center" });
+
+    // Guardar PDF
+    pdf.save(`fuerzas-concurrentes-${new Date().getTime()}.pdf`);
+  };
 
   // Dibujar método del paralelogramo (solo primeras 2 fuerzas)
   useEffect(() => {
@@ -267,7 +405,13 @@ export function ConcurrentesMethods() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Métodos Gráficos: Paralelogramo y Polígono</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Métodos Gráficos: Paralelogramo y Polígono</CardTitle>
+            <Button onClick={exportToPDF} className="bg-primary hover:bg-primary/90">
+              <Download className="w-4 h-4 mr-2" />
+              Exportar PDF
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="paralelogramo" className="w-full">
