@@ -6,11 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SEO } from "@/components/SEO";
-import { Calculator, CheckCircle2, BookOpen } from "lucide-react";
+import { Calculator, CheckCircle2, BookOpen, PlayCircle } from "lucide-react";
 import Link from "next/link";
+import { InteractiveExercise } from "@/components/InteractiveExercise";
 
 export default function Ejercicios() {
   const [selectedTopic, setSelectedTopic] = useState<string>("all");
+  const [showInteractive, setShowInteractive] = useState(false);
 
   const ejercicios = [
     {
@@ -448,108 +450,155 @@ export default function Ejercicios() {
     },
     {
       id: 38,
-      topic: "momentos",
-      title: "Momento de Fuerza Inclinada 45°",
-      description: "Componente perpendicular del brazo",
+      topic: "concurrentes",
+      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      description: "Ejercicio 38: Tres fuerzas concurrentes - Hallar R y E",
       datos: [
-        "F = 150 N a 45° con horizontal",
-        "Punto de aplicación a 2 m de O",
-        "Calcular momento respecto a O"
+        "F₁ = 10 kgf a 0° (horizontal derecha)",
+        "F₂ = 20 kgf a 135° (segundo cuadrante)",
+        "F₃ = 15 kgf a 270° (vertical abajo)",
+        "Usar métodos: Paralelogramo y Polígono"
+      ],
+      interactive: true,
+      initialForces: [
+        { magnitude: 10, angle: 0, unit: "kgf" as const },
+        { magnitude: 20, angle: 135, unit: "kgf" as const },
+        { magnitude: 15, angle: 270, unit: "kgf" as const }
       ],
       solucion: {
         pasos: [
-          "Componente perpendicular: Fy = 150·sin(45°) = 106.07 N",
-          "Componente horizontal Fx no produce momento",
-          "Brazo de palanca: d = 2 m",
-          "M = Fy × d = 106.07 × 2",
-          "M = 212.14 N·m"
+          "Convertir a Newtons: F₁ = 98 N, F₂ = 196 N, F₃ = 147 N",
+          "Componentes X: 98·cos(0°) + 196·cos(135°) + 147·cos(270°) = 98 - 138.6 + 0 = -40.6 N",
+          "Componentes Y: 98·sin(0°) + 196·sin(135°) + 147·sin(270°) = 0 + 138.6 - 147 = -8.4 N",
+          "R = √((-40.6)² + (-8.4)²) = √(1648.4 + 70.6) = 41.5 N",
+          "θ = arctan(-8.4/-40.6) + 180° = 191.7° (tercer cuadrante)",
+          "E = 41.5 N a 11.7° (opuesta a R)"
         ],
-        respuesta: "M = 212 N·m"
+        respuesta: "R = 41.5 N a 191.7°, E = 41.5 N a 11.7°"
       }
     },
     {
       id: 39,
-      topic: "equilibrio",
-      title: "Sistema con Polea - Tensión",
-      description: "Equilibrio con masa colgante",
+      topic: "concurrentes",
+      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      description: "Ejercicio 39: Cuatro fuerzas concurrentes - Hallar R y E",
       datos: [
-        "Masa m = 50 kg colgada",
-        "Brazo de viga: 2 m",
-        "g = 10 m/s²"
+        "F₁ = 30 N a 45°",
+        "F₂ = 25 N a 120°",
+        "F₃ = 40 N a 225°",
+        "F₄ = 20 N a 315°",
+        "Aplicar método del polígono"
+      ],
+      interactive: true,
+      initialForces: [
+        { magnitude: 30, angle: 45, unit: "N" as const },
+        { magnitude: 25, angle: 120, unit: "N" as const },
+        { magnitude: 40, angle: 225, unit: "N" as const },
+        { magnitude: 20, angle: 315, unit: "N" as const }
       ],
       solucion: {
         pasos: [
-          "Peso: W = m × g = 50 × 10 = 500 N",
-          "Tensión en cuerda: T = W = 500 N",
-          "Momento respecto al apoyo: M = T × d",
-          "M = 500 × 2 = 1000 N·m",
-          "Debe ser equilibrado por la estructura"
+          "Componentes X: 30·cos(45°) + 25·cos(120°) + 40·cos(225°) + 20·cos(315°)",
+          "Rx = 21.2 - 12.5 - 28.3 + 14.1 = -5.5 N",
+          "Componentes Y: 30·sin(45°) + 25·sin(120°) + 40·sin(225°) + 20·sin(315°)",
+          "Ry = 21.2 + 21.7 - 28.3 - 14.1 = 0.5 N",
+          "R = √((-5.5)² + (0.5)²) = 5.52 N",
+          "θ = arctan(0.5/-5.5) + 180° = 174.8°",
+          "E = 5.52 N a -5.2° (opuesta)"
         ],
-        respuesta: "T = 500 N, M = 1000 N·m"
+        respuesta: "R = 5.52 N a 174.8°, E = 5.52 N a -5.2°"
       }
     },
     {
       id: 40,
-      topic: "equilibrio",
-      title: "Escalera Apoyada - Equilibrio",
-      description: "Análisis de escalera contra pared",
+      topic: "concurrentes",
+      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      description: "Ejercicio 40: Sistema de cinco fuerzas - Hallar R y E",
       datos: [
-        "Escalera 5 m, peso 200 N",
-        "Ángulo 60° con piso",
-        "Persona 700 N a 3 m del apoyo"
+        "F₁ = 50 kgf a 0°",
+        "F₂ = 30 kgf a 60°",
+        "F₃ = 40 kgf a 150°",
+        "F₄ = 25 kgf a 240°",
+        "F₅ = 35 kgf a 300°"
+      ],
+      interactive: true,
+      initialForces: [
+        { magnitude: 50, angle: 0, unit: "kgf" as const },
+        { magnitude: 30, angle: 60, unit: "kgf" as const },
+        { magnitude: 40, angle: 150, unit: "kgf" as const },
+        { magnitude: 25, angle: 240, unit: "kgf" as const },
+        { magnitude: 35, angle: 300, unit: "kgf" as const }
       ],
       solucion: {
         pasos: [
-          "Peso escalera actúa en centro: 2.5 m",
-          "ΣFy = 0: Rpiso - 200 - 700 = 0",
-          "Rpiso = 900 N (vertical)",
-          "Componente perpendicular para momentos",
-          "Se necesita fricción para evitar deslizamiento"
+          "Convertir: F₁=490N, F₂=294N, F₃=392N, F₄=245N, F₅=343N",
+          "Rx = 490 + 147 - 339.4 - 122.5 + 171.5 = 346.6 N",
+          "Ry = 0 + 254.6 + 196 - 212.2 - 296.8 = -58.4 N",
+          "R = √(346.6² + (-58.4)²) = 351.5 N",
+          "θ = arctan(-58.4/346.6) = -9.6° (cuarto cuadrante)",
+          "E = 351.5 N a 170.4°"
         ],
-        respuesta: "Rpiso = 900 N vertical"
+        respuesta: "R = 351.5 N a -9.6°, E = 351.5 N a 170.4°"
       }
     },
     {
       id: 41,
-      topic: "momentos",
-      title: "Cupla en Mecanismo - Potencia",
-      description: "Momento y potencia rotacional",
+      topic: "concurrentes",
+      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      description: "Ejercicio 41: Tres fuerzas en equilibrio - Verificación",
       datos: [
-        "Par F = 80 N cada fuerza",
-        "Separación d = 0.15 m",
-        "Velocidad 120 rpm"
+        "F₁ = 80 N a 30°",
+        "F₂ = 60 N a 150°",
+        "F₃ = 70 N a 270°",
+        "Verificar si está en equilibrio"
+      ],
+      interactive: true,
+      initialForces: [
+        { magnitude: 80, angle: 30, unit: "N" as const },
+        { magnitude: 60, angle: 150, unit: "N" as const },
+        { magnitude: 70, angle: 270, unit: "N" as const }
       ],
       solucion: {
         pasos: [
-          "M = F × d = 80 × 0.15 = 12 N·m",
-          "ω = 2π × (120/60) = 12.566 rad/s",
-          "Potencia: P = M × ω",
-          "P = 12 × 12.566 = 150.8 W",
-          "Redondear: P ≈ 151 W"
+          "Rx = 80·cos(30°) + 60·cos(150°) + 70·cos(270°)",
+          "Rx = 69.3 - 52.0 + 0 = 17.3 N ≠ 0",
+          "Ry = 80·sin(30°) + 60·sin(150°) + 70·sin(270°)",
+          "Ry = 40 + 30 - 70 = 0 N ✓",
+          "Como Rx ≠ 0, el sistema NO está en equilibrio",
+          "Falta una fuerza E = 17.3 N a 180° para equilibrar"
         ],
-        respuesta: "M = 12 N·m, P = 151 W"
+        respuesta: "NO está en equilibrio. Falta E = 17.3 N a 180°"
       }
     },
     {
       id: 42,
-      topic: "equilibrio",
-      title: "Sistema Complejo - Múltiples Fuerzas",
-      description: "Viga con fuerzas y momento",
+      topic: "concurrentes",
+      title: "Sistemas de Fuerzas Concurrentes - Hallar F₄",
+      description: "Ejercicio 42: Sistema en equilibrio - Encontrar fuerza desconocida",
       datos: [
-        "Viga 10 m, apoyos A (x=0) y B (x=8m)",
-        "F₁ = 100 N en x=3m",
-        "F₂ = 150 N en x=6m",
-        "Momento M = 200 N·m en x=5m"
+        "Tres fuerzas conocidas en equilibrio con F₄",
+        "F₁ = 100 N a 0°",
+        "F₂ = 80 N a 90°",
+        "F₃ = 60 N a 180°",
+        "Hallar F₄ para equilibrio"
+      ],
+      interactive: true,
+      initialForces: [
+        { magnitude: 100, angle: 0, unit: "N" as const },
+        { magnitude: 80, angle: 90, unit: "N" as const },
+        { magnitude: 60, angle: 180, unit: "N" as const },
+        { magnitude: 80, angle: 270, unit: "N" as const }
       ],
       solucion: {
         pasos: [
-          "ΣFy = 0: RA + RB = 250 N ... (1)",
-          "ΣMA = 0: -100(3) - 150(6) - 200 + RB(8) = 0",
-          "-300 - 900 - 200 + 8RB = 0",
-          "8RB = 1400 → RB = 175 N",
-          "RA = 250 - 175 = 75 N"
+          "Para equilibrio: ΣFx = 0 y ΣFy = 0",
+          "ΣFx = 100 + 0 - 60 + F₄x = 0 → F₄x = -40 N",
+          "ΣFy = 0 + 80 + 0 + F₄y = 0 → F₄y = -80 N",
+          "F₄ = √((-40)² + (-80)²) = √(1600 + 6400) = 89.4 N",
+          "θ = arctan(-80/-40) + 180° = 243.4° (tercer cuadrante)",
+          "Verificación: todas las componentes suman cero ✓"
         ],
-        respuesta: "RA = 75 N, RB = 175 N"
+        respuesta: "F₄ = 89.4 N a 243.4°"
       }
     }
   ];
@@ -557,6 +606,8 @@ export default function Ejercicios() {
   const filteredEjercicios = selectedTopic === "all" 
     ? ejercicios 
     : ejercicios.filter(ej => ej.topic === selectedTopic);
+
+  const interactiveEjercicios = ejercicios.filter(ej => ej.interactive);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -574,9 +625,96 @@ export default function Ejercicios() {
               Ejercicios Resueltos
             </h1>
             <p className="text-lg text-muted-foreground">
-              26 problemas paso a paso de sistemas de fuerzas, momentos y equilibrio
+              42 problemas paso a paso de sistemas de fuerzas, momentos y equilibrio
             </p>
           </div>
+
+          {/* Sección de Ejercicios Interactivos */}
+          {!showInteractive && (
+            <Alert className="mb-8 bg-accent/10 border-accent cursor-pointer hover:bg-accent/20 transition-colors" onClick={() => setShowInteractive(true)}>
+              <PlayCircle className="w-5 h-5" />
+              <AlertDescription>
+                <p className="font-semibold">✨ Ejercicios 38-42: Versión Interactiva Disponible</p>
+                <p className="text-sm mt-1">
+                  Modifica magnitudes y ángulos en tiempo real. Visualiza diagramas vectoriales.
+                </p>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {showInteractive && (
+            <div className="mb-8 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-primary">Ejercicios Interactivos - Fuerzas Concurrentes</h2>
+                <Button variant="outline" onClick={() => setShowInteractive(false)}>
+                  Ver Ejercicios Estáticos
+                </Button>
+              </div>
+              
+              <InteractiveExercise
+                exerciseNumber={38}
+                title="Tres Fuerzas Concurrentes"
+                initialForces={[
+                  { magnitude: 10, angle: 0, unit: "kgf" },
+                  { magnitude: 20, angle: 135, unit: "kgf" },
+                  { magnitude: 15, angle: 270, unit: "kgf" }
+                ]}
+              />
+
+              <InteractiveExercise
+                exerciseNumber={39}
+                title="Cuatro Fuerzas Concurrentes"
+                initialForces={[
+                  { magnitude: 30, angle: 45, unit: "N" },
+                  { magnitude: 25, angle: 120, unit: "N" },
+                  { magnitude: 40, angle: 225, unit: "N" },
+                  { magnitude: 20, angle: 315, unit: "N" }
+                ]}
+              />
+
+              <InteractiveExercise
+                exerciseNumber={40}
+                title="Cinco Fuerzas Concurrentes"
+                initialForces={[
+                  { magnitude: 50, angle: 0, unit: "kgf" },
+                  { magnitude: 30, angle: 60, unit: "kgf" },
+                  { magnitude: 40, angle: 150, unit: "kgf" },
+                  { magnitude: 25, angle: 240, unit: "kgf" },
+                  { magnitude: 35, angle: 300, unit: "kgf" }
+                ]}
+              />
+
+              <InteractiveExercise
+                exerciseNumber={41}
+                title="Verificación de Equilibrio"
+                initialForces={[
+                  { magnitude: 80, angle: 30, unit: "N" },
+                  { magnitude: 60, angle: 150, unit: "N" },
+                  { magnitude: 70, angle: 270, unit: "N" }
+                ]}
+              />
+
+              <InteractiveExercise
+                exerciseNumber={42}
+                title="Encontrar Fuerza Desconocida"
+                initialForces={[
+                  { magnitude: 100, angle: 0, unit: "N" },
+                  { magnitude: 80, angle: 90, unit: "N" },
+                  { magnitude: 60, angle: 180, unit: "N" },
+                  { magnitude: 80, angle: 270, unit: "N" }
+                ]}
+              />
+
+              <Alert>
+                <AlertDescription>
+                  <p className="text-sm">
+                    💡 <strong>Tip:</strong> Modifica las magnitudes y ángulos usando los sliders o inputs numéricos.
+                    Alterna entre kgf y N haciendo clic en el botón de unidades. Observa cómo cambia la resultante en tiempo real.
+                  </p>
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
 
           <Card className="mb-8">
             <CardContent className="pt-6">
@@ -623,6 +761,13 @@ export default function Ejercicios() {
                 >
                   Equilibrio ({ejercicios.filter(e => e.topic === "equilibrio").length})
                 </Button>
+                <Button 
+                  variant={selectedTopic === "concurrentes" ? "default" : "outline"}
+                  onClick={() => setSelectedTopic("concurrentes")}
+                  className={selectedTopic === "concurrentes" ? "bg-primary" : ""}
+                >
+                  Concurrentes ({ejercicios.filter(e => e.topic === "concurrentes").length})
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -644,11 +789,12 @@ export default function Ejercicios() {
                       </p>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-mono font-semibold ${
-                      ejercicio.topic === "colineales" ? "bg-blue-100 text-blue-700" :
-                      ejercicio.topic === "graficos" ? "bg-green-100 text-green-700" :
-                      ejercicio.topic === "paralelas" ? "bg-purple-100 text-purple-700" :
-                      ejercicio.topic === "momentos" ? "bg-amber-100 text-amber-700" :
-                      "bg-pink-100 text-pink-700"
+                      ejercicio.topic === "colineales" ? "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" :
+                      ejercicio.topic === "graficos" ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300" :
+                      ejercicio.topic === "paralelas" ? "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300" :
+                      ejercicio.topic === "momentos" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" :
+                      ejercicio.topic === "concurrentes" ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300" :
+                      "bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300"
                     }`}>
                       {ejercicio.topic}
                     </div>
