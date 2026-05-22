@@ -1,11 +1,14 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SEO } from "@/components/SEO";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, RotateCw, Calculator, FlaskConical, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { BookOpen, Calculator, FlaskConical, ArrowRight, RotateCw } from "lucide-react";
+import { Momentos3D } from "@/components/simulations/Momentos3D";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function MomentosDeFuerza() {
   return (
@@ -312,28 +315,16 @@ export default function MomentosDeFuerza() {
             </CardContent>
           </Card>
 
-          {/* Navegación */}
-          <div className="flex flex-wrap gap-4 justify-between items-center pt-8 border-t">
-            <Link href="/teoria/concurrentes">
-              <Button variant="outline" className="gap-2">
-                ← Sistemas Concurrentes
-              </Button>
-            </Link>
-            
-            <Link href="/ejercicios">
-              <Button className="gap-2 bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Calculator className="w-4 h-4" />
-                Ver Ejercicios
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
+          {/* Simulación 3D */}
+          <Momentos3D />
+        </div>
 
-            <Link href="/teoria/equilibrio">
-              <Button variant="outline" className="gap-2">
-                Equilibrio →
-              </Button>
-            </Link>
-          </div>
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Momento de fuerza" 
+            title="📚 Amplía tu conocimiento: Momento de Fuerza (Torque)"
+          />
         </div>
       </main>
 

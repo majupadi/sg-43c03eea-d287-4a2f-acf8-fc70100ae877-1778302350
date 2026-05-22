@@ -1,11 +1,12 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SEO } from "@/components/SEO";
+import { ArrowLeft, Network, Calculator, FlaskConical, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { BookOpen, Calculator, FlaskConical, ArrowRight } from "lucide-react";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function SistemasConcurrentes() {
   return (
@@ -263,6 +264,14 @@ export default function SistemasConcurrentes() {
               </Button>
             </Link>
           </div>
+        </div>
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Fuerza concurrente" 
+            title="📚 Amplía tu conocimiento: Fuerzas Concurrentes"
+          />
         </div>
       </main>
 

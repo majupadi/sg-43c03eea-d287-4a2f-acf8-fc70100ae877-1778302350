@@ -1,10 +1,13 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info } from "lucide-react";
+import { Info, ArrowLeft, Triangle, Calculator } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ParalelogramoSimulation } from "@/components/simulations/ParalelogramoSimulation";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function MetodosGraficosPage() {
   return (
@@ -208,6 +211,17 @@ export default function MetodosGraficosPage() {
               </Link>
             </Button>
           </div>
+        </div>
+
+        {/* Simulación Interactiva */}
+        <ParalelogramoSimulation />
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Método gráfico" 
+            title="📚 Amplía tu conocimiento: Métodos Gráficos en Física"
+          />
         </div>
       </main>
 

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { Calculator, FlaskConical, Lightbulb } from "lucide-react";
 import Link from "next/link";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function PoleasPage() {
   return (
@@ -404,6 +405,14 @@ export default function PoleasPage() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Polea" 
+            title="📚 Amplía tu conocimiento: Poleas y Sistemas de Polipastos"
+          />
         </div>
       </main>
 

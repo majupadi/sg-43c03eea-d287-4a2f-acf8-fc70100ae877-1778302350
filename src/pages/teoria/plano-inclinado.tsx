@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { Calculator, FlaskConical, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function PlanoInclinadoPage() {
   return (
@@ -266,6 +267,14 @@ export default function PlanoInclinadoPage() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Plano inclinado" 
+            title="📚 Amplía tu conocimiento: Plano Inclinado"
+          />
         </div>
       </main>
 

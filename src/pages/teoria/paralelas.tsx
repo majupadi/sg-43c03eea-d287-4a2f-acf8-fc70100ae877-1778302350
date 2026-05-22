@@ -1,10 +1,12 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function ParalelasPage() {
   return (
@@ -242,6 +244,14 @@ export default function ParalelasPage() {
               </Link>
             </Button>
           </div>
+        </div>
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Sistema de fuerzas" 
+            title="📚 Amplía tu conocimiento: Sistemas de Fuerzas"
+          />
         </div>
       </main>
 

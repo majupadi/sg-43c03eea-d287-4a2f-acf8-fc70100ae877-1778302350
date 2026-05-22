@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { Calculator, FlaskConical, Lightbulb } from "lucide-react";
 import Link from "next/link";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function PalancasPage() {
   return (
@@ -265,6 +266,14 @@ export default function PalancasPage() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Palanca" 
+            title="📚 Amplía tu conocimiento: Palancas y Ventaja Mecánica"
+          />
         </div>
       </main>
 

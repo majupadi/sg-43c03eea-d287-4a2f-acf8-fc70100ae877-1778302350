@@ -1,11 +1,14 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SEO } from "@/components/SEO";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Scale, CheckCircle2, Calculator, FlaskConical, ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
-import { BookOpen, Calculator, FlaskConical, ArrowRight, Scale } from "lucide-react";
+import { Equilibrio3D } from "@/components/simulations/Equilibrio3D";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function Equilibrio() {
   return (
@@ -356,28 +359,16 @@ export default function Equilibrio() {
             </CardContent>
           </Card>
 
-          {/* Navegación */}
-          <div className="flex flex-wrap gap-4 justify-between items-center pt-8 border-t">
-            <Link href="/teoria/momentos">
-              <Button variant="outline" className="gap-2">
-                ← Momentos de Fuerza
-              </Button>
-            </Link>
-            
-            <Link href="/ejercicios">
-              <Button className="gap-2 bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Calculator className="w-4 h-4" />
-                Practicar con Ejercicios
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
+          {/* Simulación 3D */}
+          <Equilibrio3D />
+        </div>
 
-            <Link href="/simulaciones">
-              <Button variant="outline" className="gap-2">
-                Simulaciones →
-              </Button>
-            </Link>
-          </div>
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Equilibrio mecánico" 
+            title="📚 Amplía tu conocimiento: Equilibrio Mecánico"
+          />
         </div>
       </main>
 
