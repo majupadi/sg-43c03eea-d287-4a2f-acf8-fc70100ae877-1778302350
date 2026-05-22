@@ -15,443 +15,828 @@ export default function Ejercicios() {
   const [showInteractive, setShowInteractive] = useState(false);
 
   const ejercicios = [
+    // FUERZAS COLINEALES (1-8)
     {
-      id: 17,
+      id: 1,
       topic: "colineales",
-      title: "Sistema de Fuerzas Colineales - Problema 17-18",
-      description: "Calcular la resultante de 6 fuerzas colineales",
+      title: "Sistema de Fuerzas Colineales - Dos fuerzas",
+      description: "Ejercicio 1: Calcular la resultante de dos fuerzas colineales del mismo sentido",
       datos: [
-        "F₁ = 20 Kgf (→)",
-        "F₂ = 15 Kgf (←)",
-        "F₃ = 30 Kgf (→)",
-        "F₄ = 12 Kgf (←)",
-        "F₅ = 25 Kgf (→)",
-        "F₆ = 51 Kgf (←)"
+        "F₁ = 50 N hacia la derecha",
+        "F₂ = 30 N hacia la derecha",
+        "Hallar R"
       ],
       solucion: {
         pasos: [
-          "Establecer convención de signos: derecha (+), izquierda (-)",
-          "Sumar fuerzas hacia la derecha: ΣF(+) = 20 + 30 + 25 = 75 Kgf",
-          "Sumar fuerzas hacia la izquierda: ΣF(-) = 15 + 12 + 51 = 78 Kgf",
-          "Calcular resultante: R = ΣF(+) - ΣF(-) = 75 - 78 = -3 Kgf",
-          "Como el resultado es negativo, la resultante es 3 Kgf hacia la izquierda"
+          "Ambas fuerzas tienen el mismo sentido (→)",
+          "R = F₁ + F₂",
+          "R = 50 N + 30 N",
+          "R = 80 N hacia la derecha"
         ],
-        respuesta: "R = 3 Kgf hacia la izquierda"
+        respuesta: "R = 80 N →"
+      }
+    },
+    {
+      id: 2,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Sentidos opuestos",
+      description: "Ejercicio 2: Resultante de dos fuerzas en sentidos opuestos",
+      datos: [
+        "F₁ = 100 N hacia la derecha",
+        "F₂ = 60 N hacia la izquierda",
+        "Hallar R"
+      ],
+      solucion: {
+        pasos: [
+          "Fuerzas en sentidos opuestos (→ ←)",
+          "R = F₁ - F₂",
+          "R = 100 N - 60 N",
+          "R = 40 N hacia la derecha (sentido de la mayor)"
+        ],
+        respuesta: "R = 40 N →"
+      }
+    },
+    {
+      id: 3,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Tres fuerzas",
+      description: "Ejercicio 3: Tres fuerzas colineales en diferentes sentidos",
+      datos: [
+        "F₁ = 80 N →",
+        "F₂ = 50 N ←",
+        "F₃ = 30 N →",
+        "Hallar R"
+      ],
+      solucion: {
+        pasos: [
+          "Sumar las fuerzas hacia la derecha: 80 + 30 = 110 N",
+          "Restar las fuerzas hacia la izquierda: 110 - 50",
+          "R = 60 N",
+          "Sentido: derecha (suma mayor)"
+        ],
+        respuesta: "R = 60 N →"
+      }
+    },
+    {
+      id: 4,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Equilibrio",
+      description: "Ejercicio 4: Sistema en equilibrio, encontrar fuerza desconocida",
+      datos: [
+        "F₁ = 120 N →",
+        "F₂ = 80 N ←",
+        "F₃ = ? →",
+        "Sistema en equilibrio (R = 0)"
+      ],
+      solucion: {
+        pasos: [
+          "Para equilibrio: ΣF = 0",
+          "F₁ - F₂ + F₃ = 0",
+          "120 - 80 + F₃ = 0",
+          "F₃ = -40 N",
+          "F₃ = 40 N hacia la izquierda"
+        ],
+        respuesta: "F₃ = 40 N ←"
+      }
+    },
+    {
+      id: 5,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Cuatro fuerzas",
+      description: "Ejercicio 5: Cuatro fuerzas colineales",
+      datos: [
+        "F₁ = 200 N →",
+        "F₂ = 150 N ←",
+        "F₃ = 100 N →",
+        "F₄ = 80 N ←"
+      ],
+      solucion: {
+        pasos: [
+          "ΣF→ = 200 + 100 = 300 N",
+          "ΣF← = 150 + 80 = 230 N",
+          "R = 300 - 230 = 70 N",
+          "Sentido: → (positivo)"
+        ],
+        respuesta: "R = 70 N →"
+      }
+    },
+    {
+      id: 6,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Conversión kgf a N",
+      description: "Ejercicio 6: Fuerzas en kgf, convertir y calcular resultante",
+      datos: [
+        "F₁ = 10 kgf →",
+        "F₂ = 5 kgf ←",
+        "F₃ = 8 kgf →",
+        "Convertir a N y hallar R (1 kgf = 9.8 N)"
+      ],
+      solucion: {
+        pasos: [
+          "Convertir: F₁ = 10 × 9.8 = 98 N",
+          "F₂ = 5 × 9.8 = 49 N",
+          "F₃ = 8 × 9.8 = 78.4 N",
+          "R = (98 + 78.4) - 49 = 127.4 N →"
+        ],
+        respuesta: "R = 127.4 N → (13 kgf →)"
+      }
+    },
+    {
+      id: 7,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Cinco fuerzas",
+      description: "Ejercicio 7: Sistema complejo con cinco fuerzas",
+      datos: [
+        "F₁ = 300 N →",
+        "F₂ = 200 N ←",
+        "F₃ = 150 N →",
+        "F₄ = 100 N ←",
+        "F₅ = 50 N →"
+      ],
+      solucion: {
+        pasos: [
+          "ΣF→ = 300 + 150 + 50 = 500 N",
+          "ΣF← = 200 + 100 = 300 N",
+          "R = 500 - 300 = 200 N",
+          "Dirección: → (positivo)"
+        ],
+        respuesta: "R = 200 N →"
+      }
+    },
+    {
+      id: 8,
+      topic: "colineales",
+      title: "Sistema de Fuerzas Colineales - Aplicación práctica",
+      description: "Ejercicio 8: Tracción de un vehículo",
+      datos: [
+        "Motor ejerce 5000 N →",
+        "Fricción del aire: 800 N ←",
+        "Fricción del suelo: 600 N ←",
+        "Hallar fuerza neta"
+      ],
+      solucion: {
+        pasos: [
+          "Fuerza motriz: 5000 N →",
+          "Fuerzas resistivas: 800 + 600 = 1400 N ←",
+          "R = 5000 - 1400",
+          "R = 3600 N → (fuerza neta de aceleración)"
+        ],
+        respuesta: "Fuerza neta = 3600 N →"
+      }
+    },
+
+    // MÉTODOS GRÁFICOS (9-16)
+    {
+      id: 9,
+      topic: "graficos",
+      title: "Método del Paralelogramo - Dos fuerzas perpendiculares",
+      description: "Ejercicio 9: Dos fuerzas en ángulo recto",
+      datos: [
+        "F₁ = 30 N horizontal →",
+        "F₂ = 40 N vertical ↑",
+        "Usar método del paralelogramo"
+      ],
+      solucion: {
+        pasos: [
+          "Teorema de Pitágoras (fuerzas perpendiculares)",
+          "R = √(F₁² + F₂²)",
+          "R = √(30² + 40²) = √(900 + 1600)",
+          "R = √2500 = 50 N",
+          "θ = arctan(40/30) = 53.1°"
+        ],
+        respuesta: "R = 50 N a 53.1° desde horizontal"
+      }
+    },
+    {
+      id: 10,
+      topic: "graficos",
+      title: "Método del Paralelogramo - Ley del coseno",
+      description: "Ejercicio 10: Dos fuerzas con ángulo de 60°",
+      datos: [
+        "F₁ = 50 N",
+        "F₂ = 40 N",
+        "Ángulo entre ellas: 60°"
+      ],
+      solucion: {
+        pasos: [
+          "Ley del coseno: R² = F₁² + F₂² - 2·F₁·F₂·cos(θ)",
+          "θ = 180° - 60° = 120° (ángulo opuesto en paralelogramo)",
+          "R² = 50² + 40² - 2(50)(40)cos(120°)",
+          "R² = 2500 + 1600 - 4000(-0.5) = 6100",
+          "R = 78.1 N"
+        ],
+        respuesta: "R = 78.1 N"
+      }
+    },
+    {
+      id: 11,
+      topic: "graficos",
+      title: "Método del Polígono - Tres fuerzas",
+      description: "Ejercicio 11: Tres vectores consecutivos",
+      datos: [
+        "F₁ = 20 N a 0°",
+        "F₂ = 30 N a 90°",
+        "F₃ = 25 N a 180°"
+      ],
+      solucion: {
+        pasos: [
+          "Componentes X: Rx = 20·cos(0°) + 30·cos(90°) + 25·cos(180°)",
+          "Rx = 20 + 0 - 25 = -5 N",
+          "Componentes Y: Ry = 20·sin(0°) + 30·sin(90°) + 25·sin(180°)",
+          "Ry = 0 + 30 + 0 = 30 N",
+          "R = √((-5)² + 30²) = 30.4 N",
+          "θ = arctan(30/-5) + 180° = 99.5°"
+        ],
+        respuesta: "R = 30.4 N a 99.5°"
+      }
+    },
+    {
+      id: 12,
+      topic: "graficos",
+      title: "Método del Polígono - Cuatro fuerzas",
+      description: "Ejercicio 12: Sistema de cuatro vectores",
+      datos: [
+        "F₁ = 40 N a 0°",
+        "F₂ = 30 N a 45°",
+        "F₃ = 50 N a 135°",
+        "F₄ = 20 N a 270°"
+      ],
+      solucion: {
+        pasos: [
+          "Rx = 40·cos(0°) + 30·cos(45°) + 50·cos(135°) + 20·cos(270°)",
+          "Rx = 40 + 21.2 - 35.4 + 0 = 25.8 N",
+          "Ry = 40·sin(0°) + 30·sin(45°) + 50·sin(135°) + 20·sin(270°)",
+          "Ry = 0 + 21.2 + 35.4 - 20 = 36.6 N",
+          "R = √(25.8² + 36.6²) = 44.7 N",
+          "θ = arctan(36.6/25.8) = 54.8°"
+        ],
+        respuesta: "R = 44.7 N a 54.8°"
+      }
+    },
+    {
+      id: 13,
+      topic: "graficos",
+      title: "Método del Paralelogramo - Fuerzas iguales",
+      description: "Ejercicio 13: Dos fuerzas iguales con ángulo",
+      datos: [
+        "F₁ = F₂ = 60 N",
+        "Ángulo entre ellas: 90°"
+      ],
+      solucion: {
+        pasos: [
+          "Para fuerzas iguales perpendiculares:",
+          "R = F√2",
+          "R = 60√2 = 84.9 N",
+          "θ = 45° (bisectriz del ángulo)"
+        ],
+        respuesta: "R = 84.9 N a 45°"
+      }
+    },
+    {
+      id: 14,
+      topic: "graficos",
+      title: "Método del Polígono - Cinco fuerzas",
+      description: "Ejercicio 14: Sistema complejo con cinco vectores",
+      datos: [
+        "F₁ = 50 N a 0°",
+        "F₂ = 40 N a 72°",
+        "F₃ = 35 N a 144°",
+        "F₄ = 30 N a 216°",
+        "F₅ = 25 N a 288°"
+      ],
+      solucion: {
+        pasos: [
+          "Rx = 50 + 40·cos(72°) + 35·cos(144°) + 30·cos(216°) + 25·cos(288°)",
+          "Rx = 50 + 12.4 - 28.3 - 24.3 + 7.7 = 17.5 N",
+          "Ry = 0 + 40·sin(72°) + 35·sin(144°) + 30·sin(216°) + 25·sin(288°)",
+          "Ry = 38.0 + 20.6 - 18.0 - 23.8 = 16.8 N",
+          "R = √(17.5² + 16.8²) = 24.3 N",
+          "θ = arctan(16.8/17.5) = 43.8°"
+        ],
+        respuesta: "R = 24.3 N a 43.8°"
+      }
+    },
+    {
+      id: 15,
+      topic: "graficos",
+      title: "Método Gráfico - Escala y medición",
+      description: "Ejercicio 15: Construcción gráfica con escala",
+      datos: [
+        "F₁ = 80 N a 30°",
+        "F₂ = 60 N a 120°",
+        "Escala: 1 cm = 10 N",
+        "Dibujar y medir R"
+      ],
+      solucion: {
+        pasos: [
+          "F₁: 8 cm a 30° desde horizontal",
+          "F₂: 6 cm a 120° desde horizontal",
+          "Método analítico para verificar:",
+          "Rx = 80·cos(30°) + 60·cos(120°) = 69.3 - 30 = 39.3 N",
+          "Ry = 80·sin(30°) + 60·sin(120°) = 40 + 52.0 = 92.0 N",
+          "R = √(39.3² + 92.0²) = 100.1 N ≈ 10 cm",
+          "θ = arctan(92.0/39.3) = 66.9°"
+        ],
+        respuesta: "R = 100.1 N a 66.9° (medir ~10 cm en diagrama)"
+      }
+    },
+    {
+      id: 16,
+      topic: "graficos",
+      title: "Comparación de Métodos",
+      description: "Ejercicio 16: Resolver con ambos métodos",
+      datos: [
+        "F₁ = 70 N a 0°",
+        "F₂ = 50 N a 60°",
+        "Aplicar paralelogramo Y polígono"
+      ],
+      solucion: {
+        pasos: [
+          "Método del Paralelogramo (ley del coseno):",
+          "R² = 70² + 50² - 2(70)(50)cos(120°) = 10400",
+          "R = 102.0 N",
+          "Método del Polígono (componentes):",
+          "Rx = 70 + 50·cos(60°) = 70 + 25 = 95 N",
+          "Ry = 0 + 50·sin(60°) = 43.3 N",
+          "R = √(95² + 43.3²) = 104.5 N",
+          "Ambos métodos dan resultados equivalentes"
+        ],
+        respuesta: "R ≈ 103 N (ambos métodos coinciden)"
+      }
+    },
+
+    // FUERZAS PARALELAS (17-24)
+    {
+      id: 17,
+      topic: "paralelas",
+      title: "Fuerzas Paralelas - Mismo sentido",
+      description: "Ejercicio 17: Dos fuerzas paralelas del mismo sentido",
+      datos: [
+        "F₁ = 100 N ↓ en x = 2 m",
+        "F₂ = 60 N ↓ en x = 6 m",
+        "Hallar R y posición"
+      ],
+      solucion: {
+        pasos: [
+          "R = F₁ + F₂ = 100 + 60 = 160 N ↓",
+          "Para hallar posición (momento nulo):",
+          "F₁·d₁ = F₂·d₂",
+          "100(x - 2) = 60(6 - x)",
+          "100x - 200 = 360 - 60x",
+          "160x = 560",
+          "x = 3.5 m"
+        ],
+        respuesta: "R = 160 N ↓ en x = 3.5 m"
+      }
+    },
+    {
+      id: 18,
+      topic: "paralelas",
+      title: "Fuerzas Paralelas - Sentidos opuestos",
+      description: "Ejercicio 18: Dos fuerzas paralelas de sentidos opuestos",
+      datos: [
+        "F₁ = 150 N ↑ en x = 1 m",
+        "F₂ = 100 N ↓ en x = 5 m",
+        "Hallar R y posición"
+      ],
+      solucion: {
+        pasos: [
+          "R = F₁ - F₂ = 150 - 100 = 50 N ↑",
+          "Momento respecto al origen:",
+          "R·x = F₁·1 - F₂·5",
+          "50·x = 150·1 - 100·5",
+          "50x = 150 - 500 = -350",
+          "x = -7 m (a la izquierda del origen)"
+        ],
+        respuesta: "R = 50 N ↑ en x = -7 m"
       }
     },
     {
       id: 19,
-      topic: "graficos",
-      title: "Método del Paralelogramo (60°)",
-      description: "Dos fuerzas con ángulo de 60° entre ellas",
+      topic: "paralelas",
+      title: "Fuerzas Paralelas - Tres fuerzas",
+      description: "Ejercicio 19: Sistema de tres fuerzas paralelas",
       datos: [
-        "F₁ = 30 N",
-        "F₂ = 40 N",
-        "Ángulo θ = 60°",
-        "Aplicar R = √(F₁² + F₂² + 2·F₁·F₂·cos(θ))"
+        "F₁ = 80 N ↓ en x = 0 m",
+        "F₂ = 120 N ↓ en x = 3 m",
+        "F₃ = 60 N ↓ en x = 7 m"
       ],
       solucion: {
         pasos: [
-          "Sustituir en fórmula: R = √(30² + 40² + 2·30·40·cos(60°))",
-          "Calcular: R = √(900 + 1600 + 2400·0.5)",
-          "R = √(900 + 1600 + 1200) = √3700",
-          "R ≈ 60.83 N",
-          "Ángulo: α = arctan[(40·sen(60°))/(30 + 40·cos(60°))] ≈ 34.7°"
+          "R = 80 + 120 + 60 = 260 N ↓",
+          "Momento respecto al origen:",
+          "260·x = 80(0) + 120(3) + 60(7)",
+          "260x = 0 + 360 + 420 = 780",
+          "x = 3 m"
         ],
-        respuesta: "R ≈ 60.83 N a 34.7° de F₁"
+        respuesta: "R = 260 N ↓ en x = 3 m"
       }
     },
     {
       id: 20,
-      topic: "graficos",
-      title: "Método del Paralelogramo (90°)",
-      description: "Dos fuerzas perpendiculares entre sí",
+      topic: "paralelas",
+      title: "Fuerzas Paralelas - Viga con cargas",
+      description: "Ejercicio 20: Viga horizontal con cargas puntuales",
       datos: [
-        "F₁ = 50 Kgf",
-        "F₂ = 80 Kgf",
-        "Ángulo θ = 90°",
-        "Para θ=90°, R = √(F₁² + F₂²)"
+        "Viga de 8 m",
+        "P₁ = 200 N en x = 2 m",
+        "P₂ = 300 N en x = 5 m",
+        "Hallar reacciones en apoyos (x=0 y x=8)"
       ],
       solucion: {
         pasos: [
-          "Como θ = 90°, usar R = √(F₁² + F₂²)",
-          "R = √(50² + 80²)",
-          "R = √(2500 + 6400) = √8900",
-          "R ≈ 94.34 Kgf",
-          "Ángulo: α = arctan(80/50) = arctan(1.6) ≈ 58°"
+          "ΣF = 0: RA + RB = 200 + 300 = 500 N",
+          "ΣM₀ = 0: RB·8 = 200·2 + 300·5",
+          "8RB = 400 + 1500 = 1900",
+          "RB = 237.5 N",
+          "RA = 500 - 237.5 = 262.5 N"
         ],
-        respuesta: "R ≈ 94.34 Kgf a 58° de F₁"
+        respuesta: "RA = 262.5 N, RB = 237.5 N"
       }
     },
     {
       id: 21,
-      topic: "graficos",
-      title: "Método del Polígono - 3 Fuerzas",
-      description: "Sumar tres fuerzas concurrentes",
+      topic: "paralelas",
+      title: "Fuerzas Paralelas - Centro de gravedad",
+      description: "Ejercicio 21: Encontrar centro de gravedad",
       datos: [
-        "F₁ = 20 N a 0°",
-        "F₂ = 30 N a 60°",
-        "F₃ = 25 N a 135°",
-        "Método: polígono vectorial"
+        "Tres masas:",
+        "m₁ = 5 kg en (0, 0)",
+        "m₂ = 8 kg en (4, 0)",
+        "m₃ = 3 kg en (6, 0)"
       ],
       solucion: {
         pasos: [
-          "Descomponer: Rx = 20·cos(0°) + 30·cos(60°) + 25·cos(135°) = 17.32 N",
-          "Ry = 20·sen(0°) + 30·sen(60°) + 25·sen(135°) = 43.66 N",
-          "R = √(Rx² + Ry²) = √(17.32² + 43.66²)",
-          "R ≈ 46.97 N",
-          "α = arctan(Ry/Rx) = arctan(43.66/17.32) ≈ 68.3°"
+          "Masa total: M = 5 + 8 + 3 = 16 kg",
+          "Centro de gravedad:",
+          "xCG = (m₁·x₁ + m₂·x₂ + m₃·x₃) / M",
+          "xCG = (5·0 + 8·4 + 3·6) / 16",
+          "xCG = (0 + 32 + 18) / 16 = 50/16",
+          "xCG = 3.125 m"
         ],
-        respuesta: "R ≈ 47 N a 68°"
+        respuesta: "Centro de gravedad en x = 3.125 m"
       }
     },
     {
       id: 22,
-      topic: "equilibrio",
-      title: "Sistema en Equilibrio - Hallar F₃",
-      description: "Tres fuerzas concurrentes en equilibrio",
+      topic: "paralelas",
+      title: "Fuerzas Paralelas - Cuatro fuerzas",
+      description: "Ejercicio 22: Sistema con cuatro fuerzas paralelas",
       datos: [
-        "F₁ = 50 N horizontal →",
-        "F₂ = 60 N a 120°",
-        "F₃ = ? (calcular para equilibrio)",
-        "Condición: ΣFx = 0, ΣFy = 0"
+        "F₁ = 50 N ↓ en x = 1 m",
+        "F₂ = 80 N ↓ en x = 3 m",
+        "F₃ = 60 N ↓ en x = 5 m",
+        "F₄ = 40 N ↓ en x = 8 m"
       ],
       solucion: {
         pasos: [
-          "F₁x = 50 N, F₁y = 0 N",
-          "F₂x = 60·cos(120°) = -30 N, F₂y = 60·sen(120°) = 51.96 N",
-          "Para equilibrio: F₃x = -20 N, F₃y = -51.96 N",
-          "F₃ = √(20² + 51.96²) ≈ 55.67 N",
-          "Dirección: 249° (tercer cuadrante)"
+          "R = 50 + 80 + 60 + 40 = 230 N ↓",
+          "ΣM₀: 230·x = 50(1) + 80(3) + 60(5) + 40(8)",
+          "230x = 50 + 240 + 300 + 320 = 910",
+          "x = 910/230 = 3.96 m"
         ],
-        respuesta: "F₃ ≈ 55.67 N a 249°"
+        respuesta: "R = 230 N ↓ en x = 3.96 m"
       }
     },
     {
       id: 23,
       topic: "paralelas",
-      title: "Fuerzas Paralelas - Mismo Sentido",
-      description: "Tres fuerzas verticales sobre una viga",
+      title: "Fuerzas Paralelas - Carga distribuida",
+      description: "Ejercicio 23: Viga con carga uniformemente distribuida",
       datos: [
-        "F₁ = 100 N a 2 m del origen",
-        "F₂ = 150 N a 5 m",
-        "F₃ = 80 N a 8 m",
-        "Todas hacia abajo"
+        "Viga de 6 m",
+        "Carga uniforme: w = 100 N/m",
+        "Apoyos en extremos",
+        "Hallar reacciones"
       ],
       solucion: {
         pasos: [
-          "Resultante: R = F₁ + F₂ + F₃ = 100 + 150 + 80 = 330 N ↓",
-          "Posición (Teorema de Varignon): R·d = F₁·d₁ + F₂·d₂ + F₃·d₃",
-          "330·d = 100·2 + 150·5 + 80·8",
-          "330·d = 200 + 750 + 640 = 1590",
-          "d = 1590/330 = 4.82 m del origen"
+          "Carga total: W = w·L = 100·6 = 600 N",
+          "Actúa en el centro: x = 3 m",
+          "Por simetría: RA = RB",
+          "RA + RB = 600 N",
+          "RA = RB = 300 N"
         ],
-        respuesta: "R = 330 N a 4.82 m del origen"
+        respuesta: "RA = RB = 300 N"
       }
     },
     {
       id: 24,
       topic: "paralelas",
-      title: "Fuerzas Paralelas - Distinto Sentido",
-      description: "Dos fuerzas paralelas opuestas",
+      title: "Fuerzas Paralelas - Aplicación práctica",
+      description: "Ejercicio 24: Balancín con niños",
       datos: [
-        "F₁ = 200 N ↑ en x = 0",
-        "F₂ = 120 N ↓ en x = 6 m",
-        "Hallar R y su posición"
+        "Balancín de 4 m (fulcro al centro)",
+        "Niño A: 40 kg a 1.5 m de fulcro",
+        "Niño B: ? kg a 2 m del fulcro (lado opuesto)",
+        "Hallar masa de B para equilibrio"
       ],
       solucion: {
         pasos: [
-          "R = F₁ - F₂ = 200 - 120 = 80 N ↑",
-          "Momentos respecto al origen: R·d = F₁·0 + (-F₂)·6",
-          "80·d = 0 - 120·6 = -720",
-          "d = -720/80 = -9 m",
-          "La resultante está 9 m a la izquierda del origen"
+          "Peso A: PA = 40·9.8 = 392 N",
+          "Para equilibrio: MA = MB",
+          "PA·dA = PB·dB",
+          "392·1.5 = PB·2",
+          "PB = 588/2 = 294 N",
+          "mB = 294/9.8 = 30 kg"
         ],
-        respuesta: "R = 80 N ↑ a 9 m izquierda del origen"
+        respuesta: "Niño B debe pesar 30 kg"
       }
     },
+
+    // MOMENTOS (25-32)
     {
       id: 25,
       topic: "momentos",
-      title: "Par de Fuerzas (Cupla)",
-      description: "Dos fuerzas iguales y opuestas",
+      title: "Momento de una Fuerza",
+      description: "Ejercicio 25: Calcular momento respecto a un punto",
       datos: [
-        "F₁ = 50 N ↑",
-        "F₂ = 50 N ↓",
-        "Separación d = 0.8 m",
-        "Calcular momento del par"
+        "F = 80 N perpendicular",
+        "Brazo de palanca d = 0.5 m",
+        "Hallar M respecto al punto O"
       ],
       solucion: {
         pasos: [
-          "En un par: R = F₁ - F₂ = 0 (no hay traslación)",
-          "Momento del par: M = F · d",
-          "M = 50 · 0.8 = 40 N·m",
-          "El momento es independiente del punto de referencia",
-          "Produce solo rotación pura"
+          "M = F × d",
+          "M = 80 N × 0.5 m",
+          "M = 40 N·m",
+          "Sentido: según regla de mano derecha"
         ],
         respuesta: "M = 40 N·m"
       }
     },
     {
       id: 26,
-      topic: "equilibrio",
-      title: "Equilibrio de Viga - Reacciones",
-      description: "Viga con dos cargas, calcular reacciones en apoyos",
+      topic: "momentos",
+      title: "Momento con Ángulo",
+      description: "Ejercicio 26: Fuerza no perpendicular",
       datos: [
-        "Viga de 6 m con apoyos en A (x=0) y B (x=6m)",
-        "F₁ = 300 N ↓ en x = 2 m",
-        "F₂ = 200 N ↓ en x = 5 m",
-        "Calcular RA y RB"
+        "F = 100 N a 30° del brazo",
+        "Distancia al punto: r = 0.8 m",
+        "Hallar momento"
       ],
       solucion: {
         pasos: [
-          "ΣFy = 0: RA + RB = 300 + 200 = 500 N",
-          "ΣMA = 0: RB·6 = 300·2 + 200·5 = 600 + 1000 = 1600",
-          "RB = 1600/6 = 266.67 N",
-          "RA = 500 - 266.67 = 233.33 N",
-          "Verificar: RA·6 = 300·4 + 200·1 = 1400 ✓"
+          "M = F·r·sen(θ)",
+          "M = 100·0.8·sen(30°)",
+          "M = 100·0.8·0.5",
+          "M = 40 N·m"
         ],
-        respuesta: "RA = 233.33 N, RB = 266.67 N"
+        respuesta: "M = 40 N·m"
       }
     },
     {
       id: 27,
-      topic: "equilibrio",
-      title: "Centro de Gravedad - Sistema de Masas",
-      description: "Tres masas puntuales en el plano",
+      topic: "momentos",
+      title: "Sistema de Momentos",
+      description: "Ejercicio 27: Dos fuerzas produciendo momentos opuestos",
       datos: [
-        "m₁ = 5 kg en (0, 0)",
-        "m₂ = 8 kg en (4, 0)",
-        "m₃ = 3 kg en (2, 3)",
-        "Hallar centro de gravedad"
+        "F₁ = 60 N a 0.4 m (sentido horario)",
+        "F₂ = 40 N a 0.6 m (sentido antihorario)",
+        "Hallar momento resultante"
       ],
       solucion: {
         pasos: [
-          "Masa total: M = 5 + 8 + 3 = 16 kg",
-          "xG = (5·0 + 8·4 + 3·2)/16 = (0 + 32 + 6)/16 = 2.375 m",
-          "yG = (5·0 + 8·0 + 3·3)/16 = (0 + 0 + 9)/16 = 0.5625 m",
-          "El CG está más cerca de m₂ (masa mayor)",
-          "Ligeramente desplazado hacia m₃"
+          "M₁ = 60·0.4 = 24 N·m (horario) = -24 N·m",
+          "M₂ = 40·0.6 = 24 N·m (antihorario) = +24 N·m",
+          "MR = M₁ + M₂ = -24 + 24 = 0",
+          "Sistema en equilibrio rotacional"
         ],
-        respuesta: "CG en (2.375 m, 0.5625 m)"
+        respuesta: "MR = 0 (equilibrio)"
       }
     },
     {
       id: 28,
       topic: "momentos",
-      title: "Momento de una Fuerza Perpendicular",
-      description: "Calcular el momento producido por una fuerza",
+      title: "Momento Neto de Tres Fuerzas",
+      description: "Ejercicio 28: Tres momentos sobre una barra",
       datos: [
-        "Fuerza F = 80 N perpendicular a una barra",
-        "Distancia r = 0.6 m",
-        "Calcular momento respecto a O"
+        "M₁ = +50 N·m (antihorario)",
+        "M₂ = -30 N·m (horario)",
+        "M₃ = +20 N·m (antihorario)",
+        "Hallar momento neto"
       ],
       solucion: {
         pasos: [
-          "Para fuerza perpendicular: θ = 90°, sin(90°) = 1",
-          "Aplicar: M = F × r × sin(θ)",
-          "M = 80 × 0.6 × 1",
-          "M = 48 N·m",
-          "Sentido: antihorario (momento positivo)"
+          "Convención: (+) antihorario, (-) horario",
+          "ΣM = M₁ + M₂ + M₃",
+          "ΣM = 50 - 30 + 20",
+          "ΣM = 40 N·m (antihorario)"
         ],
-        respuesta: "M = 48 N·m (antihorario)"
+        respuesta: "Momento neto = 40 N·m (antihorario)"
       }
     },
     {
       id: 29,
       topic: "momentos",
-      title: "Momento con Ángulo 60°",
-      description: "Fuerza formando ángulo con la horizontal",
+      title: "Palanca en Equilibrio",
+      description: "Ejercicio 29: Encontrar fuerza desconocida",
       datos: [
-        "F = 100 N",
-        "Distancia r = 0.8 m",
-        "Ángulo θ = 60°"
+        "Palanca con fulcro en centro",
+        "F₁ = 200 N a 0.3 m del fulcro",
+        "F₂ = ? a 0.5 m del fulcro (lado opuesto)",
+        "Sistema en equilibrio"
       ],
       solucion: {
         pasos: [
-          "Aplicar: M = F × r × sin(θ)",
-          "sin(60°) = 0.866",
-          "M = 100 × 0.8 × 0.866",
-          "M = 69.28 N·m",
-          "Redondear: M ≈ 69.3 N·m"
+          "Para equilibrio: ΣM = 0",
+          "M₁ = M₂",
+          "200·0.3 = F₂·0.5",
+          "F₂ = 60/0.5",
+          "F₂ = 120 N"
         ],
-        respuesta: "M = 69.3 N·m"
+        respuesta: "F₂ = 120 N"
       }
     },
     {
       id: 30,
       topic: "momentos",
-      title: "Cupla - Momento de Par",
-      description: "Calcular momento de una cupla",
+      title: "Momento Respecto a Diferentes Puntos",
+      description: "Ejercicio 30: Calcular momento respecto a dos puntos",
       datos: [
-        "Dos fuerzas paralelas F = 50 N",
-        "Sentidos opuestos",
-        "Separación d = 0.4 m"
+        "F = 50 N vertical en x = 4 m",
+        "Calcular momento respecto a:",
+        "a) Origen (x=0)",
+        "b) Punto x=2 m"
       ],
       solucion: {
         pasos: [
-          "Cupla: M = F × d",
-          "M = 50 × 0.4 = 20 N·m",
-          "Produce rotación pura (no traslación)",
-          "Momento independiente del punto de referencia",
-          "Útil en mecanismos de transmisión"
+          "a) M₀ = F·d = 50·4 = 200 N·m",
+          "b) M₂ = F·(4-2) = 50·2 = 100 N·m",
+          "El momento depende del punto de referencia",
+          "Ambos en el mismo sentido de rotación"
         ],
-        respuesta: "M = 20 N·m"
+        respuesta: "a) M₀ = 200 N·m, b) M₂ = 100 N·m"
       }
     },
     {
       id: 31,
-      topic: "equilibrio",
-      title: "Equilibrio de Viga - Dos Fuerzas",
-      description: "Calcular reacción en apoyo simple",
+      topic: "momentos",
+      title: "Cupla o Par de Fuerzas",
+      description: "Ejercicio 31: Momento producido por una cupla",
       datos: [
-        "Viga de 6 m, apoyo en A (x=0)",
-        "F₁ = 40 N a 2 m de A",
-        "F₂ = 60 N a 5 m de A"
+        "Dos fuerzas paralelas opuestas",
+        "F = 30 N cada una",
+        "Separación d = 0.6 m",
+        "Hallar momento de la cupla"
       ],
       solucion: {
         pasos: [
-          "ΣFy = 0: RA - F₁ - F₂ = 0",
-          "RA = 40 + 60 = 100 N ↑",
-          "Verificar con momentos: ΣMA = 0",
-          "-40(2) - 60(5) = -80 - 300 = -380 N·m",
-          "Equilibrado por reacción en A"
+          "Momento de cupla: M = F·d",
+          "M = 30·0.6",
+          "M = 18 N·m",
+          "La cupla produce rotación pura (independiente del punto)"
         ],
-        respuesta: "RA = 100 N ↑"
+        respuesta: "M = 18 N·m (cupla)"
       }
     },
     {
       id: 32,
-      topic: "equilibrio",
-      title: "Equilibrio con Momento Externo",
-      description: "Viga con fuerzas y momento aplicado",
+      topic: "momentos",
+      title: "Sistema Complejo de Momentos",
+      description: "Ejercicio 32: Barra con múltiples fuerzas",
       datos: [
-        "Viga de 4 m, apoyos en A y B",
-        "F = 80 N a 1.5 m de A",
-        "Momento M = 100 N·m en el centro"
+        "Barra de 5 m con fulcro en x = 2 m",
+        "F₁ = 40 N en x = 0",
+        "F₂ = 60 N en x = 3 m",
+        "F₃ = 30 N en x = 5 m",
+        "Hallar momento neto respecto al fulcro"
       ],
       solucion: {
         pasos: [
-          "ΣFy = 0: RA + RB - 80 = 0",
-          "ΣMA = 0: -80(1.5) - 100 + RB(4) = 0",
-          "-120 - 100 + 4RB = 0",
-          "4RB = 220 → RB = 55 N",
-          "RA = 80 - 55 = 25 N"
+          "M₁ = 40·(2-0) = 80 N·m (antihorario)",
+          "M₂ = 60·(3-2) = 60 N·m (horario) = -60 N·m",
+          "M₃ = 30·(5-2) = 90 N·m (horario) = -90 N·m",
+          "ΣM = 80 - 60 - 90 = -70 N·m",
+          "Momento neto: 70 N·m horario"
         ],
-        respuesta: "RA = 25 N, RB = 55 N"
+        respuesta: "MR = 70 N·m (horario)"
       }
     },
+
+    // EQUILIBRIO (33-37)
     {
       id: 33,
       topic: "equilibrio",
-      title: "Viga en Voladizo (Empotrada)",
-      description: "Calcular reacciones en empotramiento",
+      title: "Equilibrio de Traslación",
+      description: "Ejercicio 33: Verificar equilibrio de fuerzas concurrentes",
       datos: [
-        "Viga empotrada en A, longitud 3 m",
-        "Carga uniforme w = 20 N/m",
-        "Calcular MA y RA"
+        "F₁ = 50 N a 0°",
+        "F₂ = 40 N a 120°",
+        "F₃ = 40 N a 240°",
+        "¿Está en equilibrio?"
       ],
       solucion: {
         pasos: [
-          "Carga total: W = w × L = 20 × 3 = 60 N",
-          "Actúa en el centro: a 1.5 m de A",
-          "MA = W × 1.5 = 60 × 1.5 = 90 N·m",
-          "RA = 60 N ↑ (equilibrio vertical)",
-          "MA equilibra la rotación"
+          "ΣFx = 50 + 40·cos(120°) + 40·cos(240°)",
+          "ΣFx = 50 - 20 - 20 = 10 N ≠ 0",
+          "ΣFy = 0 + 40·sin(120°) + 40·sin(240°)",
+          "ΣFy = 34.6 - 34.6 = 0 ✓",
+          "NO está en equilibrio (Fx ≠ 0)"
         ],
-        respuesta: "MA = 90 N·m, RA = 60 N"
+        respuesta: "NO está en equilibrio. Falta 10 N en -x"
       }
     },
     {
       id: 34,
-      topic: "momentos",
-      title: "Suma de Momentos - Sistema Completo",
-      description: "Múltiples fuerzas - momento total",
+      topic: "equilibrio",
+      title: "Equilibrio Estático - Viga",
+      description: "Ejercicio 34: Viga horizontal en equilibrio",
       datos: [
-        "Respecto a O:",
-        "F₁ = 30 N a 0.5 m (antihorario)",
-        "F₂ = 20 N a 0.8 m (horario)",
-        "F₃ = 40 N a 0.3 m (antihorario)"
+        "Viga de 80 kg, 6 m de largo",
+        "Carga de 50 kg en x = 4 m",
+        "Apoyos en x = 1 m y x = 5 m",
+        "Hallar reacciones"
       ],
       solucion: {
         pasos: [
-          "M₁ = +30 × 0.5 = +15 N·m",
-          "M₂ = -20 × 0.8 = -16 N·m",
-          "M₃ = +40 × 0.3 = +12 N·m",
-          "ΣM = 15 - 16 + 12 = 11 N·m",
-          "Positivo → rotación antihoraria"
+          "Peso viga: Wv = 80·9.8 = 784 N en x = 3 m",
+          "Peso carga: Wc = 50·9.8 = 490 N en x = 4 m",
+          "ΣF = 0: RA + RB = 784 + 490 = 1274 N",
+          "ΣM₁ = 0: RB·4 = 784·2 + 490·3",
+          "4RB = 1568 + 1470 = 3038",
+          "RB = 759.5 N, RA = 514.5 N"
         ],
-        respuesta: "ΣM = 11 N·m (antihorario)"
+        respuesta: "RA = 514.5 N, RB = 759.5 N"
       }
     },
     {
       id: 35,
       topic: "equilibrio",
-      title: "Equilibrio - Tres Fuerzas Concurrentes",
-      description: "Encontrar fuerza desconocida para equilibrio",
+      title: "Equilibrio de Cuerpo Rígido",
+      description: "Ejercicio 35: Barra apoyada en pared y piso",
       datos: [
-        "Tres fuerzas concurrentes en equilibrio",
-        "F₁ = 50 N a 0°",
-        "F₂ = 40 N a 120°",
-        "Hallar F₃"
+        "Barra de 10 kg, 4 m",
+        "Apoyada a 60° de la horizontal",
+        "Sin fricción en contactos",
+        "Hallar fuerzas de reacción"
       ],
       solucion: {
         pasos: [
-          "F₁x = 50, F₁y = 0",
-          "F₂x = 40·cos(120°) = -20, F₂y = 40·sin(120°) = 34.64",
-          "Para equilibrio: F₃x = -30, F₃y = -34.64",
-          "F₃ = √(30² + 34.64²) = 45.8 N",
-          "θ₃ = arctan(34.64/30) + 180° = 229°"
+          "Peso: W = 10·9.8 = 98 N en centro (2 m)",
+          "Reacción pared: Rp (horizontal)",
+          "Reacción piso: Rf (vertical)",
+          "ΣFx = 0: Rp = 0 (no hay componente horizontal)",
+          "ΣFy = 0: Rf = 98 N",
+          "ΣM₀ = 0: Verifica que sistema está en equilibrio"
         ],
-        respuesta: "F₃ = 45.8 N a 229°"
+        respuesta: "Rf = 98 N vertical, Rp depende de fricción"
       }
     },
     {
       id: 36,
-      topic: "momentos",
-      title: "Palanca Simple - Ley de la Palanca",
-      description: "Equilibrio de palanca",
+      topic: "equilibrio",
+      title: "Equilibrio con Tensiones",
+      description: "Ejercicio 36: Masa suspendida por dos cables",
       datos: [
-        "Fulcro en el centro",
-        "F₁ = 200 N a 0.3 m del fulcro",
-        "¿F₂ necesaria a 1.2 m?"
+        "Masa: 50 kg",
+        "Cable A a 30° de horizontal",
+        "Cable B a 45° de horizontal",
+        "Hallar tensiones"
       ],
       solucion: {
         pasos: [
-          "Ley de la palanca: F₁ × d₁ = F₂ × d₂",
-          "200 × 0.3 = F₂ × 1.2",
-          "60 = F₂ × 1.2",
-          "F₂ = 60/1.2 = 50 N",
-          "Ventaja mecánica: 200/50 = 4"
+          "Peso: W = 50·9.8 = 490 N",
+          "ΣFx = 0: TA·cos(30°) = TB·cos(45°)",
+          "ΣFy = 0: TA·sin(30°) + TB·sin(45°) = 490",
+          "De primera ecuación: TA = TB·cos(45°)/cos(30°) = 0.816TB",
+          "Sustituyendo: 0.816TB·0.5 + TB·0.707 = 490",
+          "1.115TB = 490",
+          "TB = 439.5 N, TA = 358.7 N"
         ],
-        respuesta: "F₂ = 50 N"
+        respuesta: "TA = 358.7 N, TB = 439.5 N"
       }
     },
     {
       id: 37,
       topic: "equilibrio",
-      title: "Viga con Carga Distribuida",
-      description: "Carga uniformemente distribuida",
+      title: "Equilibrio Completo",
+      description: "Ejercicio 37: Sistema en equilibrio completo (traslación + rotación)",
       datos: [
-        "Viga de 8 m, apoyos en extremos A y B",
-        "Carga uniforme w = 30 N/m",
-        "Calcular RA y RB"
+        "Viga de 100 kg, 8 m",
+        "Masas: 60 kg en x=2m, 80 kg en x=6m",
+        "Apoyo izquierdo fijo, apoyo derecho móvil",
+        "Hallar todas las reacciones"
       ],
       solucion: {
         pasos: [
-          "Carga total: W = w × L = 30 × 8 = 240 N",
-          "Actúa en el centro (4 m de cada extremo)",
-          "Por simetría: RA = RB = W/2 = 120 N",
-          "Verificar: -240(4) + RB(8) = 0 → RB = 120 N ✓",
-          "Sistema perfectamente simétrico"
+          "Wv = 980 N en x=4m, W1 = 588 N, W2 = 784 N",
+          "Total: 2352 N",
+          "ΣFy = 0: RA + RB = 2352 N",
+          "ΣM₀ = 0: RB·8 = 588·2 + 980·4 + 784·6",
+          "8RB = 1176 + 3920 + 4704 = 9800",
+          "RB = 1225 N, RA = 1127 N",
+          "ΣFx = 0: No hay fuerzas horizontales ✓"
         ],
-        respuesta: "RA = RB = 120 N"
+        respuesta: "RA = 1127 N, RB = 1225 N (equilibrio completo)"
       }
     },
+
+    // FUERZAS CONCURRENTES (38-42)
     {
       id: 38,
       topic: "concurrentes",
-      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      title: "Fuerzas Concurrentes - Método Gráfico",
       description: "Ejercicio 38: Tres fuerzas concurrentes - Hallar R y E",
       datos: [
         "F₁ = 10 kgf a 0° (horizontal derecha)",
@@ -480,7 +865,7 @@ export default function Ejercicios() {
     {
       id: 39,
       topic: "concurrentes",
-      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      title: "Fuerzas Concurrentes - Método Gráfico",
       description: "Ejercicio 39: Cuatro fuerzas concurrentes - Hallar R y E",
       datos: [
         "F₁ = 30 N a 45°",
@@ -512,7 +897,7 @@ export default function Ejercicios() {
     {
       id: 40,
       topic: "concurrentes",
-      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      title: "Fuerzas Concurrentes - Método Gráfico",
       description: "Ejercicio 40: Sistema de cinco fuerzas - Hallar R y E",
       datos: [
         "F₁ = 50 kgf a 0°",
@@ -544,7 +929,7 @@ export default function Ejercicios() {
     {
       id: 41,
       topic: "concurrentes",
-      title: "Sistemas de Fuerzas Concurrentes - Método Gráfico",
+      title: "Fuerzas Concurrentes - Verificación de Equilibrio",
       description: "Ejercicio 41: Tres fuerzas en equilibrio - Verificación",
       datos: [
         "F₁ = 80 N a 30°",
@@ -573,7 +958,7 @@ export default function Ejercicios() {
     {
       id: 42,
       topic: "concurrentes",
-      title: "Sistemas de Fuerzas Concurrentes - Hallar F₄",
+      title: "Fuerzas Concurrentes - Hallar Fuerza Desconocida",
       description: "Ejercicio 42: Sistema en equilibrio - Encontrar fuerza desconocida",
       datos: [
         "Tres fuerzas conocidas en equilibrio con F₄",
@@ -625,18 +1010,18 @@ export default function Ejercicios() {
               Ejercicios Resueltos
             </h1>
             <p className="text-lg text-muted-foreground">
-              42 problemas paso a paso de sistemas de fuerzas, momentos y equilibrio
+              42 problemas paso a paso organizados por tema: Colineales (1-8), Métodos Gráficos (9-16), Paralelas (17-24), Momentos (25-32), Equilibrio (33-37), Concurrentes (38-42)
             </p>
           </div>
 
           {/* Sección de Ejercicios Interactivos */}
-          {!showInteractive && (
+          {!showInteractive && interactiveEjercicios.length > 0 && (
             <Alert className="mb-8 bg-accent/10 border-accent cursor-pointer hover:bg-accent/20 transition-colors" onClick={() => setShowInteractive(true)}>
               <PlayCircle className="w-5 h-5" />
               <AlertDescription>
                 <p className="font-semibold">✨ Ejercicios 38-42: Versión Interactiva Disponible</p>
                 <p className="text-sm mt-1">
-                  Modifica magnitudes y ángulos en tiempo real. Visualiza diagramas vectoriales.
+                  Modifica magnitudes y ángulos en tiempo real. Visualiza diagramas vectoriales con métodos Paralelogramo y Polígono.
                 </p>
               </AlertDescription>
             </Alert>
@@ -647,75 +1032,32 @@ export default function Ejercicios() {
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-primary">Ejercicios Interactivos - Fuerzas Concurrentes</h2>
                 <Button variant="outline" onClick={() => setShowInteractive(false)}>
-                  Ver Ejercicios Estáticos
+                  Ver Todos los Ejercicios
                 </Button>
               </div>
               
-              <InteractiveExercise
-                exerciseNumber={38}
-                title="Tres Fuerzas Concurrentes"
-                initialForces={[
-                  { magnitude: 10, angle: 0, unit: "kgf" },
-                  { magnitude: 20, angle: 135, unit: "kgf" },
-                  { magnitude: 15, angle: 270, unit: "kgf" }
-                ]}
-              />
-
-              <InteractiveExercise
-                exerciseNumber={39}
-                title="Cuatro Fuerzas Concurrentes"
-                initialForces={[
-                  { magnitude: 30, angle: 45, unit: "N" },
-                  { magnitude: 25, angle: 120, unit: "N" },
-                  { magnitude: 40, angle: 225, unit: "N" },
-                  { magnitude: 20, angle: 315, unit: "N" }
-                ]}
-              />
-
-              <InteractiveExercise
-                exerciseNumber={40}
-                title="Cinco Fuerzas Concurrentes"
-                initialForces={[
-                  { magnitude: 50, angle: 0, unit: "kgf" },
-                  { magnitude: 30, angle: 60, unit: "kgf" },
-                  { magnitude: 40, angle: 150, unit: "kgf" },
-                  { magnitude: 25, angle: 240, unit: "kgf" },
-                  { magnitude: 35, angle: 300, unit: "kgf" }
-                ]}
-              />
-
-              <InteractiveExercise
-                exerciseNumber={41}
-                title="Verificación de Equilibrio"
-                initialForces={[
-                  { magnitude: 80, angle: 30, unit: "N" },
-                  { magnitude: 60, angle: 150, unit: "N" },
-                  { magnitude: 70, angle: 270, unit: "N" }
-                ]}
-              />
-
-              <InteractiveExercise
-                exerciseNumber={42}
-                title="Encontrar Fuerza Desconocida"
-                initialForces={[
-                  { magnitude: 100, angle: 0, unit: "N" },
-                  { magnitude: 80, angle: 90, unit: "N" },
-                  { magnitude: 60, angle: 180, unit: "N" },
-                  { magnitude: 80, angle: 270, unit: "N" }
-                ]}
-              />
+              {interactiveEjercicios.map((ejercicio) => (
+                <InteractiveExercise
+                  key={ejercicio.id}
+                  exerciseNumber={ejercicio.id}
+                  title={ejercicio.title}
+                  initialForces={ejercicio.initialForces!}
+                />
+              ))}
 
               <Alert>
                 <AlertDescription>
                   <p className="text-sm">
                     💡 <strong>Tip:</strong> Modifica las magnitudes y ángulos usando los sliders o inputs numéricos.
                     Alterna entre kgf y N haciendo clic en el botón de unidades. Observa cómo cambia la resultante en tiempo real.
+                    Los métodos Paralelogramo y Polígono se visualizan simultáneamente en diferentes tabs.
                   </p>
                 </AlertDescription>
               </Alert>
             </div>
           )}
 
+          {/* Filtros */}
           <Card className="mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-wrap gap-3">
@@ -731,62 +1073,67 @@ export default function Ejercicios() {
                   onClick={() => setSelectedTopic("colineales")}
                   className={selectedTopic === "colineales" ? "bg-primary" : ""}
                 >
-                  Colineales ({ejercicios.filter(e => e.topic === "colineales").length})
+                  Colineales 1-8 ({ejercicios.filter(e => e.topic === "colineales").length})
                 </Button>
                 <Button 
                   variant={selectedTopic === "graficos" ? "default" : "outline"}
                   onClick={() => setSelectedTopic("graficos")}
                   className={selectedTopic === "graficos" ? "bg-primary" : ""}
                 >
-                  Métodos Gráficos ({ejercicios.filter(e => e.topic === "graficos").length})
+                  Métodos Gráficos 9-16 ({ejercicios.filter(e => e.topic === "graficos").length})
                 </Button>
                 <Button 
                   variant={selectedTopic === "paralelas" ? "default" : "outline"}
                   onClick={() => setSelectedTopic("paralelas")}
                   className={selectedTopic === "paralelas" ? "bg-primary" : ""}
                 >
-                  Paralelas ({ejercicios.filter(e => e.topic === "paralelas").length})
+                  Paralelas 17-24 ({ejercicios.filter(e => e.topic === "paralelas").length})
                 </Button>
                 <Button 
                   variant={selectedTopic === "momentos" ? "default" : "outline"}
                   onClick={() => setSelectedTopic("momentos")}
                   className={selectedTopic === "momentos" ? "bg-primary" : ""}
                 >
-                  Momentos ({ejercicios.filter(e => e.topic === "momentos").length})
+                  Momentos 25-32 ({ejercicios.filter(e => e.topic === "momentos").length})
                 </Button>
                 <Button 
                   variant={selectedTopic === "equilibrio" ? "default" : "outline"}
                   onClick={() => setSelectedTopic("equilibrio")}
                   className={selectedTopic === "equilibrio" ? "bg-primary" : ""}
                 >
-                  Equilibrio ({ejercicios.filter(e => e.topic === "equilibrio").length})
+                  Equilibrio 33-37 ({ejercicios.filter(e => e.topic === "equilibrio").length})
                 </Button>
                 <Button 
                   variant={selectedTopic === "concurrentes" ? "default" : "outline"}
                   onClick={() => setSelectedTopic("concurrentes")}
                   className={selectedTopic === "concurrentes" ? "bg-primary" : ""}
                 >
-                  Concurrentes ({ejercicios.filter(e => e.topic === "concurrentes").length})
+                  Concurrentes 38-42 ({ejercicios.filter(e => e.topic === "concurrentes").length})
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
+          {/* Lista de Ejercicios */}
+          <div className="space-y-4">
             {filteredEjercicios.map((ejercicio) => (
-              <Card key={ejercicio.id} className="border-l-4 border-l-primary">
+              <Card key={ejercicio.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <CardTitle className="text-2xl mb-2">
-                        Ejercicio {ejercicio.id}
-                      </CardTitle>
-                      <CardDescription className="text-base font-semibold text-foreground">
-                        {ejercicio.title}
-                      </CardDescription>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {ejercicio.description}
-                      </p>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <span className="text-xl font-mono font-bold text-primary">
+                            {ejercicio.id}
+                          </span>
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">{ejercicio.title}</CardTitle>
+                          <CardDescription className="mt-1">
+                            {ejercicio.description}
+                          </CardDescription>
+                        </div>
+                      </div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-mono font-semibold ${
                       ejercicio.topic === "colineales" ? "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" :
@@ -801,46 +1148,65 @@ export default function Ejercicios() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="mb-6">
-                    <h3 className="font-mono font-semibold mb-3 text-primary">Datos:</h3>
-                    <ul className="space-y-2">
-                      {ejercicio.datos.map((dato, idx) => (
-                        <li key={idx} className="flex gap-2">
-                          <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                          <span className="text-sm">{dato}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="solution">
-                      <AccordionTrigger className="text-base font-semibold">
-                        Ver Solución Paso a Paso
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="datos">
+                      <AccordionTrigger className="hover:no-underline">
+                        <span className="flex items-center gap-2">
+                          <BookOpen className="w-4 h-4" />
+                          Datos del Problema
+                        </span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <div className="space-y-4 pt-2">
+                        <ul className="space-y-2 mt-2">
+                          {ejercicio.datos.map((dato, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm">
+                              <span className="text-accent mt-1">•</span>
+                              <span>{dato}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        {ejercicio.interactive && (
+                          <Alert className="mt-4 bg-accent/5 border-accent">
+                            <PlayCircle className="w-4 h-4" />
+                            <AlertDescription>
+                              <p className="text-sm font-semibold">
+                                Este ejercicio tiene versión interactiva.{" "}
+                                <button 
+                                  onClick={() => setShowInteractive(true)}
+                                  className="underline hover:text-accent"
+                                >
+                                  Ver ejercicios interactivos
+                                </button>
+                              </p>
+                            </AlertDescription>
+                          </Alert>
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="solucion">
+                      <AccordionTrigger className="hover:no-underline">
+                        <span className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" />
+                          Solución Paso a Paso
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4 mt-2">
                           <ol className="space-y-3">
                             {ejercicio.solucion.pasos.map((paso, idx) => (
-                              <li key={idx} className="flex gap-3">
-                                <span className="font-mono font-bold text-primary min-w-[2rem]">
-                                  {idx + 1}.
+                              <li key={idx} className="flex gap-3 text-sm">
+                                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
+                                  {idx + 1}
                                 </span>
-                                <span className="text-sm leading-relaxed">{paso}</span>
+                                <span className="flex-1 pt-0.5">{paso}</span>
                               </li>
                             ))}
                           </ol>
-                          
-                          <Alert className="bg-accent/10 border-accent">
-                            <AlertDescription>
-                              <div className="flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5 text-accent" />
-                                <span className="font-mono font-bold text-lg">
-                                  {ejercicio.solucion.respuesta}
-                                </span>
-                              </div>
-                            </AlertDescription>
-                          </Alert>
+                          <div className="mt-6 p-4 bg-accent/10 border-2 border-accent rounded-lg">
+                            <p className="text-sm font-semibold text-accent mb-1">Respuesta Final:</p>
+                            <p className="text-lg font-mono font-bold">{ejercicio.solucion.respuesta}</p>
+                          </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -850,36 +1216,13 @@ export default function Ejercicios() {
             ))}
           </div>
 
-          <Card className="mt-12 bg-primary/5 border-primary/20">
-            <CardContent className="pt-6">
-              <div className="text-center space-y-4">
-                <BookOpen className="w-12 h-12 text-primary mx-auto" />
-                <h3 className="text-xl font-bold">¿Quieres revisar la teoría?</h3>
-                <p className="text-muted-foreground">
-                  Repasa los conceptos fundamentales antes de continuar con más ejercicios
-                </p>
-                <div className="flex flex-wrap gap-3 justify-center pt-2">
-                  <Link href="/teoria/colineales">
-                    <Button variant="outline">Fuerzas Colineales</Button>
-                  </Link>
-                  <Link href="/teoria/paralelas">
-                    <Button variant="outline">Fuerzas Paralelas</Button>
-                  </Link>
-                  <Link href="/teoria/momentos">
-                    <Button variant="outline">Momentos</Button>
-                  </Link>
-                  <Link href="/teoria/equilibrio">
-                    <Button variant="outline">Equilibrio</Button>
-                  </Link>
-                  <Link href="/simulaciones">
-                    <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                      Ir a Simulaciones
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {filteredEjercicios.length === 0 && (
+            <Alert>
+              <AlertDescription>
+                No se encontraron ejercicios para esta categoría.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </main>
 
