@@ -31,6 +31,17 @@ export default function SimulacionesIndex() {
       bgColor: "bg-green-100 dark:bg-green-950",
     },
     {
+      id: "concurrentes-metodos",
+      title: "Fuerzas Concurrentes - Métodos Gráficos",
+      description: "Visualiza sistemas de fuerzas concurrentes con método del Paralelogramo y Polígono",
+      icon: Box,
+      type: "2D Canvas Interactivo",
+      difficulty: "Intermedio",
+      href: "/simulaciones/concurrentes-metodos",
+      color: "text-cyan-600 dark:text-cyan-400",
+      bgColor: "bg-cyan-100 dark:bg-cyan-950",
+    },
+    {
       id: "paralelas",
       title: "Fuerzas Paralelas 3D",
       description: "Visualiza sistemas de fuerzas paralelas en un espacio tridimensional interactivo",
