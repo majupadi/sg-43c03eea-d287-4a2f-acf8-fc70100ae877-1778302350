@@ -3,10 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User, Trash2, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Bot, Send, Loader2, BookOpen, Sparkles } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -14,52 +13,59 @@ interface Message {
   timestamp: Date;
 }
 
+const exampleQuestions = [
+  "¿Cómo sumar dos fuerzas con el método del paralelogramo?",
+  "¿Qué es el momento de una fuerza?",
+  "Explícame las condiciones de equilibrio",
+  "¿Cómo funcionan las poleas compuestas?",
+  "¿Qué diferencia hay entre fuerzas colineales y concurrentes?"
+];
+
 export function AIAssistant() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "¡Hola! Soy tu asistente de Física. Puedo ayudarte con:\n\n• Sistemas de fuerzas (colineales, paralelas, concurrentes)\n• Momentos y equilibrio\n• Máquinas simples (palancas, poleas, plano inclinado)\n• Explicaciones de conceptos\n• Resolución de problemas paso a paso\n\n¿En qué puedo ayudarte hoy?",
+      content: "¡Hola! Soy tu asistente de física 🔬\n\nPuedo ayudarte con:\n- Sistemas de fuerzas\n- Métodos gráficos\n- Momentos y equilibrio\n- Máquinas simples\n- Resolución de problemas\n\n¿En qué puedo ayudarte hoy?",
       timestamp: new Date()
     }
   ]);
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+  const sendMessage = async (messageText?: string) => {
+    const text = messageText || input;
+    if (!text.trim() || loading) return;
 
     const userMessage: Message = {
       role: "user",
-      content: input.trim(),
+      content: text,
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput("");
-    setIsLoading(true);
+    setLoading(true);
 
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [...messages, userMessage].map(m => ({
-            role: m.role,
-            content: m.content
-          }))
-        })
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: text })
       });
 
       if (!response.ok) {
-        throw new Error("Error al obtener respuesta");
+        throw new Error("Error en la respuesta del servidor");
       }
 
       const data = await response.json();
@@ -72,145 +78,128 @@ export function AIAssistant() {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
+      console.error("Error sending message:", error);
       const errorMessage: Message = {
         role: "assistant",
-        content: "Lo siento, hubo un error al procesar tu consulta. Por favor, intenta de nuevo.",
+        content: "Lo siento, ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const clearChat = () => {
-    setMessages([
-      {
-        role: "assistant",
-        content: "Chat reiniciado. ¿En qué puedo ayudarte?",
-        timestamp: new Date()
-      }
-    ]);
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("es-ES", {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   };
 
   return (
     <Card className="h-[600px] flex flex-col">
-      <CardHeader className="border-b">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-primary" />
-            Asistente de Física IA
-          </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearChat}
-            disabled={isLoading}
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
+      <CardHeader className="border-b bg-primary/5">
+        <CardTitle className="flex items-center gap-2">
+          <Bot className="w-6 h-6 text-primary" />
+          Asistente de Física IA
+          <Sparkles className="w-4 h-4 text-accent ml-auto" />
+        </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-        <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-          <div className="space-y-4">
-            {messages.map((message, index) => (
+      <CardContent className="flex-1 flex flex-col p-0">
+        {/* Mensajes */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+            >
               <div
-                key={index}
-                className={cn(
-                  "flex gap-3",
-                  message.role === "user" ? "justify-end" : "justify-start"
-                )}
+                className={`max-w-[80%] rounded-lg p-3 ${
+                  msg.role === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted"
+                }`}
               >
-                {message.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-primary" />
-                  </div>
-                )}
+                <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                  {msg.content}
+                </p>
+                <p className="text-xs opacity-60 mt-1">
+                  {msg.timestamp.toLocaleTimeString("es-ES", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })}
+                </p>
+              </div>
+            </div>
+          ))}
 
-                <div
-                  className={cn(
-                    "max-w-[80%] rounded-lg p-3",
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  )}
+          {loading && (
+            <div className="flex justify-start">
+              <div className="bg-muted rounded-lg p-3 flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                <span className="text-sm text-muted-foreground">Pensando...</span>
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Preguntas de ejemplo */}
+        {messages.length === 1 && (
+          <div className="p-4 border-t bg-muted/30">
+            <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+              <BookOpen className="w-3 h-3" />
+              Preguntas de ejemplo:
+            </p>
+            <div className="space-y-2">
+              {exampleQuestions.slice(0, 3).map((question, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start text-left h-auto py-2 px-3"
+                  onClick={() => sendMessage(question)}
                 >
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <div className="whitespace-pre-wrap break-words">
-                      {message.content}
-                    </div>
-                  </div>
-                  <div
-                    className={cn(
-                      "text-xs mt-1 opacity-70",
-                      message.role === "user" ? "text-right" : "text-left"
-                    )}
-                  >
-                    {formatTime(message.timestamp)}
-                  </div>
-                </div>
-
-                {message.role === "user" && (
-                  <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-accent" />
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {isLoading && (
-              <div className="flex gap-3 justify-start">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4 text-primary" />
-                </div>
-                <div className="bg-muted rounded-lg p-3">
-                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                </div>
-              </div>
-            )}
+                  <span className="text-xs">{question}</span>
+                </Button>
+              ))}
+            </div>
           </div>
-        </ScrollArea>
+        )}
 
-        <div className="border-t p-4">
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Textarea
+        {/* Input */}
+        <div className="p-4 border-t bg-background">
+          <Alert className="mb-3">
+            <AlertDescription className="text-xs">
+              💡 <strong>Tip:</strong> Pregunta sobre cualquier tema de física de la plataforma. 
+              El asistente está especializado en sistemas de fuerzas.
+            </AlertDescription>
+          </Alert>
+
+          <div className="flex gap-2">
+            <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
               placeholder="Escribe tu pregunta sobre física..."
-              className="min-h-[60px] max-h-[120px] resize-none"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit(e);
-                }
-              }}
-              disabled={isLoading}
+              disabled={loading}
+              className="flex-1"
             />
             <Button
-              type="submit"
-              size="icon"
-              className="h-[60px] w-[60px]"
-              disabled={!input.trim() || isLoading}
+              onClick={() => sendMessage()}
+              disabled={loading || !input.trim()}
+              className="bg-primary hover:bg-primary/90"
             >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <Send className="w-5 h-5" />
+                <Send className="w-4 h-4" />
               )}
             </Button>
-          </form>
-          <p className="text-xs text-muted-foreground mt-2">
-            Presiona Enter para enviar, Shift+Enter para nueva línea
-          </p>
+          </div>
         </div>
       </CardContent>
     </Card>

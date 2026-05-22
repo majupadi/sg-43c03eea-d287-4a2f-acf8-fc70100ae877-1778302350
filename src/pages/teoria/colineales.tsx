@@ -5,6 +5,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { SEO } from "@/components/SEO";
+import { ArrowLeft, TrendingUp, Calculator } from "lucide-react";
+import { ColinealesSimulation } from "@/components/simulations/ColinealesSimulation";
+import { WikipediaCard } from "@/components/WikipediaCard";
 
 export default function ColinealesPage() {
   return (
@@ -190,6 +194,17 @@ export default function ColinealesPage() {
               </Link>
             </Button>
           </div>
+        </div>
+
+        {/* Simulación Interactiva */}
+        <ColinealesSimulation />
+
+        {/* Información de Wikipedia */}
+        <div className="mt-12">
+          <WikipediaCard 
+            term="Fuerza" 
+            title="📚 Amplía tu conocimiento: ¿Qué es una Fuerza?"
+          />
         </div>
       </main>
 
