@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, RotateCw, Calculator, FlaskConical, ArrowRight } from "lucide-react";
+import { ArrowLeft, RotateCw, Calculator, FlaskConical, ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Momentos3D } from "@/components/simulations/Momentos3D";
 import { WikipediaCard } from "@/components/WikipediaCard";

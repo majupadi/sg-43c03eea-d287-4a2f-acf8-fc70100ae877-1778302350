@@ -4,7 +4,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, Network, Calculator, FlaskConical, ArrowRight } from "lucide-react";
+import { ArrowLeft, Network, Calculator, FlaskConical, ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { WikipediaCard } from "@/components/WikipediaCard";
 
